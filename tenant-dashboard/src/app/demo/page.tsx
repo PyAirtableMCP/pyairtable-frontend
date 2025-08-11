@@ -1,13 +1,25 @@
 "use client"
 
 import React from "react"
+import dynamic from "next/dynamic"
 import { ColumnDef } from "@tanstack/react-table"
-import { MoreHorizontal, ArrowUpDown, ExternalLink, Edit, Trash2 } from "lucide-react"
+import { MoreHorizontal, ArrowUpDown, ExternalLink, Edit, Trash2, Loader2 } from "lucide-react"
 
-import { MainLayout } from "@/components/layout/MainLayout"
+// Dynamic imports for heavy components to optimize bundle splitting
+const MainLayout = dynamic(() => import("@/components/layout/MainLayout").then(mod => ({ default: mod.MainLayout })), {
+  loading: () => <div className="flex items-center justify-center min-h-screen"><Loader2 className="h-8 w-8 animate-spin" /></div>
+});
+
+const DataTable = dynamic(() => import("@/components/design-system").then(mod => ({ default: mod.DataTable })), {
+  loading: () => <div className="h-64 flex items-center justify-center"><Loader2 className="h-6 w-6 animate-spin" /></div>
+});
+
+const MetricGrid = dynamic(() => import("@/components/design-system").then(mod => ({ default: mod.MetricGrid })), {
+  loading: () => <div className="grid grid-cols-4 gap-4 mb-6 animate-pulse"><div className="h-20 bg-gray-200 rounded"></div><div className="h-20 bg-gray-200 rounded"></div><div className="h-20 bg-gray-200 rounded"></div><div className="h-20 bg-gray-200 rounded"></div></div>
+});
+
+// Static imports for smaller components
 import { 
-  DataTable, 
-  MetricGrid, 
   MetricCard, 
   Button, 
   Badge, 

@@ -9,6 +9,7 @@ import { Toaster } from "react-hot-toast";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { handleAsyncError } from "@/components/error-boundary";
 import { PWAPrompts, ConnectionStatus } from "@/components/pwa/PWAPrompts";
+import { PerformanceProvider } from "@/components/performance/PerformanceProvider";
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -58,10 +59,11 @@ export function Providers({ children }: ProvidersProps) {
         console.error("Root error boundary triggered:", error, errorInfo);
       }}
     >
-      <SessionProvider>
-        {/* Temporarily disabled: <PostHogProvider> */}
-          <QueryClientProvider client={queryClient}>
-            {children}
+      <PerformanceProvider>
+        <SessionProvider>
+          {/* Temporarily disabled: <PostHogProvider> */}
+            <QueryClientProvider client={queryClient}>
+              {children}
             <Toaster
               position="top-right"
               toastOptions={{
@@ -93,9 +95,10 @@ export function Providers({ children }: ProvidersProps) {
             {/* PWA Components */}
             <ConnectionStatus />
             <PWAPrompts showInstallBanner={true} autoShowInstallDialog={false} />
-          </QueryClientProvider>
-        {/* Temporarily disabled: </PostHogProvider> */}
-      </SessionProvider>
+            </QueryClientProvider>
+          {/* Temporarily disabled: </PostHogProvider> */}
+        </SessionProvider>
+      </PerformanceProvider>
     </ErrorBoundary>
   );
 }

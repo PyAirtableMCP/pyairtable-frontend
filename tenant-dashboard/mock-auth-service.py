@@ -5,16 +5,33 @@ in the platform-services while tests are run.
 """
 
 import json
+import os
 import jwt
 from datetime import datetime, timedelta
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import uvicorn
 
+# Environment variable validation
+def validate_required_env_vars():
+    """Validate that all required environment variables are present"""
+    required_vars = ["JWT_SECRET"]
+    missing_vars = []
+    
+    for var in required_vars:
+        if not os.getenv(var):
+            missing_vars.append(var)
+    
+    if missing_vars:
+        raise ValueError(f"Missing required environment variables: {', '.join(missing_vars)}")
+
+# Validate environment variables on startup
+validate_required_env_vars()
+
 app = FastAPI(title="Mock Auth Service")
 
-# Mock JWT secret (use a proper secret in production)
-JWT_SECRET = "mock-secret-for-testing-only"
+# JWT secret from environment variable (required)
+JWT_SECRET = os.getenv("JWT_SECRET")
 
 class LoginRequest(BaseModel):
     email: str
