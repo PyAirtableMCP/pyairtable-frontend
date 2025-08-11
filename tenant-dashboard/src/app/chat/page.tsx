@@ -1,10 +1,22 @@
 "use client"
 
 import React from "react"
-import { ChatInterface } from "@/components/chat/chat-interface"
+import dynamic from "next/dynamic"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Bot, Database, Zap, BarChart3, MessageSquare, Lightbulb } from "lucide-react"
+import { Bot, Database, Zap, BarChart3, MessageSquare, Lightbulb, Loader2 } from "lucide-react"
+
+// Dynamic import for heavy chat interface component
+const ChatInterface = dynamic(() => import("@/components/chat/chat-interface").then(mod => ({ default: mod.ChatInterface })), {
+  loading: () => (
+    <div className="h-[600px] flex items-center justify-center bg-gray-50 rounded-lg">
+      <div className="text-center">
+        <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+        <p className="text-gray-600">Loading chat interface...</p>
+      </div>
+    </div>
+  )
+});
 
 export default function ChatPage() {
   return (

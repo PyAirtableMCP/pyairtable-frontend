@@ -10,9 +10,63 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   experimental: {
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+    optimizePackageImports: [
+      'lucide-react', 
+      '@radix-ui/react-icons'
+    ],
     // Enable server components
     serverComponentsExternalPackages: ["prisma", "@prisma/client"],
+  },
+  
+  // Compiler optimizations
+  compiler: {
+    // Remove console.log in production
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error']
+    } : false,
+  },
+  
+  // Bundle configuration and optimizations
+  webpack: (config, { dev, isServer }) => {
+    // Handle ESM modules correctly
+    config.resolve.extensionAlias = {
+      '.js': ['.js', '.ts', '.tsx'],
+    };
+    
+    // Bundle splitting for better caching
+    if (!dev && !isServer) {
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            priority: 10,
+            reuseExistingChunk: true,
+          },
+          common: {
+            name: 'common',
+            minChunks: 2,
+            priority: 5,
+            reuseExistingChunk: true,
+          },
+          // Separate chunk for UI components
+          ui: {
+            test: /[\\/]src[\\/]components[\\/]ui[\\/]/,
+            name: 'ui-components',
+            priority: 8,
+          },
+          // Separate chunk for design system
+          designSystem: {
+            test: /[\\/]src[\\/]components[\\/]design-system[\\/]/,
+            name: 'design-system',
+            priority: 8,
+          },
+        },
+      };
+    }
+    
+    return config;
   },
   images: {
     domains: [
@@ -30,6 +84,43 @@ const nextConfig = {
         { key: 'Access-Control-Allow-Origin', value: '*' },
         { key: 'Access-Control-Allow-Methods', value: 'GET, POST, PUT, DELETE, OPTIONS' },
         { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization' },
+        // Cache API responses for 5 minutes
+        { key: 'Cache-Control', value: 'public, max-age=300, stale-while-revalidate=60' },
+      ],
+    },
+    {
+      // Cache static assets for 1 year
+      source: '/static/(.*)',
+      headers: [
+        { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+      ],
+    },
+    {
+      // Cache images optimally
+      source: '/_next/image(.*)',
+      headers: [
+        { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+      ],
+    },
+    {
+      // Cache JavaScript and CSS bundles
+      source: '/_next/static/(.*)',
+      headers: [
+        { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+      ],
+    },
+    {
+      // Cache fonts for 1 year
+      source: '/fonts/(.*)',
+      headers: [
+        { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+      ],
+    },
+    {
+      // Cache manifest and service worker with shorter duration
+      source: '/(manifest.json|sw.js)',
+      headers: [
+        { key: 'Cache-Control', value: 'public, max-age=86400' }, // 24 hours
       ],
     },
     {
@@ -50,6 +141,20 @@ const nextConfig = {
         {
           key: "Permissions-Policy",
           value: "camera=(), microphone=(), geolocation=(), payment=()",
+        },
+        // Performance headers
+        {
+          key: "X-DNS-Prefetch-Control",
+          value: "on",
+        },
+        {
+          key: "Strict-Transport-Security",
+          value: "max-age=31536000; includeSubDomains",
+        },
+        // Cache HTML pages for 5 minutes with stale-while-revalidate
+        {
+          key: "Cache-Control",
+          value: "public, max-age=300, stale-while-revalidate=60",
         },
       ],
     },
