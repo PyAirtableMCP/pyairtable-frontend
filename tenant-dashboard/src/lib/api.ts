@@ -276,6 +276,46 @@ export const tenantApi = {
     apiClient.delete<any>(`/tenant/sessions/${sessionId}`),
 };
 
+// Authentication API functions
+export const authApi = {
+  // Login
+  login: async (email: string, password: string) => {
+    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new ApiErrorImpl(
+        errorData.code || "LOGIN_ERROR",
+        errorData.message || "Login failed",
+        errorData.details,
+        new Date().toISOString(),
+        errorData.requestId || ""
+      );
+    }
+
+    return response.json();
+  },
+
+  // Logout
+  logout: () => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("auth_token");
+    }
+  },
+
+  // Get current user
+  getCurrentUser: () => apiClient.get<any>("/auth/me"),
+
+  // Refresh token if needed
+  refreshToken: () => apiClient.post<any>("/auth/refresh"),
+};
+
 // Response interceptor for handling common errors
 export const handleApiError = (error: any) => {
   if (error instanceof ApiErrorImpl) {
