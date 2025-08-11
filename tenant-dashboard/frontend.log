@@ -1,0 +1,1490 @@
+
+> pyairtable-tenant-dashboard@1.0.0 dev
+> next dev --port 3000
+
+  ▲ Next.js 14.2.31
+  - Local:        http://localhost:3000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 4.7s
+ ○ Compiling /src/middleware ...
+ ✓ Compiled /src/middleware in 746ms (204 modules)
+ ○ Compiling / ...
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/opentelemetry/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/server/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/opentelemetry/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/server/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ HEAD / 200 in 11205ms
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/opentelemetry/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/server/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/opentelemetry/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/server/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/opentelemetry/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/server/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/opentelemetry/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/server/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/register. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ HEAD /auth/register 200 in 4105ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 272ms
+ GET / 200 in 274ms
+ GET / 200 in 273ms
+ GET / 200 in 274ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/register. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/register. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/register. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+ GET /auth/register 200 in 610ms
+ GET /auth/register 200 in 611ms
+ GET /auth/register 200 in 585ms
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/register. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /api/auth/session 200 in 3522ms
+ GET / 200 in 3985ms
+ GET / 200 in 3986ms
+ GET / 200 in 3370ms
+ GET / 200 in 3987ms
+ GET /offline 200 in 3986ms
+ GET /offline 200 in 3375ms
+ GET /offline 200 in 3988ms
+ GET /offline 200 in 3990ms
+ GET /auth/register 200 in 3563ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev#debug-enabled
+ GET /api/auth/session 200 in 2196ms
+ GET /api/auth/session 200 in 2196ms
+ GET /api/auth/session 200 in 2198ms
+ GET /api/auth/session 200 in 148ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/session 200 in 9ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 50ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/register. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/register 200 in 68ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 56ms
+ GET /offline 200 in 56ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/session 200 in 4ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 97ms
+ GET / 200 in 101ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/register. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/register. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /api/auth/session 200 in 63ms
+ GET /api/auth/session 200 in 63ms
+ GET /auth/register 200 in 112ms
+ GET /auth/register 200 in 118ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 132ms
+ GET / 200 in 135ms
+ GET /offline 200 in 160ms
+ GET /offline 200 in 164ms
+ GET /api/auth/session 200 in 30ms
+ GET /api/auth/session 200 in 28ms
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev#debug-enabled
+ GET /api/auth/session 200 in 2410ms
+ GET /api/auth/session 200 in 2411ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 1098ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/register. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /api/auth/session 200 in 99ms
+ GET /auth/register 200 in 125ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 113ms
+ GET /offline 200 in 117ms
+ GET /api/auth/session 200 in 16ms
+ GET /api/auth/session 200 in 14ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 43ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/register. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /api/auth/session 200 in 55ms
+ GET /auth/register 200 in 86ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 77ms
+ GET /offline 200 in 81ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/session 200 in 15ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ HEAD / 200 in 43ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 292ms
+ GET / 200 in 295ms
+ GET / 200 in 300ms
+ GET / 200 in 304ms
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+ GET /api/auth/session 200 in 408ms
+ GET /api/auth/session 200 in 415ms
+ GET /api/auth/session 200 in 416ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 1215ms
+ GET /auth/login 200 in 1290ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 12091ms
+ GET / 200 in 12088ms
+ GET / 200 in 12090ms
+ GET /offline 200 in 12328ms
+ GET /offline 200 in 12327ms
+ GET /offline 200 in 12328ms
+ GET /api/auth/session 200 in 11785ms
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-192x192.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-192x192.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-192x192.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-192x192.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-192x192.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-192x192.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev#debug-enabled
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 11397ms
+ GET / 200 in 11400ms
+ GET / 200 in 11401ms
+ GET / 200 in 11402ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-192x192.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-192x192.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-192x192.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-192x192.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-192x192.png 404 in 624ms
+ GET /icons/icon-192x192.png 404 in 589ms
+ GET /icons/icon-192x192.png 404 in 583ms
+ GET /icons/icon-192x192.png 404 in 582ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-512x512.png 404 in 253ms
+ GET /api/auth/session 200 in 374ms
+ GET /icons/icon-512x512.png 404 in 265ms
+ GET /api/auth/session 200 in 382ms
+ GET /icons/icon-512x512.png 404 in 282ms
+ GET /api/auth/session 200 in 402ms
+ GET /api/auth/session 200 in 408ms
+ GET /icons/icon-512x512.png 404 in 292ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 552ms
+ GET /auth/login 200 in 548ms
+ GET /auth/login 200 in 566ms
+ GET /auth/login 200 in 569ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 519ms
+ GET / 200 in 525ms
+ GET / 200 in 528ms
+ GET / 200 in 531ms
+ GET /offline 200 in 571ms
+ GET /offline 200 in 576ms
+ GET /offline 200 in 578ms
+ GET /offline 200 in 547ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-512x512.png 404 in 480ms
+ GET /icons/icon-512x512.png 404 in 494ms
+ GET /icons/icon-512x512.png 404 in 526ms
+ GET /icons/icon-512x512.png 404 in 461ms
+ GET /api/auth/session 200 in 83ms
+ GET /api/auth/session 200 in 83ms
+ GET /api/auth/session 200 in 83ms
+ GET /api/auth/session 200 in 84ms
+ GET /api/auth/session 200 in 12ms
+ GET /api/auth/session 200 in 14ms
+ GET /api/auth/session 200 in 14ms
+ GET /api/auth/session 200 in 18ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 248ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-192x192.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-192x192.png 404 in 100ms
+ GET /api/auth/session 200 in 39ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-512x512.png 404 in 128ms
+ GET /auth/login 200 in 298ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 150ms
+ GET /offline 200 in 154ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-512x512.png 404 in 194ms
+ GET /api/auth/session 200 in 185ms
+ GET /api/auth/session 200 in 28ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 462ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-192x192.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-192x192.png 404 in 169ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /api/auth/session 200 in 59ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-512x512.png 404 in 68ms
+ GET /auth/login 200 in 160ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /offline 200 in 119ms
+ GET / 200 in 123ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-512x512.png 404 in 154ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 36ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-512x512.png 404 in 2173ms
+ GET /api/auth/session 200 in 404ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 1003ms
+ GET / 200 in 1020ms
+ GET /auth/login 200 in 236ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 748ms
+ GET /offline 200 in 775ms
+ GET /api/auth/session 200 in 102ms
+ GET /api/auth/session 200 in 119ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-192x192.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-192x192.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-192x192.png 404 in 584ms
+ GET /icons/icon-192x192.png 404 in 605ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /api/auth/session 200 in 125ms
+ GET /api/auth/session 200 in 129ms
+ GET /icons/icon-512x512.png 404 in 124ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-512x512.png 404 in 178ms
+ GET /auth/login 200 in 254ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 399ms
+ GET / 200 in 433ms
+ GET / 200 in 435ms
+ GET /offline 200 in 441ms
+ GET /offline 200 in 442ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 441ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-512x512.png 404 in 322ms
+ GET /icons/icon-512x512.png 404 in 315ms
+ GET /api/auth/session 200 in 96ms
+ GET /api/auth/session 200 in 101ms
+ GET /icons/icon-512x512.png 404 in 107ms
+ GET /api/auth/session 200 in 35ms
+ GET /api/auth/session 200 in 36ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/session 200 in 21ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 3ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 183ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-192x192.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-192x192.png 404 in 37ms
+ GET /api/auth/session 200 in 22ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 79ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /offline 200 in 85ms
+ GET / 200 in 88ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-512x512.png 404 in 58ms
+ GET /api/auth/session 200 in 15ms
+ GET /api/auth/session 200 in 5ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 117ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-192x192.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-192x192.png 404 in 25ms
+ GET /api/auth/session 200 in 21ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-512x512.png 404 in 32ms
+ GET /api/auth/session 200 in 13ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /offline 200 in 40ms
+ GET / 200 in 42ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 28ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-192x192.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-192x192.png 404 in 23ms
+ GET /api/auth/session 200 in 17ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-512x512.png 404 in 47ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /api/auth/session 200 in 14ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 35ms
+ GET /offline 200 in 35ms
+ GET /api/auth/providers 200 in 12ms
+ GET /api/auth/csrf 200 in 4ms
+Auth service login failed: 404
+Read more at https://errors.authjs.dev/#credentialssignin
+[90m[auth][debug]:[0m callback route error details {
+  "method": "POST",
+  "query": {},
+  "body": {
+    "email": "testuser@example.com",
+    "password": "TestPassword123!",
+    "redirect": "false",
+    "csrfToken": "71e11ce5cbb37820c83552a2cf0a04e4fa498d36fdef94dcd9366747e96f2f29",
+    "callbackUrl": "http://localhost:3000/auth/login"
+  }
+}
+[31m[auth][error][0m CallbackRouteError: Read more at https://errors.authjs.dev#callbackrouteerror
+[31m[auth][cause][0m: Error
+    at Module.callback (webpack-internal:///(rsc)/./node_modules/next-auth/node_modules/@auth/core/lib/actions/callback/index.js:226:23)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AuthInternal (webpack-internal:///(rsc)/./node_modules/next-auth/node_modules/@auth/core/lib/index.js:66:24)
+    at async Auth (webpack-internal:///(rsc)/./node_modules/next-auth/node_modules/@auth/core/index.js:126:34)
+    at async /Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/base-server.js:1576:40)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/lib/start-server.js:141:13)
+[31m[auth][details][0m: {
+  "provider": "credentials"
+}
+ POST /api/auth/callback/credentials? 200 in 149ms
+ GET /api/auth/session 200 in 10ms
+ GET /api/auth/session 200 in 33ms
+ GET /api/auth/providers 200 in 6ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 35ms
+ GET /api/auth/session 200 in 13ms
+ GET /api/auth/session 200 in 10ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 66ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 26ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 2ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 45ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-192x192.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-192x192.png 404 in 37ms
+ GET /api/auth/session 200 in 20ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-512x512.png 404 in 30ms
+ GET /api/auth/session 200 in 13ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 35ms
+ GET /offline 200 in 35ms
+ GET /api/auth/providers 200 in 24ms
+ GET /api/auth/csrf 200 in 4ms
+Auth service login failed: 404
+Read more at https://errors.authjs.dev/#credentialssignin
+[90m[auth][debug]:[0m callback route error details {
+  "method": "POST",
+  "query": {},
+  "body": {
+    "email": "testuser@example.com",
+    "password": "TestPassword123",
+    "redirect": "false",
+    "csrfToken": "09ed78a06bfdfc13bea1a2b6307da421b35ff2964cc1dbc0adaf6d21501aaa34",
+    "callbackUrl": "http://localhost:3000/auth/login"
+  }
+}
+[31m[auth][error][0m CallbackRouteError: Read more at https://errors.authjs.dev#callbackrouteerror
+[31m[auth][cause][0m: Error
+    at Module.callback (webpack-internal:///(rsc)/./node_modules/next-auth/node_modules/@auth/core/lib/actions/callback/index.js:226:23)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AuthInternal (webpack-internal:///(rsc)/./node_modules/next-auth/node_modules/@auth/core/lib/index.js:66:24)
+    at async Auth (webpack-internal:///(rsc)/./node_modules/next-auth/node_modules/@auth/core/index.js:126:34)
+    at async /Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/base-server.js:1576:40)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/lib/start-server.js:141:13)
+[31m[auth][details][0m: {
+  "provider": "credentials"
+}
+ POST /api/auth/callback/credentials? 200 in 41ms
+ GET /api/auth/session 200 in 4ms
+   Reload env: .env.local
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 768ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-192x192.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-192x192.png 404 in 61ms
+[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev#debug-enabled
+ GET /api/auth/session 200 in 111ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-512x512.png 404 in 16ms
+ GET /api/auth/session 200 in 17ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /offline 200 in 428ms
+ GET / 200 in 430ms
+ GET /api/auth/providers 200 in 6ms
+ GET /api/auth/csrf 200 in 2ms
+User testuser@example.com signed in with credentials
+ POST /api/auth/callback/credentials? 200 in 211ms
+ GET /api/auth/session 200 in 11ms
+ GET /api/auth/session 200 in 5ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 46ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 15ms
+ GET /api/auth/session 200 in 12ms
+ GET /api/auth/session 200 in 12ms
+ GET /api/auth/session 200 in 14ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 43ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 45ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 38ms
+ GET /offline 200 in 39ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 6ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 45ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 29ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /offline 200 in 33ms
+ GET / 200 in 40ms
+ GET /api/auth/session 200 in 11ms
+ GET /api/auth/session 200 in 2ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 43ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-192x192.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-192x192.png 404 in 23ms
+ GET /api/auth/session 200 in 13ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-512x512.png 404 in 27ms
+ GET /api/auth/session 200 in 4ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /offline 200 in 22ms
+ GET / 200 in 23ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 50ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 37ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /offline 200 in 38ms
+ GET / 200 in 38ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/session 200 in 14ms
+ GET /api/auth/providers 200 in 5ms
+ GET /api/auth/csrf 200 in 7ms
+User testuser@example.com signed in with credentials
+ POST /api/auth/callback/credentials? 200 in 175ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 5ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 23ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 21ms
+ GET /api/auth/session 200 in 22ms
+ GET /api/auth/session 200 in 17ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 40ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-192x192.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-192x192.png 404 in 21ms
+ GET /api/auth/session 200 in 10ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /icons/icon-512x512.png 404 in 29ms
+ GET /api/auth/session 200 in 20ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 39ms
+ GET /offline 200 in 38ms
+ GET /api/auth/providers 200 in 32ms
+ GET /api/auth/csrf 200 in 3ms
+User testuser@example.com signed in with credentials
+ POST /api/auth/callback/credentials? 200 in 170ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 14ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 28ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 12ms
+ GET /api/auth/session 200 in 11ms
+ GET /api/auth/session 200 in 4ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 35ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 50ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 34ms
+ GET /offline 200 in 39ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/providers 200 in 6ms
+ GET /api/auth/csrf 200 in 3ms
+User testuser@example.com signed in with credentials
+ POST /api/auth/callback/credentials? 200 in 143ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 4ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 231ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 69ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/session 200 in 2ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 16ms
+ GET /api/auth/session 200 in 19ms
+ GET /api/auth/session 200 in 11ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 30ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /api/auth/session 200 in 23ms
+ GET /auth/login 200 in 49ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 45ms
+ GET /offline 200 in 49ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/providers 200 in 5ms
+ GET /api/auth/csrf 200 in 4ms
+User testuser@example.com signed in with credentials
+ POST /api/auth/callback/credentials? 200 in 161ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/session 200 in 8ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 35ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 15ms
+ GET /api/auth/session 200 in 12ms
+ GET /api/auth/session 200 in 7ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 48ms
+ GET /api/auth/session 200 in 19ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 89ms
+ GET /api/auth/session 200 in 33ms
+ GET /api/auth/session 200 in 13ms
+ GET /api/auth/session 200 in 5ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 63ms
+ GET / 200 in 64ms
+ GET / 200 in 64ms
+ GET / 200 in 66ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /api/auth/session 200 in 118ms
+ GET /api/auth/session 200 in 144ms
+ GET /api/auth/session 200 in 150ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 299ms
+ GET /auth/login 200 in 299ms
+ GET /chat 200 in 305ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /api/auth/session 200 in 135ms
+ GET / 200 in 232ms
+ GET / 200 in 233ms
+ GET / 200 in 234ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /offline 200 in 250ms
+ GET /offline 200 in 252ms
+ GET /offline 200 in 252ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 238ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 240ms
+ GET /offline 200 in 269ms
+ GET /api/auth/session 200 in 177ms
+ GET /api/auth/session 200 in 174ms
+ GET /api/auth/session 200 in 175ms
+ GET /api/auth/session 200 in 175ms
+ GET /api/auth/providers 200 in 17ms
+ GET /api/auth/session 200 in 16ms
+ GET /api/auth/providers 200 in 17ms
+ GET /api/auth/session 200 in 20ms
+ GET /api/auth/session 200 in 21ms
+ GET /api/auth/session 200 in 29ms
+ GET /api/auth/csrf 200 in 7ms
+ GET /api/auth/csrf 200 in 9ms
+User testuser@example.com signed in with credentials
+ POST /api/auth/callback/credentials? 200 in 459ms
+ GET /api/auth/session 200 in 17ms
+ GET /api/auth/session 200 in 12ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+User testuser@example.com signed in with credentials
+ POST /api/auth/callback/credentials? 200 in 741ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 4ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 91ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 79ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 45ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 47ms
+ GET /api/auth/session 200 in 276ms
+ GET /api/auth/session 200 in 270ms
+ GET /api/auth/session 200 in 22ms
+ GET /api/auth/session 200 in 61ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 28ms
+ GET /api/auth/session 200 in 30ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 168ms
+ GET /api/auth/session 200 in 36ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 6ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 20ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 34ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 29ms
+ GET /offline 200 in 29ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/providers 200 in 5ms
+ GET /api/auth/csrf 200 in 20ms
+User testuser@example.com signed in with credentials
+ POST /api/auth/callback/credentials? 200 in 219ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 5ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 17ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 33ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 4ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 42ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /api/auth/session 200 in 10ms
+ GET /auth/login 200 in 56ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 38ms
+ GET /offline 200 in 41ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 10ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 15ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /api/auth/session 200 in 16ms
+ GET /auth/login 200 in 41ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 68ms
+ GET /offline 200 in 68ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 2ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 32ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /api/auth/session 200 in 41ms
+ GET /auth/login 200 in 87ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /offline 200 in 112ms
+ GET / 200 in 112ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 5ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 15ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 51ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 84ms
+ GET /offline 200 in 85ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 40ms
+ GET /api/auth/session 200 in 11ms
+ GET /api/auth/session 200 in 4ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 61ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 25ms
+ GET /offline 200 in 26ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 3ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 24ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 27ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 47ms
+ GET /offline 200 in 67ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/auth/session 200 in 9ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 31ms
+ GET /api/auth/session 200 in 18ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /api/auth/session 200 in 16ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 20ms
+ GET /auth/login 200 in 36ms
+ GET /offline 200 in 36ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 47ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 4ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 39ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 47ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 41ms
+ GET /offline 200 in 40ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/providers 200 in 4ms
+ GET /api/auth/csrf 200 in 12ms
+User testuser@example.com signed in with credentials
+ POST /api/auth/callback/credentials? 200 in 190ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 3ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 32ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /chat 200 in 33ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /api/auth/session 200 in 96ms
+ GET / 200 in 129ms
+ GET /api/auth/session 200 in 38ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /api/auth/session 200 in 67ms
+ GET /auth/login 200 in 104ms
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET / 200 in 120ms
+ GET /offline 200 in 123ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 5ms
