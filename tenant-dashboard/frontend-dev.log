@@ -1040,3 +1040,59 @@ Import trace for requested module:
  ✓ Compiled in 390ms (1439 modules)
  ✓ Compiled in 330ms (1439 modules)
  ✓ Compiled in 542ms (1439 modules)
+ ⚠ Found a change in next.config.js. Restarting the server to apply the changes...
+  ▲ Next.js 14.2.31
+  - Local:        http://localhost:5173
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 2.2s
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/.next/cache/webpack/client-development/0.pack.gz_' -> '/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/.next/cache/webpack/client-development/0.pack.gz'
+ ⚠ Found a change in next.config.js. Restarting the server to apply the changes...
+  ▲ Next.js 14.2.31
+  - Local:        http://localhost:5173
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1358ms
+ ⚠ Found a change in next.config.js. Restarting the server to apply the changes...
+  ▲ Next.js 14.2.31
+  - Local:        http://localhost:5173
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1547ms
+ ⚠ Found a change in next.config.js. Restarting the server to apply the changes...
+  ▲ Next.js 14.2.31
+  - Local:        http://localhost:5173
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1715ms
+ ⚠ Found a change in next.config.js. Restarting the server to apply the changes...
+  ▲ Next.js 14.2.31
+  - Local:        http://localhost:5173
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1645ms
+ ⚠ Found a change in next.config.js. Restarting the server to apply the changes...
+  ▲ Next.js 14.2.31
+  - Local:        http://localhost:5173
+  - Environments: .env.local
+
+ ✓ Starting...
+Error [ERR_PACKAGE_PATH_NOT_EXPORTED]: Package subpath './build/lib/index.js' is not defined by "exports" in /Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/@tanstack/react-table/package.json
+    at exportsNotFound (node:internal/modules/esm/resolve:313:10)
+    at packageExportsResolve (node:internal/modules/esm/resolve:660:9)
+    at resolveExports (node:internal/modules/cjs/loader:650:36)
+    at Module._findPath (node:internal/modules/cjs/loader:717:31)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1355:27)
+    at /Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/require-hook.js:55:36
+    at require.resolve (node:internal/modules/helpers:145:19)
+    at Object.webpack (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/next.config.js:46:40)
+    at getBaseWebpackConfig (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/build/webpack-config.js:1838:32)
+    at async Promise.all (index 1) {
+  code: 'ERR_PACKAGE_PATH_NOT_EXPORTED'
+}
+[?25h

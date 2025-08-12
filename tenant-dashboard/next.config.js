@@ -1,4 +1,7 @@
 const { withSentryConfig } = require("@sentry/nextjs");
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -12,7 +15,9 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: [
       'lucide-react', 
-      '@radix-ui/react-icons'
+      '@radix-ui/react-icons',
+      'recharts',
+      'framer-motion'
     ],
     // Enable server components
     serverComponentsExternalPackages: ["prisma", "@prisma/client"],
@@ -33,11 +38,57 @@ const nextConfig = {
       '.js': ['.js', '.ts', '.tsx'],
     };
     
+    // Handle ESM packages properly for tree shaking
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+    };
+    
+    // Enable tree shaking for production builds
+    if (!dev) {
+      config.optimization.usedExports = true;
+    }
+    
     // Bundle splitting for better caching
     if (!dev && !isServer) {
       config.optimization.splitChunks = {
         chunks: 'all',
+        maxSize: 244000, // 244KB max chunk size
         cacheGroups: {
+          // Heavy chart libraries
+          charts: {
+            test: /[\\/]node_modules[\\/](recharts|d3)[\\/]/,
+            name: 'charts',
+            priority: 15,
+            reuseExistingChunk: true,
+          },
+          // Animation libraries
+          animations: {
+            test: /[\\/]node_modules[\\/](framer-motion)[\\/]/,
+            name: 'animations',
+            priority: 14,
+            reuseExistingChunk: true,
+          },
+          // Data table libraries
+          tables: {
+            test: /[\\/]node_modules[\\/](@tanstack|react-virtual)[\\/]/,
+            name: 'tables',
+            priority: 13,
+            reuseExistingChunk: true,
+          },
+          // Radix UI components
+          radix: {
+            test: /[\\/]node_modules[\\/]@radix-ui[\\/]/,
+            name: 'radix-ui',
+            priority: 12,
+            reuseExistingChunk: true,
+          },
+          // React ecosystem
+          react: {
+            test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+            name: 'react',
+            priority: 11,
+            reuseExistingChunk: true,
+          },
           vendor: {
             test: /[\\/]node_modules[\\/]/,
             name: 'vendors',
@@ -210,6 +261,8 @@ const sentryWebpackPluginOptions = {
 };
 
 // Wrap config with Sentry only if DSN is provided
-module.exports = process.env.NEXT_PUBLIC_SENTRY_DSN
-  ? withSentryConfig(nextConfig, sentryWebpackPluginOptions)
-  : nextConfig;
+module.exports = withBundleAnalyzer(
+  process.env.NEXT_PUBLIC_SENTRY_DSN
+    ? withSentryConfig(nextConfig, sentryWebpackPluginOptions)
+    : nextConfig
+);

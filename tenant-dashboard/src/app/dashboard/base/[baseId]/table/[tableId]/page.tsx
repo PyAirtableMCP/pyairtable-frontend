@@ -2,12 +2,15 @@
 
 import { useRouter, useParams } from 'next/navigation'
 import { useEffect, useState, useMemo } from 'react'
+import dynamic from 'next/dynamic'
 import { airtableClient, AirtableRecord } from '@/lib/airtable-client'
 import { useAuth } from '@/lib/auth/auth-context'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 import { useInputValidation } from '@/lib/hooks/useInputValidation'
 import { CriticalPageErrorBoundary } from '@/lib/components/PageErrorBoundary'
+
+// Dynamic imports for UI components to reduce initial bundle size
+const Input = dynamic(() => import('@/components/ui/input').then(mod => ({ default: mod.Input })))
+const Button = dynamic(() => import('@/components/ui/button').then(mod => ({ default: mod.Button })))
 
 // Custom hook for debouncing
 function useDebounce<T>(value: T, delay: number): T {
