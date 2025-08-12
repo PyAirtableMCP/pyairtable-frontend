@@ -7,6 +7,10 @@ import { airtableClient, AirtableRecord } from '@/lib/airtable-client'
 import { useAuth } from '@/lib/auth/auth-context'
 import { useInputValidation } from '@/lib/hooks/useInputValidation'
 import { CriticalPageErrorBoundary } from '@/lib/components/PageErrorBoundary'
+import { useRealtimeEvents } from '@/lib/hooks/useWebSocket'
+import { Badge } from '@/components/ui/badge'
+import { AdvancedSearch, FilterCondition, SortCondition } from '@/components/table/AdvancedSearch'
+import { downloadCSV, downloadExcel, exportRecordsWithProgress } from '@/lib/utils/export'
 
 // Dynamic imports for UI components to reduce initial bundle size
 const Input = dynamic(() => import('@/components/ui/input').then(mod => ({ default: mod.Input })))
@@ -37,6 +41,14 @@ function TableRecordsPageContent() {
   const tableId = params.tableId as string
   const { validateSearchInput } = useInputValidation()
 
+  // WebSocket real-time events
+  const {
+    isConnected: wsConnected,
+    events: wsEvents,
+    userPresence,
+    sendMessage,
+  } = useRealtimeEvents(tableId)
+
   const [records, setRecords] = useState<AirtableRecord[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -47,6 +59,9 @@ function TableRecordsPageContent() {
   const [currentPage, setCurrentPage] = useState(1)
   const [offset, setOffset] = useState<string>('')
   const [hasMore, setHasMore] = useState(false)
+  const [activeFilters, setActiveFilters] = useState<FilterCondition[]>([])
+  const [sortCondition, setSortCondition] = useState<SortCondition | null>(null)
+  const [filteredCurrentPage, setFilteredCurrentPage] = useState(1)
   const debouncedSearchQuery = useDebounce(searchQuery, 300)
 
   // CRUD states
@@ -57,7 +72,56 @@ function TableRecordsPageContent() {
   const [deletingRecordId, setDeletingRecordId] = useState<string | null>(null)
   const [crudLoading, setCrudLoading] = useState(false)
 
+  // Export states
+  const [isExporting, setIsExporting] = useState(false)
+  const [exportProgress, setExportProgress] = useState(0)
+  const [showExportDropdown, setShowExportDropdown] = useState(false)
+
   const recordsPerPage = 10
+
+  // Handle WebSocket events for real-time updates
+  useEffect(() => {
+    const latestEvent = wsEvents[wsEvents.length - 1];
+    if (!latestEvent) return;
+
+    switch (latestEvent.type) {
+      case 'record:created':
+        const newRecord = latestEvent.payload?.data;
+        if (newRecord && newRecord.id && latestEvent.payload?.tableId === tableId) {
+          setRecords(prev => {
+            // Check if record already exists to avoid duplicates
+            const exists = prev.some(r => r.id === newRecord.id);
+            if (!exists) {
+              return [newRecord, ...prev];
+            }
+            return prev;
+          });
+          setTotalRecords(prev => prev + 1);
+        }
+        break;
+
+      case 'record:updated':
+        const updatedRecord = latestEvent.payload?.data;
+        if (updatedRecord && updatedRecord.id && latestEvent.payload?.tableId === tableId) {
+          setRecords(prev => 
+            prev.map(record => 
+              record.id === updatedRecord.id 
+                ? { ...record, ...updatedRecord, lastModified: new Date().toISOString() }
+                : record
+            )
+          );
+        }
+        break;
+
+      case 'record:deleted':
+        const deletedRecordId = latestEvent.payload?.recordId;
+        if (deletedRecordId && latestEvent.payload?.tableId === tableId) {
+          setRecords(prev => prev.filter(record => record.id !== deletedRecordId));
+          setTotalRecords(prev => prev - 1);
+        }
+        break;
+    }
+  }, [wsEvents, tableId]);
 
   // Mock data fallback
   const mockRecords: AirtableRecord[] = [
@@ -138,8 +202,8 @@ function TableRecordsPageContent() {
     return String(value)
   }
 
-  // Filter records based on search query (debounced for performance)
-  const filteredRecords = useMemo(() => {
+  // Apply search query filter
+  const searchFilteredRecords = useMemo(() => {
     if (!debouncedSearchQuery.trim()) return records
     
     const query = debouncedSearchQuery.toLowerCase()
@@ -155,9 +219,114 @@ function TableRecordsPageContent() {
     })
   }, [records, debouncedSearchQuery])
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value
-    const validation = validateSearchInput(rawValue)
+  // Apply advanced filters
+  const filteredRecords = useMemo(() => {
+    let result = searchFilteredRecords
+
+    // Apply advanced filters
+    const validFilters = activeFilters.filter(f => f.value.trim() !== '')
+    if (validFilters.length > 0) {
+      result = result.filter(record => {
+        return validFilters.every((filter, index) => {
+          const fieldValue = formatFieldValue(record.fields[filter.field])
+          const filterValue = filter.value.toLowerCase()
+          const recordValue = fieldValue.toLowerCase()
+
+          let matches = false
+          switch (filter.operator) {
+            case 'contains':
+              matches = recordValue.includes(filterValue)
+              break
+            case 'equals':
+              matches = recordValue === filterValue
+              break
+            case 'not_equals':
+              matches = recordValue !== filterValue
+              break
+            case 'starts_with':
+              matches = recordValue.startsWith(filterValue)
+              break
+            case 'ends_with':
+              matches = recordValue.endsWith(filterValue)
+              break
+            case 'is_empty':
+              matches = !fieldValue || fieldValue.trim() === ''
+              break
+            case 'is_not_empty':
+              matches = fieldValue && fieldValue.trim() !== ''
+              break
+            case 'greater_than':
+              const numValue = parseFloat(fieldValue)
+              const numFilter = parseFloat(filter.value)
+              matches = !isNaN(numValue) && !isNaN(numFilter) && numValue > numFilter
+              break
+            case 'less_than':
+              const numValue2 = parseFloat(fieldValue)
+              const numFilter2 = parseFloat(filter.value)
+              matches = !isNaN(numValue2) && !isNaN(numFilter2) && numValue2 < numFilter2
+              break
+            default:
+              matches = recordValue.includes(filterValue)
+          }
+
+          // Handle logical operators for multiple filters
+          if (index === 0) return matches
+          
+          const previousResult = validFilters.slice(0, index).every((prevFilter, prevIndex) => {
+            // This is a simplified evaluation - in a real implementation, 
+            // you'd want proper boolean expression parsing
+            return true // placeholder
+          })
+
+          return filter.logicalOperator === 'OR' ? (previousResult || matches) : matches
+        })
+      })
+    }
+
+    // Apply sorting
+    if (sortCondition) {
+      result = [...result].sort((a, b) => {
+        const aValue = formatFieldValue(a.fields[sortCondition.field])
+        const bValue = formatFieldValue(b.fields[sortCondition.field])
+        
+        // Try numeric comparison first
+        const aNum = parseFloat(aValue)
+        const bNum = parseFloat(bValue)
+        
+        let comparison = 0
+        if (!isNaN(aNum) && !isNaN(bNum)) {
+          comparison = aNum - bNum
+        } else {
+          // String comparison
+          comparison = aValue.localeCompare(bValue)
+        }
+        
+        return sortCondition.direction === 'desc' ? -comparison : comparison
+      })
+    }
+
+    return result
+  }, [searchFilteredRecords, activeFilters, sortCondition])
+
+  // Paginate filtered results for display
+  const paginatedRecords = useMemo(() => {
+    const isFiltered = searchQuery || activeFilters.length > 0 || sortCondition
+    const currentPageToUse = isFiltered ? filteredCurrentPage : currentPage
+    const recordsToUse = isFiltered ? filteredRecords : records
+    
+    if (isFiltered) {
+      // Client-side pagination for filtered results
+      const startIndex = (currentPageToUse - 1) * recordsPerPage
+      const endIndex = startIndex + recordsPerPage
+      return recordsToUse.slice(startIndex, endIndex)
+    } else {
+      // Server-side pagination for unfiltered results
+      return recordsToUse
+    }
+  }, [filteredRecords, records, searchQuery, activeFilters, sortCondition, filteredCurrentPage, currentPage, recordsPerPage])
+
+  const handleSearch = (query: string) => {
+    const validation = validateSearchInput(query)
     
     if (!validation.isValid) {
       setSearchError(validation.errors[0])
@@ -167,37 +336,78 @@ function TableRecordsPageContent() {
     
     // Reset pagination when searching
     setCurrentPage(1)
+    setFilteredCurrentPage(1)
     setOffset('')
     
     // Always use sanitized value
     setSearchQuery(validation.sanitizedValue)
   }
 
+  const handleFiltersChange = (filters: FilterCondition[]) => {
+    setActiveFilters(filters)
+    // Reset pagination when filters change
+    setCurrentPage(1)
+    setFilteredCurrentPage(1)
+    setOffset('')
+  }
+
+  const handleSortChange = (sort: SortCondition | null) => {
+    setSortCondition(sort)
+    // Reset pagination when sort changes
+    setCurrentPage(1)
+    setFilteredCurrentPage(1)
+    setOffset('')
+  }
+
   const handleClearSearch = () => {
     setSearchQuery('')
     setSearchError(null)
+    setActiveFilters([])
+    setSortCondition(null)
     setCurrentPage(1)
+    setFilteredCurrentPage(1)
     setOffset('')
   }
 
   const handleNextPage = async () => {
-    if (!hasMore || !offset) return // No next page available
-    setCurrentPage(prev => prev + 1)
-    await fetchRecords(offset)
+    const isFiltered = searchQuery || activeFilters.length > 0 || sortCondition
+    
+    if (isFiltered) {
+      // Client-side pagination for filtered results
+      const maxPages = Math.ceil(filteredRecords.length / recordsPerPage)
+      if (filteredCurrentPage < maxPages) {
+        setFilteredCurrentPage(prev => prev + 1)
+      }
+    } else {
+      // Server-side pagination for unfiltered results
+      if (!hasMore || !offset) return // No next page available
+      setCurrentPage(prev => prev + 1)
+      await fetchRecords(offset)
+    }
   }
 
   const handlePreviousPage = async () => {
-    if (currentPage <= 1) return
-    setCurrentPage(prev => prev - 1)
-    // For previous page, we need to recalculate - for simplicity, let's reset to page 1 for now
-    if (currentPage === 2) {
-      setOffset('')
-      await fetchRecords('')
+    const isFiltered = searchQuery || activeFilters.length > 0 || sortCondition
+    
+    if (isFiltered) {
+      // Client-side pagination for filtered results
+      if (filteredCurrentPage > 1) {
+        setFilteredCurrentPage(prev => prev - 1)
+      }
     } else {
-      // This would require storing page offsets - simplified approach for now
-      setCurrentPage(1)
-      setOffset('')
-      await fetchRecords('')
+      // Server-side pagination for unfiltered results
+      if (currentPage <= 1) return
+      setCurrentPage(prev => prev - 1)
+      // For previous page, we need to recalculate - for simplicity, let's reset to page 1 for now
+      if (currentPage === 2) {
+        setOffset('')
+        await fetchRecords('')
+      } else {
+        // This would require storing page offsets - simplified approach for now
+        setCurrentPage(1)
+        setOffset('')
+        await fetchRecords('')
+      }
     }
   }
 
@@ -205,20 +415,35 @@ function TableRecordsPageContent() {
     if (e.key === 'Enter') {
       const target = e.target as HTMLInputElement
       const pageNumber = parseInt(target.value)
-      const totalPages = Math.ceil(totalRecords / recordsPerPage)
+      const isFiltered = searchQuery || activeFilters.length > 0 || sortCondition
       
-      if (pageNumber >= 1 && pageNumber <= totalPages && pageNumber !== currentPage) {
-        if (pageNumber === 1) {
-          setCurrentPage(1)
-          setOffset('')
-          await fetchRecords('')
+      if (isFiltered) {
+        // Client-side pagination for filtered results
+        const totalPages = Math.ceil(filteredRecords.length / recordsPerPage)
+        const currentPageToUse = filteredCurrentPage
+        
+        if (pageNumber >= 1 && pageNumber <= totalPages && pageNumber !== currentPageToUse) {
+          setFilteredCurrentPage(pageNumber)
         } else {
-          // For simplicity, we'll just show a message for now
-          alert('Direct page navigation coming soon. Use Next/Previous for now.')
-          target.value = currentPage.toString()
+          target.value = currentPageToUse.toString()
         }
       } else {
-        target.value = currentPage.toString()
+        // Server-side pagination for unfiltered results
+        const totalPages = Math.ceil(totalRecords / recordsPerPage)
+        
+        if (pageNumber >= 1 && pageNumber <= totalPages && pageNumber !== currentPage) {
+          if (pageNumber === 1) {
+            setCurrentPage(1)
+            setOffset('')
+            await fetchRecords('')
+          } else {
+            // For simplicity, we'll just show a message for now
+            alert('Direct page navigation coming soon. Use Next/Previous for now.')
+            target.value = currentPage.toString()
+          }
+        } else {
+          target.value = currentPage.toString()
+        }
       }
     }
   }
@@ -246,10 +471,20 @@ function TableRecordsPageContent() {
       
       // Optimistic update - add new record to current records
       if (response.records && response.records.length > 0) {
-        setRecords(prev => [response.records[0], ...prev])
+        const newRecord = response.records[0];
+        setRecords(prev => [newRecord, ...prev])
         setTotalRecords(prev => prev + 1)
         setIsCreateModalOpen(false)
         setNewRecordFields({})
+
+        // Broadcast WebSocket event
+        if (wsConnected) {
+          sendMessage('record:created', {
+            tableId,
+            recordId: newRecord.id,
+            data: newRecord
+          });
+        }
       }
     } catch (err) {
       console.error('Error creating record:', err)
@@ -280,6 +515,21 @@ function TableRecordsPageContent() {
       await airtableClient.updateRecords(baseId, tableId, [
         { id: recordId, [fieldName]: newValue }
       ], true)
+
+      // Broadcast WebSocket event
+      if (wsConnected) {
+        const updatedRecord = records.find(r => r.id === recordId);
+        if (updatedRecord) {
+          sendMessage('record:updated', {
+            tableId,
+            recordId,
+            data: {
+              ...updatedRecord,
+              fields: { ...updatedRecord.fields, [fieldName]: newValue }
+            }
+          });
+        }
+      }
     } catch (err) {
       console.error('Error updating record:', err)
       // Rollback on error
@@ -314,6 +564,14 @@ function TableRecordsPageContent() {
       if (!accessToken) throw new Error('No access token available')
 
       await airtableClient.deleteRecords(baseId, tableId, [recordId])
+
+      // Broadcast WebSocket event
+      if (wsConnected) {
+        sendMessage('record:deleted', {
+          tableId,
+          recordId
+        });
+      }
     } catch (err) {
       console.error('Error deleting record:', err)
       // Rollback on error
@@ -341,6 +599,51 @@ function TableRecordsPageContent() {
       setEditingValue('')
     }
   }
+
+  // Export handlers
+  const handleExport = async (format: 'csv' | 'excel') => {
+    setIsExporting(true)
+    setExportProgress(0)
+    setShowExportDropdown(false)
+    
+    try {
+      // Determine which records to export (filtered or all)
+      const recordsToExport = (searchQuery || activeFilters.length > 0 || sortCondition) 
+        ? filteredRecords 
+        : records
+      
+      if (recordsToExport.length === 0) {
+        alert('No records to export')
+        return
+      }
+
+      const exportOptions = {
+        tableName: tableName || tableId,
+        includeMetadata: true,
+        onProgress: (progress: number) => setExportProgress(progress)
+      }
+
+      await exportRecordsWithProgress(recordsToExport, format, exportOptions)
+      
+      // Show success message briefly
+      setTimeout(() => {
+        setExportProgress(100)
+        setTimeout(() => {
+          setIsExporting(false)
+          setExportProgress(0)
+        }, 1000)
+      }, 100)
+      
+    } catch (error) {
+      console.error('Export failed:', error)
+      alert('Export failed: ' + (error instanceof Error ? error.message : 'Unknown error'))
+      setIsExporting(false)
+      setExportProgress(0)
+    }
+  }
+
+  const handleCSVExport = () => handleExport('csv')
+  const handleExcelExport = () => handleExport('excel')
 
   if (authLoading) {
     return (
@@ -375,15 +678,41 @@ function TableRecordsPageContent() {
           
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Table Records</h1>
+              <div className="flex items-center gap-3 mb-2">
+                <h1 className="text-3xl font-bold text-gray-900">Table Records</h1>
+                <Badge 
+                  variant={wsConnected ? "default" : "destructive"}
+                  className={wsConnected ? "bg-green-100 text-green-800" : ""}
+                >
+                  {wsConnected ? "Live" : "Offline"}
+                </Badge>
+                {userPresence.length > 1 && (
+                  <Badge variant="outline">
+                    {userPresence.length - 1} other user{userPresence.length - 1 !== 1 ? 's' : ''} viewing
+                  </Badge>
+                )}
+              </div>
               <p className="text-gray-600 mt-2">
                 Table: <span className="font-mono text-sm bg-gray-100 px-2 py-1 rounded">{tableId}</span>
+                {wsConnected && (
+                  <span className="ml-2 text-sm text-green-600">● Real-time updates enabled</span>
+                )}
               </p>
               <p className="text-gray-600 mt-1">
-                {searchQuery && debouncedSearchQuery === searchQuery ? (
+                {(searchQuery || activeFilters.length > 0 || sortCondition) && debouncedSearchQuery === searchQuery ? (
                   <>
                     Showing {Math.min(recordsPerPage, filteredRecords.length)} of {filteredRecords.length} filtered records
                     <span className="text-gray-500 ml-1">({totalRecords.toLocaleString()} total)</span>
+                    {activeFilters.length > 0 && (
+                      <span className="text-blue-600 ml-2 text-sm">
+                        • {activeFilters.filter(f => f.value.trim() !== '').length} filter{activeFilters.filter(f => f.value.trim() !== '').length !== 1 ? 's' : ''} applied
+                      </span>
+                    )}
+                    {sortCondition && (
+                      <span className="text-purple-600 ml-2 text-sm">
+                        • Sorted by {sortCondition.field}
+                      </span>
+                    )}
                   </>
                 ) : (
                   <>
@@ -398,6 +727,74 @@ function TableRecordsPageContent() {
               </p>
             </div>
             <div className="flex space-x-3">
+              {/* Export Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowExportDropdown(!showExportDropdown)}
+                  disabled={isExporting || records.length === 0}
+                  className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 flex items-center space-x-2"
+                >
+                  {isExporting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      <span>Exporting... {Math.round(exportProgress)}%</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      <span>Export</span>
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </>
+                  )}
+                </button>
+                
+                {/* Dropdown Menu */}
+                {showExportDropdown && !isExporting && (
+                  <>
+                    <div 
+                      className="fixed inset-0 z-10" 
+                      onClick={() => setShowExportDropdown(false)}
+                    />
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-20">
+                      <div className="py-1">
+                        <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">
+                          Export Format
+                        </div>
+                        <button
+                          onClick={handleCSVExport}
+                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
+                        >
+                          <svg className="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                          <span>Export as CSV</span>
+                        </button>
+                        <button
+                          onClick={handleExcelExport}
+                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
+                        >
+                          <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+                          </svg>
+                          <span>Export as Excel</span>
+                        </button>
+                        <div className="px-4 py-2 text-xs text-gray-500 border-t border-gray-100">
+                          {(searchQuery || activeFilters.length > 0 || sortCondition) ? (
+                            <>Filtered results: {filteredRecords.length} records</>
+                          ) : (
+                            <>All records: {records.length} records</>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+
               <button
                 onClick={() => setIsCreateModalOpen(true)}
                 disabled={crudLoading}
@@ -419,43 +816,15 @@ function TableRecordsPageContent() {
           </div>
         </div>
 
-        {/* Search Section */}
+        {/* Advanced Search Section */}
         <div className="mb-6">
-          <div className="flex items-center space-x-4 max-w-md">
-            <div className="relative flex-1">
-              <Input
-                type="text"
-                placeholder="Search records..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-                className="pr-10"
-              />
-              {searchQuery && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleClearSearch}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0 hover:bg-gray-100"
-                  title="Clear search"
-                >
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </Button>
-              )}
-            </div>
-            <div className="text-sm text-gray-600 whitespace-nowrap">
-              {searchQuery ? (
-                debouncedSearchQuery === searchQuery ? (
-                  `${filteredRecords.length} result${filteredRecords.length !== 1 ? 's' : ''} found`
-                ) : (
-                  'Searching...'
-                )
-              ) : (
-                `${records.length} record${records.length !== 1 ? 's' : ''}`
-              )}
-            </div>
-          </div>
+          <AdvancedSearch
+            fieldNames={fieldNames}
+            onFiltersChange={handleFiltersChange}
+            onSortChange={handleSortChange}
+            onSearch={handleSearch}
+            searchQuery={searchQuery}
+          />
           
           {/* Search Error */}
           {searchError && (
@@ -463,6 +832,19 @@ function TableRecordsPageContent() {
               Search validation error: {searchError}
             </div>
           )}
+          
+          {/* Results Summary */}
+          <div className="mt-3 text-sm text-gray-600">
+            {searchQuery || activeFilters.length > 0 || sortCondition ? (
+              debouncedSearchQuery === searchQuery ? (
+                <>Showing {filteredRecords.length} of {records.length} records</>
+              ) : (
+                'Searching...'
+              )
+            ) : (
+              `${records.length} record${records.length !== 1 ? 's' : ''} total`
+            )}
+          </div>
         </div>
 
         {/* Error State */}
@@ -491,8 +873,31 @@ function TableRecordsPageContent() {
                       Record ID
                     </th>
                     {fieldNames.map((fieldName) => (
-                      <th key={fieldName} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        {fieldName}
+                      <th 
+                        key={fieldName} 
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors"
+                        onClick={() => {
+                          const newDirection = sortCondition?.field === fieldName && sortCondition.direction === 'asc' ? 'desc' : 'asc'
+                          handleSortChange({ field: fieldName, direction: newDirection })
+                        }}
+                        title={`Click to sort by ${fieldName}`}
+                      >
+                        <div className="flex items-center space-x-1">
+                          <span>{fieldName}</span>
+                          {sortCondition?.field === fieldName && (
+                            <span className="text-blue-600">
+                              {sortCondition.direction === 'asc' ? (
+                                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                                </svg>
+                              ) : (
+                                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                              )}
+                            </span>
+                          )}
+                        </div>
                       </th>
                     ))}
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -504,7 +909,7 @@ function TableRecordsPageContent() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredRecords.map((record) => (
+                  {paginatedRecords.map((record) => (
                     <tr key={record.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-500">
                         {record.id}
@@ -601,56 +1006,82 @@ function TableRecordsPageContent() {
         )}
 
         {/* Pagination Controls */}
-        {!loading && !error && records.length > 0 && totalRecords > recordsPerPage && !searchQuery && (
+        {!loading && !error && records.length > 0 && (
+          // Show pagination for unfiltered results (server-side pagination)
+          (!searchQuery && !activeFilters.length && !sortCondition && totalRecords > recordsPerPage) ||
+          // Show pagination for filtered results (client-side pagination)
+          ((searchQuery || activeFilters.length > 0 || sortCondition) && filteredRecords.length > recordsPerPage)
+        ) && (
           <div className="mt-6 pt-4 border-t border-gray-200">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <Button
-                  variant="outline"
-                  onClick={handlePreviousPage}
-                  disabled={currentPage === 1 || loading}
-                  className="flex items-center space-x-1"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                  <span>Previous</span>
-                </Button>
+              {(() => {
+                const isFiltered = searchQuery || activeFilters.length > 0 || sortCondition
+                const currentPageToUse = isFiltered ? filteredCurrentPage : currentPage
+                const totalRecordsToUse = isFiltered ? filteredRecords.length : totalRecords
+                const totalPages = Math.ceil(totalRecordsToUse / recordsPerPage)
+                const isFirstPage = currentPageToUse === 1
+                const isLastPage = isFiltered ? currentPageToUse >= totalPages : (!hasMore || !offset)
                 
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-600">Page</span>
-                  <Input
-                    type="number"
-                    min="1"
-                    max={Math.ceil(totalRecords / recordsPerPage)}
-                    defaultValue={currentPage}
-                    onKeyDown={handlePageInput}
-                    className="w-16 text-center"
-                    disabled={loading}
-                  />
-                  <span className="text-sm text-gray-600">
-                    of {Math.ceil(totalRecords / recordsPerPage)}
-                  </span>
-                </div>
+                return (
+                  <>
+                    <div className="flex items-center space-x-4">
+                      <Button
+                        variant="outline"
+                        onClick={handlePreviousPage}
+                        disabled={isFirstPage || loading}
+                        className="flex items-center space-x-1"
+                      >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                        <span>Previous</span>
+                      </Button>
+                      
+                      <div className="flex items-center space-x-2">
+                        <span className="text-sm text-gray-600">Page</span>
+                        <Input
+                          type="number"
+                          min="1"
+                          max={totalPages}
+                          defaultValue={currentPageToUse}
+                          onKeyDown={handlePageInput}
+                          className="w-16 text-center"
+                          disabled={loading}
+                        />
+                        <span className="text-sm text-gray-600">
+                          of {totalPages}
+                        </span>
+                      </div>
 
-                <Button
-                  variant="outline"
-                  onClick={handleNextPage}
-                  disabled={!hasMore || !offset || loading}
-                  className="flex items-center space-x-1"
-                >
-                  <span>Next</span>
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </Button>
-              </div>
+                      <Button
+                        variant="outline"
+                        onClick={handleNextPage}
+                        disabled={isLastPage || loading}
+                        className="flex items-center space-x-1"
+                      >
+                        <span>Next</span>
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Button>
+                    </div>
 
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
-                <span>Records per page: {recordsPerPage}</span>
-                <span className="text-gray-400">|</span>
-                <span>Total: {totalRecords.toLocaleString()}</span>
-              </div>
+                    <div className="flex items-center space-x-2 text-sm text-gray-600">
+                      <span>Records per page: {recordsPerPage}</span>
+                      <span className="text-gray-400">|</span>
+                      {isFiltered ? (
+                        <>
+                          <span>Filtered: {totalRecordsToUse.toLocaleString()}</span>
+                          <span className="text-gray-400">|</span>
+                          <span>Total: {totalRecords.toLocaleString()}</span>
+                        </>
+                      ) : (
+                        <span>Total: {totalRecords.toLocaleString()}</span>
+                      )}
+                    </div>
+                  </>
+                )
+              })()}
             </div>
             
             {loading && (

@@ -10,6 +10,7 @@ import { handleAsyncError } from "@/components/error-boundary";
 import { PWAPrompts, ConnectionStatus } from "@/components/pwa/PWAPrompts";
 import { PerformanceProvider } from "@/components/performance/PerformanceProvider";
 import { AuthProvider } from "@/lib/auth/auth-context";
+import { WebSocketProvider } from "@/lib/realtime/WebSocketProvider";
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -61,6 +62,7 @@ export function Providers({ children }: ProvidersProps) {
     >
       <PerformanceProvider>
         <AuthProvider>
+          <WebSocketProvider>
           {/* Temporarily disabled: <PostHogProvider> */}
             <QueryClientProvider client={queryClient}>
               {children}
@@ -97,6 +99,7 @@ export function Providers({ children }: ProvidersProps) {
             <PWAPrompts showInstallBanner={true} autoShowInstallDialog={false} />
             </QueryClientProvider>
           {/* Temporarily disabled: </PostHogProvider> */}
+          </WebSocketProvider>
         </AuthProvider>
       </PerformanceProvider>
     </ErrorBoundary>
