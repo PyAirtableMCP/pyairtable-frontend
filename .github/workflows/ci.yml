@@ -1,0 +1,200 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: "18"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  detect-changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      tenant-dashboard: ${{ steps.changes.outputs.tenant-dashboard }}
+      admin-dashboard: ${{ steps.changes.outputs.admin-dashboard }}
+      auth-frontend: ${{ steps.changes.outputs.auth-frontend }}
+      event-sourcing-ui: ${{ steps.changes.outputs.event-sourcing-ui }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            tenant-dashboard:
+              - 'tenant-dashboard/**'
+            admin-dashboard:
+              - 'admin-dashboard/**'
+            auth-frontend:
+              - 'auth-frontend/**'
+            event-sourcing-ui:
+              - 'event-sourcing-ui/**'
+
+  test-tenant-dashboard:
+    name: Test Tenant Dashboard
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.tenant-dashboard == 'true'
+    defaults:
+      run:
+        working-directory: tenant-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: tenant-dashboard/package-lock.json
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Type check
+        run: npm run type-check
+      
+      - name: Lint
+        run: npm run lint
+      
+      - name: Run unit tests
+        run: npm run test:coverage
+      
+      - name: Build
+        run: npm run build
+
+  test-admin-dashboard:
+    name: Test Admin Dashboard
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.admin-dashboard == 'true'
+    defaults:
+      run:
+        working-directory: admin-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: admin-dashboard/package-lock.json
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Type check
+        run: npm run type-check || npx tsc --noEmit
+      
+      - name: Lint
+        run: npm run lint
+      
+      - name: Build
+        run: npm run build
+
+  test-auth-frontend:
+    name: Test Auth Frontend
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.auth-frontend == 'true'
+    defaults:
+      run:
+        working-directory: auth-frontend
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: auth-frontend/package-lock.json
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Type check
+        run: npm run type-check || npx tsc --noEmit
+      
+      - name: Lint
+        run: npm run lint
+      
+      - name: Build
+        run: npm run build
+
+  test-event-sourcing-ui:
+    name: Test Event Sourcing UI
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.event-sourcing-ui == 'true'
+    defaults:
+      run:
+        working-directory: event-sourcing-ui
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: event-sourcing-ui/package-lock.json
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Type check
+        run: npm run type-check || npx tsc --noEmit
+      
+      - name: Lint
+        run: npm run lint
+      
+      - name: Build
+        run: npm run build
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Run npm audit
+        run: |
+          # Check for security vulnerabilities in all packages
+          for dir in tenant-dashboard admin-dashboard auth-frontend event-sourcing-ui; do
+            if [ -f "$dir/package.json" ]; then
+              echo "Auditing $dir..."
+              cd "$dir"
+              npm audit --audit-level=moderate
+              cd ..
+            fi
+          done
+
+  build-success:
+    name: All Builds Successful
+    runs-on: ubuntu-latest
+    needs: [test-tenant-dashboard, test-admin-dashboard, test-auth-frontend, test-event-sourcing-ui]
+    if: always()
+    steps:
+      - name: Check build status
+        run: |
+          if [[ "${{ needs.test-tenant-dashboard.result }}" == "failure" || \
+                "${{ needs.test-admin-dashboard.result }}" == "failure" || \
+                "${{ needs.test-auth-frontend.result }}" == "failure" || \
+                "${{ needs.test-event-sourcing-ui.result }}" == "failure" ]]; then
+            echo "One or more builds failed"
+            exit 1
+          fi
+          echo "All applicable builds passed"
