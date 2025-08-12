@@ -46,6 +46,14 @@ function TableRecordsPageContent() {
   const [hasMore, setHasMore] = useState(false)
   const debouncedSearchQuery = useDebounce(searchQuery, 300)
 
+  // CRUD states
+  const [editingCell, setEditingCell] = useState<{recordId: string, fieldName: string} | null>(null)
+  const [editingValue, setEditingValue] = useState<string>('')
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const [newRecordFields, setNewRecordFields] = useState<Record<string, any>>({})
+  const [deletingRecordId, setDeletingRecordId] = useState<string | null>(null)
+  const [crudLoading, setCrudLoading] = useState(false)
+
   const recordsPerPage = 10
 
   // Mock data fallback
@@ -212,6 +220,125 @@ function TableRecordsPageContent() {
     }
   }
 
+  // CRUD Operations
+  const handleCreateRecord = async () => {
+    if (!isAuthenticated || !baseId || !tableId) return
+    
+    setCrudLoading(true)
+    try {
+      const accessToken = await getAccessToken()
+      if (!accessToken) throw new Error('No access token available')
+
+      // Create record with only non-empty fields
+      const fieldsToCreate = Object.entries(newRecordFields)
+        .filter(([_, value]) => value !== '' && value !== null && value !== undefined)
+        .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
+
+      if (Object.keys(fieldsToCreate).length === 0) {
+        alert('Please fill in at least one field')
+        return
+      }
+
+      const response = await airtableClient.createRecords(baseId, tableId, [fieldsToCreate], true)
+      
+      // Optimistic update - add new record to current records
+      if (response.records && response.records.length > 0) {
+        setRecords(prev => [response.records[0], ...prev])
+        setTotalRecords(prev => prev + 1)
+        setIsCreateModalOpen(false)
+        setNewRecordFields({})
+      }
+    } catch (err) {
+      console.error('Error creating record:', err)
+      alert('Failed to create record: ' + (err instanceof Error ? err.message : 'Unknown error'))
+    } finally {
+      setCrudLoading(false)
+    }
+  }
+
+  const handleUpdateRecord = async (recordId: string, fieldName: string, newValue: string) => {
+    if (!isAuthenticated || !baseId || !tableId) return
+    
+    setCrudLoading(true)
+    const originalRecord = records.find(r => r.id === recordId)
+    if (!originalRecord) return
+
+    // Optimistic update
+    setRecords(prev => prev.map(record => 
+      record.id === recordId 
+        ? { ...record, fields: { ...record.fields, [fieldName]: newValue } }
+        : record
+    ))
+
+    try {
+      const accessToken = await getAccessToken()
+      if (!accessToken) throw new Error('No access token available')
+
+      await airtableClient.updateRecords(baseId, tableId, [
+        { id: recordId, [fieldName]: newValue }
+      ], true)
+    } catch (err) {
+      console.error('Error updating record:', err)
+      // Rollback on error
+      setRecords(prev => prev.map(record => 
+        record.id === recordId ? originalRecord : record
+      ))
+      alert('Failed to update record: ' + (err instanceof Error ? err.message : 'Unknown error'))
+    } finally {
+      setCrudLoading(false)
+    }
+  }
+
+  const handleDeleteRecord = async (recordId: string) => {
+    if (!isAuthenticated || !baseId || !tableId) return
+    
+    setDeletingRecordId(recordId)
+    
+    if (!confirm('Are you sure you want to delete this record? This action cannot be undone.')) {
+      setDeletingRecordId(null)
+      return
+    }
+
+    setCrudLoading(true)
+    const originalRecords = [...records]
+    
+    // Optimistic update - remove record
+    setRecords(prev => prev.filter(record => record.id !== recordId))
+    setTotalRecords(prev => prev - 1)
+
+    try {
+      const accessToken = await getAccessToken()
+      if (!accessToken) throw new Error('No access token available')
+
+      await airtableClient.deleteRecords(baseId, tableId, [recordId])
+    } catch (err) {
+      console.error('Error deleting record:', err)
+      // Rollback on error
+      setRecords(originalRecords)
+      setTotalRecords(prev => prev + 1)
+      alert('Failed to delete record: ' + (err instanceof Error ? err.message : 'Unknown error'))
+    } finally {
+      setCrudLoading(false)
+      setDeletingRecordId(null)
+    }
+  }
+
+  const handleCellDoubleClick = (recordId: string, fieldName: string, currentValue: any) => {
+    setEditingCell({ recordId, fieldName })
+    setEditingValue(formatFieldValue(currentValue))
+  }
+
+  const handleCellEdit = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && editingCell) {
+      await handleUpdateRecord(editingCell.recordId, editingCell.fieldName, editingValue)
+      setEditingCell(null)
+      setEditingValue('')
+    } else if (e.key === 'Escape') {
+      setEditingCell(null)
+      setEditingValue('')
+    }
+  }
+
   if (authLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -267,13 +394,25 @@ function TableRecordsPageContent() {
                 )}
               </p>
             </div>
-            <button
-              onClick={fetchRecords}
-              disabled={loading}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-            >
-              {loading ? 'Loading...' : 'Refresh'}
-            </button>
+            <div className="flex space-x-3">
+              <button
+                onClick={() => setIsCreateModalOpen(true)}
+                disabled={crudLoading}
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 flex items-center space-x-2"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                <span>New Record</span>
+              </button>
+              <button
+                onClick={fetchRecords}
+                disabled={loading}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              >
+                {loading ? 'Loading...' : 'Refresh'}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -356,6 +495,9 @@ function TableRecordsPageContent() {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Created
                     </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -365,12 +507,50 @@ function TableRecordsPageContent() {
                         {record.id}
                       </td>
                       {fieldNames.map((fieldName) => (
-                        <td key={fieldName} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {formatFieldValue(record.fields[fieldName])}
+                        <td 
+                          key={fieldName} 
+                          className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 cursor-pointer hover:bg-gray-50"
+                          onDoubleClick={() => handleCellDoubleClick(record.id, fieldName, record.fields[fieldName])}
+                          title="Double-click to edit"
+                        >
+                          {editingCell?.recordId === record.id && editingCell?.fieldName === fieldName ? (
+                            <input
+                              type="text"
+                              value={editingValue}
+                              onChange={(e) => setEditingValue(e.target.value)}
+                              onKeyDown={handleCellEdit}
+                              onBlur={() => {
+                                setEditingCell(null)
+                                setEditingValue('')
+                              }}
+                              className="w-full px-2 py-1 border border-blue-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              autoFocus
+                            />
+                          ) : (
+                            formatFieldValue(record.fields[fieldName])
+                          )}
                         </td>
                       ))}
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {new Date(record.createdTime).toLocaleDateString()}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => handleDeleteRecord(record.id)}
+                            disabled={crudLoading || deletingRecordId === record.id}
+                            className="text-red-600 hover:text-red-800 disabled:opacity-50"
+                            title="Delete record"
+                          >
+                            {deletingRecordId === record.id ? (
+                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-600"></div>
+                            ) : (
+                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                              </svg>
+                            )}
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -476,6 +656,80 @@ function TableRecordsPageContent() {
                 Loading next page...
               </div>
             )}
+          </div>
+        )}
+
+        {/* Create Record Modal */}
+        {isCreateModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-gray-900">Create New Record</h2>
+                <button
+                  onClick={() => {
+                    setIsCreateModalOpen(false)
+                    setNewRecordFields({})
+                  }}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                {fieldNames.map((fieldName) => (
+                  <div key={fieldName}>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      {fieldName}
+                    </label>
+                    <input
+                      type="text"
+                      value={newRecordFields[fieldName] || ''}
+                      onChange={(e) => setNewRecordFields(prev => ({ 
+                        ...prev, 
+                        [fieldName]: e.target.value 
+                      }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder={`Enter ${fieldName}...`}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex items-center justify-end space-x-3 mt-6 pt-4 border-t border-gray-200">
+                <button
+                  onClick={() => {
+                    setIsCreateModalOpen(false)
+                    setNewRecordFields({})
+                  }}
+                  disabled={crudLoading}
+                  className="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleCreateRecord}
+                  disabled={crudLoading}
+                  className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 flex items-center space-x-2"
+                >
+                  {crudLoading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      <span>Creating...</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      </svg>
+                      <span>Create Record</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>

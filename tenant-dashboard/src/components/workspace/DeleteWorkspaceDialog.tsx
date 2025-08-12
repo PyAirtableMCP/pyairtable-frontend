@@ -14,6 +14,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Workspace } from "@/types";
+import { ErrorMessage, FieldError, useErrorState } from "@/components/ui/ErrorMessage";
+import { useErrorHandler } from "@/lib/errors/error-handler";
 
 interface DeleteWorkspaceDialogProps {
   open: boolean;
@@ -32,6 +34,8 @@ export function DeleteWorkspaceDialog({
 }: DeleteWorkspaceDialogProps) {
   const [confirmationText, setConfirmationText] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const { error, setError, clearError } = useErrorState();
+  const errorHandler = useErrorHandler();
 
   const isConfirmed = confirmationText === workspace?.name;
 
@@ -39,18 +43,21 @@ export function DeleteWorkspaceDialog({
     if (!open) {
       setConfirmationText("");
       setIsSubmitting(false);
+      clearError();
     }
-  }, [open]);
+  }, [open, clearError]);
 
   const handleDelete = async () => {
     if (!isConfirmed || !workspace) return;
 
+    clearError();
     setIsSubmitting(true);
     try {
       await onConfirmDelete();
       onOpenChange(false);
-    } catch (error) {
-      console.error("Error deleting workspace:", error);
+    } catch (err) {
+      const handledError = errorHandler.handle(err, 'delete-workspace');
+      setError(handledError);
     } finally {
       setIsSubmitting(false);
     }
@@ -75,6 +82,9 @@ export function DeleteWorkspaceDialog({
         </DialogHeader>
 
         <div className="space-y-4">
+          {/* Error Display */}
+          <ErrorMessage error={error} onDismiss={clearError} />
+
           {/* Warning */}
           <div className="p-4 bg-red-50 border border-red-200 rounded-md">
             <div className="flex items-start gap-3">
@@ -131,11 +141,9 @@ export function DeleteWorkspaceDialog({
               onChange={(e) => setConfirmationText(e.target.value)}
               disabled={isSubmitting || loading}
             />
-            {confirmationText && !isConfirmed && (
-              <p className="text-sm text-red-600">
-                Text doesn't match the workspace name
-              </p>
-            )}
+            <FieldError 
+              message={confirmationText && !isConfirmed ? "Text doesn't match the workspace name" : undefined}
+            />
           </div>
         </div>
 

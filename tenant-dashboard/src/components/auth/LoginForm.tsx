@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { useAuth } from "@/lib/auth/auth-context";
 import { useInputValidation } from "@/lib/hooks/useInputValidation";
+import { ErrorMessage, FieldError, useErrorState } from "@/components/ui/ErrorMessage";
+import { useErrorHandler, ValidationError } from "@/lib/errors/error-handler";
 
 // Login form validation schema
 const loginSchema = z.object({
@@ -24,10 +26,11 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ onSuccess, onError }: LoginFormProps) {
-  const [error, setError] = useState<string | null>(null);
+  const { error, setError, clearError } = useErrorState();
   const [validationErrors, setValidationErrors] = useState<{ email?: string; password?: string }>({});
   const { login, isLoading } = useAuth();
   const { validateEmail, validatePassword } = useInputValidation();
+  const errorHandler = useErrorHandler();
 
   const {
     register,
@@ -69,7 +72,7 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
   };
 
   const onSubmit = async (data: LoginFormData) => {
-    setError(null);
+    clearError();
     setValidationErrors({});
 
     // Final validation before submission
@@ -91,10 +94,10 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
       // Login successful - auth context handles state management
       onSuccess?.();
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Login failed";
-      console.error("Login error:", err);
-      setError(message);
-      onError?.(message);
+      // Use centralized error handling
+      const handledError = errorHandler.handle(err, 'login-form');
+      setError(handledError);
+      onError?.(errorHandler.getUserMessage(handledError));
     }
   };
 
@@ -108,11 +111,7 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
           </p>
         </div>
 
-        {error && (
-          <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
-            {error}
-          </div>
-        )}
+        <ErrorMessage error={error} onDismiss={clearError} />
 
         <div className="space-y-4">
           <div className="space-y-2">
@@ -128,11 +127,10 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
               disabled={isLoading}
               aria-invalid={!!(errors.email || validationErrors.email)}
             />
-            {(errors.email || validationErrors.email) && (
-              <p className="text-xs text-red-600">
-                {errors.email?.message || validationErrors.email}
-              </p>
-            )}
+            <FieldError 
+              error={errors.email || new ValidationError(validationErrors.email || '', 'email')}
+              message={errors.email?.message || validationErrors.email}
+            />
           </div>
 
           <div className="space-y-2">
@@ -148,11 +146,10 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
               disabled={isLoading}
               aria-invalid={!!(errors.password || validationErrors.password)}
             />
-            {(errors.password || validationErrors.password) && (
-              <p className="text-xs text-red-600">
-                {errors.password?.message || validationErrors.password}
-              </p>
-            )}
+            <FieldError 
+              error={errors.password || new ValidationError(validationErrors.password || '', 'password')}
+              message={errors.password?.message || validationErrors.password}
+            />
           </div>
         </div>
 
