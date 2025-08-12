@@ -296,6 +296,135 @@ export const authApi = {
       .then(res => res.ok),
 };
 
+// Workspace Service API functions (port 8003)
+const WORKSPACE_SERVICE_URL = process.env.NEXT_PUBLIC_WORKSPACE_SERVICE_URL || "http://localhost:8003";
+
+class WorkspaceApiClient {
+  private baseURL: string;
+  private defaultHeaders: Record<string, string>;
+
+  constructor() {
+    this.baseURL = `${WORKSPACE_SERVICE_URL}/api/v1`;
+    this.defaultHeaders = {
+      "Content-Type": "application/json",
+    };
+  }
+
+  private async request<T>(
+    endpoint: string,
+    options: RequestInit = {}
+  ): Promise<T> {
+    const url = `${this.baseURL}${endpoint}`;
+    
+    const config: RequestInit = {
+      ...options,
+      headers: {
+        ...this.defaultHeaders,
+        ...options.headers,
+      },
+      credentials: "include",
+    };
+
+    try {
+      const response = await fetch(url, config);
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        
+        if (response.status === 401) {
+          if (typeof window !== "undefined") {
+            window.location.href = "/auth/login";
+          }
+        }
+        
+        throw new ApiErrorImpl(
+          errorData.code || "API_ERROR",
+          errorData.message || `HTTP ${response.status}: ${response.statusText}`,
+          errorData.details,
+          new Date().toISOString(),
+          errorData.requestId || "",
+          errorData.field
+        );
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      if (error instanceof ApiErrorImpl) {
+        throw error;
+      }
+      
+      throw new ApiErrorImpl(
+        "NETWORK_ERROR",
+        "Network error occurred",
+        { originalError: error },
+        new Date().toISOString(),
+        ""
+      );
+    }
+  }
+
+  async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
+    const searchParams = params ? `?${new URLSearchParams(params).toString()}` : "";
+    return this.request<T>(`${endpoint}${searchParams}`);
+  }
+
+  async post<T>(endpoint: string, data?: any): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: "POST",
+      body: data ? JSON.stringify(data) : undefined,
+    });
+  }
+
+  async put<T>(endpoint: string, data?: any): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: "PUT",
+      body: data ? JSON.stringify(data) : undefined,
+    });
+  }
+
+  async delete<T>(endpoint: string): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: "DELETE",
+    });
+  }
+}
+
+// Create workspace service client instance
+const workspaceApiClient = new WorkspaceApiClient();
+
+// Workspace API functions
+export const workspaceApi = {
+  // Get all workspaces
+  getAll: () => workspaceApiClient.get<any>("/workspaces"),
+  
+  // Get workspace by ID
+  getById: (id: string) => workspaceApiClient.get<any>(`/workspaces/${id}`),
+  
+  // Create workspace
+  create: (data: { name: string; description?: string }) => 
+    workspaceApiClient.post<any>("/workspaces", data),
+  
+  // Update workspace
+  update: (id: string, data: { name?: string; description?: string }) => 
+    workspaceApiClient.put<any>(`/workspaces/${id}`, data),
+  
+  // Delete workspace
+  delete: (id: string) => workspaceApiClient.delete<any>(`/workspaces/${id}`),
+
+  // Add member to workspace
+  addMember: (workspaceId: string, data: { userId: string; role: string }) =>
+    workspaceApiClient.post<any>(`/workspaces/${workspaceId}/members`, data),
+
+  // Remove member from workspace
+  removeMember: (workspaceId: string, userId: string) =>
+    workspaceApiClient.delete<any>(`/workspaces/${workspaceId}/members/${userId}`),
+
+  // Update member role
+  updateMemberRole: (workspaceId: string, userId: string, data: { role: string }) =>
+    workspaceApiClient.put<any>(`/workspaces/${workspaceId}/members/${userId}`, data),
+};
+
 // Response interceptor for handling common errors
 export const handleApiError = (error: any) => {
   if (error instanceof ApiErrorImpl) {

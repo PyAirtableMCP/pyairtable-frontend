@@ -1,15 +1,15 @@
 
 > pyairtable-tenant-dashboard@1.0.0 dev
-> next dev --port 3000
+> next dev --port 5173
 
   ▲ Next.js 14.2.31
-  - Local:        http://localhost:3000
+  - Local:        http://localhost:5173
   - Environments: .env.local
 
  ✓ Starting...
- ✓ Ready in 1829ms
- ✓ Compiled /src/middleware in 390ms (204 modules)
- ○ Compiling /auth/login ...
+ ✓ Ready in 2.4s
+ ✓ Compiled /src/middleware in 223ms (117 modules)
+ ○ Compiling / ...
  ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
 Critical dependency: the request of a dependency is an expression
 
@@ -18,8 +18,8 @@ Import trace for requested module:
 ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
 ./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
 ./node_modules/@opentelemetry/instrumentation/build/esm/index.js
-./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
-./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/opentelemetry/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/server/index.js
 ./node_modules/@sentry/nextjs/build/cjs/index.server.js
 ./src/app/global-error.tsx
 
@@ -32,123 +32,18 @@ Import trace for requested module:
 ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
 ./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
 ./node_modules/@opentelemetry/instrumentation/build/esm/index.js
-./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
-./node_modules/@sentry/node/build/cjs/index.js
-./node_modules/@sentry/nextjs/build/cjs/index.server.js
-./src/app/global-error.tsx
- ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
-Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
- HEAD /auth/login 200 in 4944ms
- ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
-Critical dependency: the request of a dependency is an expression
-
-Import trace for requested module:
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/index.js
-./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
-./node_modules/@sentry/node/build/cjs/index.js
-./node_modules/@sentry/nextjs/build/cjs/index.server.js
-./src/app/global-error.tsx
-
-./node_modules/require-in-the-middle/index.js
-Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
-
-Import trace for requested module:
-./node_modules/require-in-the-middle/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/index.js
-./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
-./node_modules/@sentry/node/build/cjs/index.js
-./node_modules/@sentry/nextjs/build/cjs/index.server.js
-./src/app/global-error.tsx
- ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
-Critical dependency: the request of a dependency is an expression
-
-Import trace for requested module:
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/index.js
-./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
-./node_modules/@sentry/node/build/cjs/index.js
-./node_modules/@sentry/nextjs/build/cjs/index.server.js
-./src/app/global-error.tsx
-
-./node_modules/require-in-the-middle/index.js
-Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
-
-Import trace for requested module:
-./node_modules/require-in-the-middle/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/index.js
-./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
-./node_modules/@sentry/node/build/cjs/index.js
-./node_modules/@sentry/nextjs/build/cjs/index.server.js
-./src/app/global-error.tsx
- ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
-Critical dependency: the request of a dependency is an expression
-
-Import trace for requested module:
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/index.js
-./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
-./node_modules/@sentry/node/build/cjs/index.js
-./node_modules/@sentry/nextjs/build/cjs/index.server.js
-./src/app/global-error.tsx
-
-./node_modules/require-in-the-middle/index.js
-Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
-
-Import trace for requested module:
-./node_modules/require-in-the-middle/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/index.js
-./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
-./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/opentelemetry/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/server/index.js
 ./node_modules/@sentry/nextjs/build/cjs/index.server.js
 ./src/app/global-error.tsx
  ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
 Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
- GET / 200 in 2323ms
- ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
-Critical dependency: the request of a dependency is an expression
-
-Import trace for requested module:
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/index.js
-./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
-./node_modules/@sentry/node/build/cjs/index.js
-./node_modules/@sentry/nextjs/build/cjs/index.server.js
-./src/app/global-error.tsx
-
-./node_modules/require-in-the-middle/index.js
-Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
-
-Import trace for requested module:
-./node_modules/require-in-the-middle/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/index.js
-./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
-./node_modules/@sentry/node/build/cjs/index.js
-./node_modules/@sentry/nextjs/build/cjs/index.server.js
-./src/app/global-error.tsx
  ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
 Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
- GET / 200 in 123ms
+ ⨯ Error: [next-auth]: `useSession` must be wrapped in a <SessionProvider />
+    at HomePage (./src/app/page.tsx:214:83)
+digest: "2525534461"
+ GET / 500 in 5367ms
  ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
 Critical dependency: the request of a dependency is an expression
 
@@ -157,8 +52,8 @@ Import trace for requested module:
 ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
 ./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
 ./node_modules/@opentelemetry/instrumentation/build/esm/index.js
-./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
-./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/opentelemetry/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/server/index.js
 ./node_modules/@sentry/nextjs/build/cjs/index.server.js
 ./src/app/global-error.tsx
 
@@ -171,22 +66,10 @@ Import trace for requested module:
 ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
 ./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
 ./node_modules/@opentelemetry/instrumentation/build/esm/index.js
-./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
-./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/opentelemetry/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/server/index.js
 ./node_modules/@sentry/nextjs/build/cjs/index.server.js
 ./src/app/global-error.tsx
- ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-192x192.png. Please move it to viewport export instead.
-Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
- ⚠ Unsupported metadata viewport is configured in metadata export in /offline. Please move it to viewport export instead.
-Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
- GET /icons/icon-192x192.png 404 in 976ms
- GET /offline 200 in 880ms
- ⚠ Unsupported metadata viewport is configured in metadata export in /icons/icon-512x512.png. Please move it to viewport export instead.
-Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
- GET /icons/icon-512x512.png 404 in 12ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev#debug-enabled
- GET /api/auth/session 200 in 1240ms
- GET /api/auth/session 200 in 6ms
  ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
 Critical dependency: the request of a dependency is an expression
 
@@ -195,8 +78,8 @@ Import trace for requested module:
 ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
 ./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
 ./node_modules/@opentelemetry/instrumentation/build/esm/index.js
-./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
-./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/opentelemetry/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/server/index.js
 ./node_modules/@sentry/nextjs/build/cjs/index.server.js
 ./src/app/global-error.tsx
 
@@ -209,74 +92,8 @@ Import trace for requested module:
 ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
 ./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
 ./node_modules/@opentelemetry/instrumentation/build/esm/index.js
-./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
-./node_modules/@sentry/node/build/cjs/index.js
-./node_modules/@sentry/nextjs/build/cjs/index.server.js
-./src/app/global-error.tsx
- ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
-Critical dependency: the request of a dependency is an expression
-
-Import trace for requested module:
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/index.js
-./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
-./node_modules/@sentry/node/build/cjs/index.js
-./node_modules/@sentry/nextjs/build/cjs/index.server.js
-./src/app/global-error.tsx
-
-./node_modules/require-in-the-middle/index.js
-Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
-
-Import trace for requested module:
-./node_modules/require-in-the-middle/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/index.js
-./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
-./node_modules/@sentry/node/build/cjs/index.js
-./node_modules/@sentry/nextjs/build/cjs/index.server.js
-./src/app/global-error.tsx
- ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
-Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
- GET /chat 200 in 685ms
- ⚠ Unsupported metadata viewport is configured in metadata export in /chat. Please move it to viewport export instead.
-Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
- GET /chat 200 in 32ms
-[33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev#debug-enabled
- GET /api/auth/session 200 in 33ms
- GET /api/auth/session 200 in 3ms
- ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
-Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
- GET /auth/login 200 in 36ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 4ms
- ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
-Critical dependency: the request of a dependency is an expression
-
-Import trace for requested module:
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/index.js
-./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
-./node_modules/@sentry/node/build/cjs/index.js
-./node_modules/@sentry/nextjs/build/cjs/index.server.js
-./src/app/global-error.tsx
-
-./node_modules/require-in-the-middle/index.js
-Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
-
-Import trace for requested module:
-./node_modules/require-in-the-middle/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
-./node_modules/@opentelemetry/instrumentation/build/esm/index.js
-./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
-./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/opentelemetry/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/server/index.js
 ./node_modules/@sentry/nextjs/build/cjs/index.server.js
 ./src/app/global-error.tsx
  ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
@@ -307,74 +124,607 @@ Import trace for requested module:
 ./src/app/global-error.tsx
  ⚠ Unsupported metadata viewport is configured in metadata export in /auth/register. Please move it to viewport export instead.
 Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
- GET /auth/register 200 in 1414ms
+ GET /auth/register 200 in 1018ms
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+ POST /api/auth/register 201 in 407ms
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+ ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /auth/login 200 in 615ms
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
 [33m[auth][warn][debug-enabled][0m Read more: https://warnings.authjs.dev#debug-enabled
- GET /api/auth/session 200 in 13ms
- GET /api/auth/session 200 in 3ms
- ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
-Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
- GET /auth/login 200 in 82ms
- GET /api/auth/session 200 in 27ms
- GET /api/auth/session 200 in 8ms
- GET /api/auth/providers 200 in 10ms
- GET /api/auth/csrf 200 in 5ms
-🔐 NextAuth authorize called with: {
-  email: 'test@example.com',
-  password: 'testpassword123',
-  redirect: 'false',
-  csrfToken: '60c5f8a8b727bf785206818b99646062287d5b334d0e470ecf5854c3f1bc1d4b',
-  callbackUrl: 'http://localhost:3000/auth/login'
-}
-✅ Credentials validated: { email: 'test@example.com', password: '***' }
-📞 Calling auth service: http://localhost:8009/auth/login
-📥 Auth service response status: 401
-Auth service login failed: 401 {"detail":"Invalid credentials"}
-Read more at https://errors.authjs.dev/#credentialssignin
-[90m[auth][debug]:[0m callback route error details {
-  "method": "POST",
-  "query": {},
-  "body": {
-    "email": "test@example.com",
-    "password": "testpassword123",
-    "redirect": "false",
-    "csrfToken": "60c5f8a8b727bf785206818b99646062287d5b334d0e470ecf5854c3f1bc1d4b",
-    "callbackUrl": "http://localhost:3000/auth/login"
-  }
-}
-[31m[auth][error][0m CallbackRouteError: Read more at https://errors.authjs.dev#callbackrouteerror
-[31m[auth][cause][0m: Error
-    at Module.callback (webpack-internal:///(rsc)/./node_modules/next-auth/node_modules/@auth/core/lib/actions/callback/index.js:226:23)
-    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
-    at async AuthInternal (webpack-internal:///(rsc)/./node_modules/next-auth/node_modules/@auth/core/lib/index.js:66:24)
+[31m[auth][error][0m MissingCSRF: CSRF token was missing during an action signin. Read more at https://errors.authjs.dev#missingcsrf
+    at validateCSRF (webpack-internal:///(rsc)/./node_modules/next-auth/node_modules/@auth/core/lib/actions/callback/oauth/csrf-token.js:45:11)
+    at AuthInternal (webpack-internal:///(rsc)/./node_modules/next-auth/node_modules/@auth/core/lib/index.js:71:100)
     at async Auth (webpack-internal:///(rsc)/./node_modules/next-auth/node_modules/@auth/core/index.js:126:34)
-    at async /Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
-    at async eT.execute (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
-    at async eT.handle (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
-    at async doRender (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/base-server.js:1366:42)
-    at async cacheEntry.responseCache.get.routeKind (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/base-server.js:1576:40)
-    at async DevServer.renderToResponseWithComponentsImpl (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/base-server.js:1496:28)
-    at async DevServer.renderPageComponent (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/base-server.js:1924:24)
-    at async DevServer.renderToResponseImpl (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/base-server.js:1962:32)
-    at async DevServer.pipeImpl (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/base-server.js:922:25)
-    at async NextNodeServer.handleCatchallRenderRequest (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/next-server.js:272:17)
-    at async DevServer.handleRequestImpl (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/base-server.js:818:17)
-    at async /Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/dev/next-dev-server.js:339:20
-    at async Span.traceAsyncFn (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/trace/trace.js:154:20)
-    at async DevServer.handleRequest (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
-    at async invokeRender (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/lib/router-server.js:179:21)
-    at async handleRequest (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/lib/router-server.js:359:24)
-    at async requestHandlerImpl (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/lib/router-server.js:383:13)
-    at async Server.requestListener (/Users/kg/IdeaProjects/pyairtable-compose/frontend-services/tenant-dashboard/node_modules/next/dist/server/lib/start-server.js:141:13)
-[31m[auth][details][0m: {
-  "provider": "credentials"
+    at async /Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/base-server.js:1576:40)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/lib/start-server.js:141:13)
+ POST /api/auth/signin/credentials 302 in 1068ms
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+Testing login to mock auth service...
+ POST /api/test-auth 200 in 421ms
+Registration error: ZodError: [
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "name"
+    ],
+    "message": "Required"
+  },
+  {
+    "validation": "email",
+    "code": "invalid_string",
+    "message": "Please enter a valid email address",
+    "path": [
+      "email"
+    ]
+  },
+  {
+    "code": "too_small",
+    "minimum": 8,
+    "type": "string",
+    "inclusive": true,
+    "exact": false,
+    "message": "Password must be at least 8 characters",
+    "path": [
+      "password"
+    ]
+  },
+  {
+    "validation": "regex",
+    "code": "invalid_string",
+    "message": "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+    "path": [
+      "password"
+    ]
+  }
+]
+    at get error (webpack-internal:///(rsc)/./node_modules/zod/v3/types.js:134:31)
+    at ZodObject.parse (webpack-internal:///(rsc)/./node_modules/zod/v3/types.js:209:22)
+    at POST (webpack-internal:///(rsc)/./src/app/api/auth/register/route.ts:21:46)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  issues: [
+    {
+      code: 'invalid_type',
+      expected: 'string',
+      received: 'undefined',
+      path: [Array],
+      message: 'Required'
+    },
+    {
+      validation: 'email',
+      code: 'invalid_string',
+      message: 'Please enter a valid email address',
+      path: [Array]
+    },
+    {
+      code: 'too_small',
+      minimum: 8,
+      type: 'string',
+      inclusive: true,
+      exact: false,
+      message: 'Password must be at least 8 characters',
+      path: [Array]
+    },
+    {
+      validation: 'regex',
+      code: 'invalid_string',
+      message: 'Password must contain at least one uppercase letter, one lowercase letter, and one number',
+      path: [Array]
+    }
+  ],
+  addIssue: [Function (anonymous)],
+  addIssues: [Function (anonymous)],
+  errors: [
+    {
+      code: 'invalid_type',
+      expected: 'string',
+      received: 'undefined',
+      path: [Array],
+      message: 'Required'
+    },
+    {
+      validation: 'email',
+      code: 'invalid_string',
+      message: 'Please enter a valid email address',
+      path: [Array]
+    },
+    {
+      code: 'too_small',
+      minimum: 8,
+      type: 'string',
+      inclusive: true,
+      exact: false,
+      message: 'Password must be at least 8 characters',
+      path: [Array]
+    },
+    {
+      validation: 'regex',
+      code: 'invalid_string',
+      message: 'Password must contain at least one uppercase letter, one lowercase letter, and one number',
+      path: [Array]
+    }
+  ]
 }
- POST /api/auth/callback/credentials? 200 in 125ms
- GET /api/auth/session 200 in 9ms
+ POST /api/auth/register 400 in 50ms
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+ ✓ Compiled /api/auth/logout in 321ms (115 modules)
+ POST /api/auth/logout 200 in 390ms
+ ○ Compiling /auth/login ...
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
  ⚠ Unsupported metadata viewport is configured in metadata export in /auth/login. Please move it to viewport export instead.
 Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
- GET /auth/login?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fdashboard 200 in 27ms
- GET /api/auth/session 200 in 41ms
- GET /api/auth/session 200 in 9ms
+ GET /auth/login 200 in 1048ms
+ POST /api/auth/register 201 in 20ms
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+Testing login to mock auth service...
+ POST /api/test-auth 200 in 146ms
+ POST /api/auth/logout 200 in 4ms
+Registration error: ZodError: [
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "name"
+    ],
+    "message": "Required"
+  },
+  {
+    "validation": "email",
+    "code": "invalid_string",
+    "message": "Please enter a valid email address",
+    "path": [
+      "email"
+    ]
+  },
+  {
+    "code": "too_small",
+    "minimum": 8,
+    "type": "string",
+    "inclusive": true,
+    "exact": false,
+    "message": "Password must be at least 8 characters",
+    "path": [
+      "password"
+    ]
+  },
+  {
+    "validation": "regex",
+    "code": "invalid_string",
+    "message": "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+    "path": [
+      "password"
+    ]
+  }
+]
+    at get error (webpack-internal:///(rsc)/./node_modules/zod/v3/types.js:134:31)
+    at ZodObject.parse (webpack-internal:///(rsc)/./node_modules/zod/v3/types.js:209:22)
+    at POST (webpack-internal:///(rsc)/./src/app/api/auth/register/route.ts:21:46)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  issues: [
+    {
+      code: 'invalid_type',
+      expected: 'string',
+      received: 'undefined',
+      path: [Array],
+      message: 'Required'
+    },
+    {
+      validation: 'email',
+      code: 'invalid_string',
+      message: 'Please enter a valid email address',
+      path: [Array]
+    },
+    {
+      code: 'too_small',
+      minimum: 8,
+      type: 'string',
+      inclusive: true,
+      exact: false,
+      message: 'Password must be at least 8 characters',
+      path: [Array]
+    },
+    {
+      validation: 'regex',
+      code: 'invalid_string',
+      message: 'Password must contain at least one uppercase letter, one lowercase letter, and one number',
+      path: [Array]
+    }
+  ],
+  addIssue: [Function (anonymous)],
+  addIssues: [Function (anonymous)],
+  errors: [
+    {
+      code: 'invalid_type',
+      expected: 'string',
+      received: 'undefined',
+      path: [Array],
+      message: 'Required'
+    },
+    {
+      validation: 'email',
+      code: 'invalid_string',
+      message: 'Please enter a valid email address',
+      path: [Array]
+    },
+    {
+      code: 'too_small',
+      minimum: 8,
+      type: 'string',
+      inclusive: true,
+      exact: false,
+      message: 'Password must be at least 8 characters',
+      path: [Array]
+    },
+    {
+      validation: 'regex',
+      code: 'invalid_string',
+      message: 'Password must contain at least one uppercase letter, one lowercase letter, and one number',
+      path: [Array]
+    }
+  ]
+}
+ POST /api/auth/register 400 in 4ms
  ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
 Critical dependency: the request of a dependency is an expression
 
@@ -531,7 +881,68 @@ Import trace for requested module:
 ./node_modules/@sentry/node/build/cjs/index.js
 ./node_modules/@sentry/nextjs/build/cjs/index.server.js
 ./src/app/global-error.tsx
- ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
-Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
- GET / 200 in 5298ms
-[?25h
+ ⚠ ./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+Critical dependency: the request of a dependency is an expression
+
+Import trace for requested module:
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+
+./node_modules/require-in-the-middle/index.js
+Critical dependency: require function is used in a way in which dependencies cannot be statically extracted
+
+Import trace for requested module:
+./node_modules/require-in-the-middle/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/instrumentation.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/node/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/platform/index.js
+./node_modules/@opentelemetry/instrumentation/build/esm/index.js
+./node_modules/@sentry/node/build/cjs/integrations/node-fetch.js
+./node_modules/@sentry/node/build/cjs/index.js
+./node_modules/@sentry/nextjs/build/cjs/index.server.js
+./src/app/global-error.tsx
+ ✓ Compiled /api/test-auth in 873ms (1545 modules)
+ ✓ Compiled in 344ms (1442 modules)
+ ✓ Compiled in 257ms (1442 modules)
+ ✓ Compiled in 323ms (1442 modules)
+ ✓ Compiled in 248ms (1442 modules)
+ ✓ Compiled in 239ms (1442 modules)
+ ✓ Compiled in 281ms (1442 modules)
+ ✓ Compiled in 1347ms (1442 modules)
+ ✓ Compiled in 425ms (1442 modules)
+ ✓ Compiled in 302ms (1442 modules)
+ ✓ Compiled in 302ms (1442 modules)
+ ✓ Compiled in 258ms (1442 modules)
+ ✓ Compiled in 256ms (1442 modules)
+ ✓ Compiled in 900ms (1442 modules)
+ ✓ Compiled in 264ms (1442 modules)
+ ✓ Compiled in 388ms (1442 modules)
+ ✓ Compiled in 271ms (1442 modules)
+ ✓ Compiled in 593ms (1545 modules)
+ ✓ Compiled in 871ms (1442 modules)
+ ✓ Compiled in 391ms (1442 modules)
+ ✓ Compiled in 254ms (1442 modules)
+ ✓ Compiled in 183ms (1442 modules)
+ ✓ Compiled in 252ms (1442 modules)
+ ✓ Compiled in 1874ms (1442 modules)
+ ✓ Compiled in 506ms (1442 modules)
+ ✓ Compiled in 253ms (1442 modules)
+ ✓ Compiled in 491ms (1442 modules)
+ ✓ Compiled in 376ms (1442 modules)
+ ✓ Compiled in 372ms (1442 modules)
+ ✓ Compiled in 297ms (1442 modules)
+ ✓ Compiled in 259ms (1442 modules)
+ ✓ Compiled in 303ms (1442 modules)
+ ✓ Compiled in 295ms (1442 modules)
+ ✓ Compiled in 524ms (1442 modules)
+ ✓ Compiled in 252ms (1442 modules)
+ ✓ Compiled in 813ms (1442 modules)
+ ✓ Compiled in 431ms (1442 modules)
+ ✓ Compiled in 361ms (1442 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/.next/cache/webpack/client-development/1.pack.gz_' -> '/Users/kg/IdeaProjects/pyairtable-frontend/tenant-dashboard/.next/cache/webpack/client-development/1.pack.gz'

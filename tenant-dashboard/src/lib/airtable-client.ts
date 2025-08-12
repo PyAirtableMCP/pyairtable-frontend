@@ -72,7 +72,8 @@ class AirtableGatewayClient {
 
   private async makeRequest<T>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
+    accessToken?: string
   ): Promise<T> {
     const url = `${this.config.gatewayUrl}${endpoint}`;
     
@@ -86,10 +87,16 @@ class AirtableGatewayClient {
       headers['X-Internal-API-Key'] = this.config.internalApiKey;
     }
 
+    // Add JWT token if provided
+    if (accessToken) {
+      headers['Authorization'] = `Bearer ${accessToken}`;
+    }
+
     try {
       const response = await fetch(url, {
         ...options,
         headers,
+        credentials: 'include', // Include cookies for additional auth
       });
 
       if (!response.ok) {
@@ -116,8 +123,8 @@ class AirtableGatewayClient {
   /**
    * List all accessible Airtable bases
    */
-  async listBases(): Promise<AirtableBase[]> {
-    const response = await this.makeRequest<ListBasesResponse>('/api/v1/airtable/bases');
+  async listBases(accessToken?: string): Promise<AirtableBase[]> {
+    const response = await this.makeRequest<ListBasesResponse>('/api/v1/airtable/bases', {}, accessToken);
     return response.bases;
   }
 

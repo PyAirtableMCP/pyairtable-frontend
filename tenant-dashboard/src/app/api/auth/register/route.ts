@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 
-// Auth service base URL
+// Auth service base URL - using mock auth service (TODO: implement in platform-services)
 const AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL || "http://localhost:8009"
 
 const registerSchema = z.object({

@@ -23,8 +23,17 @@ export interface LoginResponse {
   user: User;
 }
 
+// Go service response format
+interface GoAuthResponse {
+  token: string;
+  user: {
+    id: string;
+    email: string;
+  };
+}
+
 // Auth API client with cookie support
-const AUTH_SERVICE_URL = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || "http://localhost:8007";
+const AUTH_SERVICE_URL = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || "http://localhost:8082";
 
 export class CookieAuthClient {
   // Login and store tokens in httpOnly cookies
@@ -43,27 +52,66 @@ export class CookieAuthClient {
       throw new Error(errorData.detail || "Login failed");
     }
 
-    const data: LoginResponse = await response.json();
+    const goResponse: GoAuthResponse = await response.json();
 
-    // Store tokens in httpOnly cookies via API route
-    await fetch("/api/auth/set-tokens", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        access_token: data.access_token,
-        token_type: data.token_type,
-        expires_in: data.expires_in,
-      }),
-      credentials: "include",
-    });
+    // Convert Go service response to expected format
+    const user: User = {
+      id: parseInt(goResponse.user.id),
+      email: goResponse.user.email,
+      first_name: null,
+      last_name: null,
+      is_active: true,
+      created_at: new Date().toISOString()
+    };
+
+    const data: LoginResponse = {
+      access_token: goResponse.token,
+      token_type: "Bearer",
+      expires_in: 86400, // 24 hours default
+      user: user
+    };
+
+    // Store JWT token in localStorage
+    if (typeof window !== "undefined" && data.access_token) {
+      localStorage.setItem("jwt_token", data.access_token);
+      localStorage.setItem("user_data", JSON.stringify(data.user));
+    }
+
+    // Also store tokens in httpOnly cookies via API route (for backward compatibility)
+    try {
+      await fetch("/api/auth/set-tokens", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          access_token: data.access_token,
+          token_type: data.token_type,
+          expires_in: data.expires_in,
+        }),
+        credentials: "include",
+      });
+    } catch (error) {
+      console.warn("Failed to set cookies, continuing with localStorage only:", error);
+    }
 
     return data;
   }
 
   // Get current user profile
   static async getCurrentUser(): Promise<User | null> {
+    // Check localStorage first
+    if (typeof window !== "undefined") {
+      const userData = localStorage.getItem("user_data");
+      if (userData) {
+        try {
+          return JSON.parse(userData);
+        } catch (error) {
+          console.error("Error parsing user data from localStorage:", error);
+        }
+      }
+    }
+
     try {
       const response = await fetch("/api/auth/profile", {
         method: "GET",
@@ -83,6 +131,12 @@ export class CookieAuthClient {
 
   // Logout and clear cookies
   static async logout(): Promise<void> {
+    // Clear localStorage
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("jwt_token");
+      localStorage.removeItem("user_data");
+    }
+
     try {
       await fetch("/api/auth/logout", {
         method: "POST",
@@ -110,6 +164,14 @@ export class CookieAuthClient {
 
   // Check if user is authenticated
   static async isAuthenticated(): Promise<boolean> {
+    // Check localStorage first
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("jwt_token");
+      if (token) {
+        return true; // Basic check - could be enhanced with token validation
+      }
+    }
+
     try {
       const response = await fetch("/api/auth/check", {
         method: "GET",
