@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { useAuth } from "@/lib/auth/auth-context";
+import { useInputValidation } from "@/lib/hooks/useInputValidation";
 
 // Login form validation schema
 const loginSchema = z.object({
@@ -24,21 +25,68 @@ interface LoginFormProps {
 
 export function LoginForm({ onSuccess, onError }: LoginFormProps) {
   const [error, setError] = useState<string | null>(null);
+  const [validationErrors, setValidationErrors] = useState<{ email?: string; password?: string }>({});
   const { login, isLoading } = useAuth();
+  const { validateEmail, validatePassword } = useInputValidation();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
+    watch,
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
 
+  const watchedEmail = watch("email", "");
+  const watchedPassword = watch("password", "");
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const validation = validateEmail(value);
+    
+    setValidationErrors(prev => ({
+      ...prev,
+      email: validation.isValid ? undefined : validation.errors[0]
+    }));
+    
+    // Update form with sanitized value
+    setValue("email", validation.sanitizedValue);
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const validation = validatePassword(value);
+    
+    setValidationErrors(prev => ({
+      ...prev,
+      password: validation.isValid ? undefined : validation.errors[0]
+    }));
+    
+    // Update form with sanitized value
+    setValue("password", validation.sanitizedValue);
+  };
+
   const onSubmit = async (data: LoginFormData) => {
     setError(null);
+    setValidationErrors({});
+
+    // Final validation before submission
+    const emailValidation = validateEmail(data.email);
+    const passwordValidation = validatePassword(data.password);
+
+    if (!emailValidation.isValid || !passwordValidation.isValid) {
+      setValidationErrors({
+        email: emailValidation.isValid ? undefined : emailValidation.errors[0],
+        password: passwordValidation.isValid ? undefined : passwordValidation.errors[0]
+      });
+      return;
+    }
 
     try {
-      await login(data.email, data.password);
+      // Use sanitized values for login
+      await login(emailValidation.sanitizedValue, passwordValidation.sanitizedValue);
       
       // Login successful - auth context handles state management
       onSuccess?.();
@@ -76,11 +124,14 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
               type="email"
               placeholder="Enter your email"
               {...register("email")}
+              onChange={handleEmailChange}
               disabled={isLoading}
-              aria-invalid={!!errors.email}
+              aria-invalid={!!(errors.email || validationErrors.email)}
             />
-            {errors.email && (
-              <p className="text-xs text-red-600">{errors.email.message}</p>
+            {(errors.email || validationErrors.email) && (
+              <p className="text-xs text-red-600">
+                {errors.email?.message || validationErrors.email}
+              </p>
             )}
           </div>
 
@@ -93,11 +144,14 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
               type="password"
               placeholder="Enter your password"
               {...register("password")}
+              onChange={handlePasswordChange}
               disabled={isLoading}
-              aria-invalid={!!errors.password}
+              aria-invalid={!!(errors.password || validationErrors.password)}
             />
-            {errors.password && (
-              <p className="text-xs text-red-600">{errors.password.message}</p>
+            {(errors.password || validationErrors.password) && (
+              <p className="text-xs text-red-600">
+                {errors.password?.message || validationErrors.password}
+              </p>
             )}
           </div>
         </div>

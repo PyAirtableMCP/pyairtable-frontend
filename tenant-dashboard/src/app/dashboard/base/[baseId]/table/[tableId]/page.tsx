@@ -6,6 +6,8 @@ import { airtableClient, AirtableRecord } from '@/lib/airtable-client'
 import { useAuth } from '@/lib/auth/auth-context'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { useInputValidation } from '@/lib/hooks/useInputValidation'
+import { CriticalPageErrorBoundary } from '@/lib/components/PageErrorBoundary'
 
 // Custom hook for debouncing
 function useDebounce<T>(value: T, delay: number): T {
@@ -24,12 +26,13 @@ function useDebounce<T>(value: T, delay: number): T {
   return debouncedValue
 }
 
-export default function TableRecordsPage() {
+function TableRecordsPageContent() {
   const { user, isLoading: authLoading, isAuthenticated, getAccessToken } = useAuth()
   const router = useRouter()
   const params = useParams()
   const baseId = params.baseId as string
   const tableId = params.tableId as string
+  const { validateSearchInput } = useInputValidation()
 
   const [records, setRecords] = useState<AirtableRecord[]>([])
   const [loading, setLoading] = useState(false)
@@ -37,7 +40,13 @@ export default function TableRecordsPage() {
   const [tableName, setTableName] = useState<string>('')
   const [totalRecords, setTotalRecords] = useState<number>(0)
   const [searchQuery, setSearchQuery] = useState('')
+  const [searchError, setSearchError] = useState<string | null>(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [offset, setOffset] = useState<string>('')
+  const [hasMore, setHasMore] = useState(false)
   const debouncedSearchQuery = useDebounce(searchQuery, 300)
+
+  const recordsPerPage = 10
 
   // Mock data fallback
   const mockRecords: AirtableRecord[] = [
@@ -67,7 +76,7 @@ export default function TableRecordsPage() {
     }
   }, [authLoading, isAuthenticated, router, baseId, tableId])
 
-  const fetchRecords = async () => {
+  const fetchRecords = async (pageOffset?: string) => {
     if (!isAuthenticated || !baseId || !tableId) return
 
     setLoading(true)
@@ -79,14 +88,17 @@ export default function TableRecordsPage() {
         throw new Error('No access token available')
       }
       
-      console.log('Fetching records for table:', tableId, 'in base:', baseId)
+      console.log('Fetching records for table:', tableId, 'in base:', baseId, 'page:', currentPage)
       const response = await airtableClient.listRecords(baseId, tableId, {
-        maxRecords: 10, // Limit to first 10 records
-        pageSize: 10
+        maxRecords: recordsPerPage,
+        pageSize: recordsPerPage,
+        offset: pageOffset || offset
       })
       
       setRecords(response.records)
       setTotalRecords(response.total)
+      setOffset(response.offset || '')
+      setHasMore(response.hasMore || false)
       setTableName(tableId.substring(0, 15) + '...') // Fallback table name
     } catch (err) {
       console.error('Error fetching records:', err)
@@ -132,8 +144,72 @@ export default function TableRecordsPage() {
     })
   }, [records, debouncedSearchQuery])
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value
+    const validation = validateSearchInput(rawValue)
+    
+    if (!validation.isValid) {
+      setSearchError(validation.errors[0])
+    } else {
+      setSearchError(null)
+    }
+    
+    // Reset pagination when searching
+    setCurrentPage(1)
+    setOffset('')
+    
+    // Always use sanitized value
+    setSearchQuery(validation.sanitizedValue)
+  }
+
   const handleClearSearch = () => {
     setSearchQuery('')
+    setSearchError(null)
+    setCurrentPage(1)
+    setOffset('')
+  }
+
+  const handleNextPage = async () => {
+    if (!hasMore || !offset) return // No next page available
+    setCurrentPage(prev => prev + 1)
+    await fetchRecords(offset)
+  }
+
+  const handlePreviousPage = async () => {
+    if (currentPage <= 1) return
+    setCurrentPage(prev => prev - 1)
+    // For previous page, we need to recalculate - for simplicity, let's reset to page 1 for now
+    if (currentPage === 2) {
+      setOffset('')
+      await fetchRecords('')
+    } else {
+      // This would require storing page offsets - simplified approach for now
+      setCurrentPage(1)
+      setOffset('')
+      await fetchRecords('')
+    }
+  }
+
+  const handlePageInput = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      const target = e.target as HTMLInputElement
+      const pageNumber = parseInt(target.value)
+      const totalPages = Math.ceil(totalRecords / recordsPerPage)
+      
+      if (pageNumber >= 1 && pageNumber <= totalPages && pageNumber !== currentPage) {
+        if (pageNumber === 1) {
+          setCurrentPage(1)
+          setOffset('')
+          await fetchRecords('')
+        } else {
+          // For simplicity, we'll just show a message for now
+          alert('Direct page navigation coming soon. Use Next/Previous for now.')
+          target.value = currentPage.toString()
+        }
+      } else {
+        target.value = currentPage.toString()
+      }
+    }
   }
 
   if (authLoading) {
@@ -176,14 +252,16 @@ export default function TableRecordsPage() {
               <p className="text-gray-600 mt-1">
                 {searchQuery && debouncedSearchQuery === searchQuery ? (
                   <>
-                    Showing {Math.min(10, filteredRecords.length)} of {filteredRecords.length} filtered records
+                    Showing {Math.min(recordsPerPage, filteredRecords.length)} of {filteredRecords.length} filtered records
                     <span className="text-gray-500 ml-1">({totalRecords.toLocaleString()} total)</span>
                   </>
                 ) : (
                   <>
-                    Showing {Math.min(10, records.length)} of {totalRecords.toLocaleString()} records
-                    {totalRecords > 10 && (
-                      <span className="text-blue-600 ml-2 text-sm">(pagination coming soon)</span>
+                    Showing {Math.min(recordsPerPage, records.length)} of {totalRecords.toLocaleString()} records
+                    {totalRecords > recordsPerPage && (
+                      <span className="text-blue-600 ml-2 text-sm">
+                        (Page {currentPage} of {Math.ceil(totalRecords / recordsPerPage)})
+                      </span>
                     )}
                   </>
                 )}
@@ -207,7 +285,7 @@ export default function TableRecordsPage() {
                 type="text"
                 placeholder="Search records..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleSearchChange}
                 className="pr-10"
               />
               {searchQuery && (
@@ -236,6 +314,13 @@ export default function TableRecordsPage() {
               )}
             </div>
           </div>
+          
+          {/* Search Error */}
+          {searchError && (
+            <div className="mt-2 p-2 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md max-w-md">
+              Search validation error: {searchError}
+            </div>
+          )}
         </div>
 
         {/* Error State */}
@@ -332,25 +417,76 @@ export default function TableRecordsPage() {
           </div>
         )}
 
-        {/* Pagination Info */}
-        {!loading && !error && filteredRecords.length > 0 && totalRecords > 10 && (
+        {/* Pagination Controls */}
+        {!loading && !error && records.length > 0 && totalRecords > recordsPerPage && !searchQuery && (
           <div className="mt-6 pt-4 border-t border-gray-200">
-            <div className="flex items-center justify-between text-sm text-gray-600">
-              <div>
-                Page 1 of {Math.ceil(totalRecords / 10)}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <Button
+                  variant="outline"
+                  onClick={handlePreviousPage}
+                  disabled={currentPage === 1 || loading}
+                  className="flex items-center space-x-1"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  <span>Previous</span>
+                </Button>
+                
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm text-gray-600">Page</span>
+                  <Input
+                    type="number"
+                    min="1"
+                    max={Math.ceil(totalRecords / recordsPerPage)}
+                    defaultValue={currentPage}
+                    onKeyDown={handlePageInput}
+                    className="w-16 text-center"
+                    disabled={loading}
+                  />
+                  <span className="text-sm text-gray-600">
+                    of {Math.ceil(totalRecords / recordsPerPage)}
+                  </span>
+                </div>
+
+                <Button
+                  variant="outline"
+                  onClick={handleNextPage}
+                  disabled={!hasMore || !offset || loading}
+                  className="flex items-center space-x-1"
+                >
+                  <span>Next</span>
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Button>
               </div>
-              <div className="flex items-center space-x-2">
-                <span>Records per page: 10</span>
+
+              <div className="flex items-center space-x-2 text-sm text-gray-600">
+                <span>Records per page: {recordsPerPage}</span>
                 <span className="text-gray-400">|</span>
                 <span>Total: {totalRecords.toLocaleString()}</span>
               </div>
             </div>
-            <div className="mt-2 text-xs text-gray-500">
-              Note: Currently showing first 10 records. Full pagination controls coming in next sprint.
-            </div>
+            
+            {loading && (
+              <div className="mt-2 flex items-center text-sm text-gray-500">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                Loading next page...
+              </div>
+            )}
           </div>
         )}
       </div>
     </div>
+  )
+}
+
+export default function TableRecordsPage() {
+  return (
+    <CriticalPageErrorBoundary pageName="Table Records">
+      <TableRecordsPageContent />
+    </CriticalPageErrorBoundary>
   )
 }
