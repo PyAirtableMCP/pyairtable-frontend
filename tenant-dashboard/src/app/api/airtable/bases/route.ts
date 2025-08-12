@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { AirtableGatewayClient } from '@/lib/airtable-client'
 
 interface AirtableBasesRequest {
   personalAccessToken: string
@@ -15,48 +16,32 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Fetch bases from Airtable
+    // Create client instance with the user's token
+    const airtableClient = new AirtableGatewayClient({
+      gatewayUrl: process.env.AIRTABLE_GATEWAY_URL || 'http://localhost:8002',
+      internalApiKey: process.env.INTERNAL_API_KEY
+    })
+
     try {
-      const response = await fetch('https://api.airtable.com/v0/meta/bases', {
-        headers: {
-          'Authorization': `Bearer ${personalAccessToken}`,
-          'Content-Type': 'application/json'
-        }
-      })
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          return NextResponse.json(
-            { error: 'Invalid Personal Access Token' },
-            { status: 401 }
-          )
-        }
-        
-        if (response.status === 403) {
-          return NextResponse.json(
-            { error: 'Insufficient permissions to access bases' },
-            { status: 403 }
-          )
-        }
-
-        throw new Error(`Airtable API error: ${response.status}`)
-      }
-
-      const data = await response.json()
+      // Test connection first
+      await airtableClient.testConnection()
       
-      // Transform the data to our expected format
-      const bases = data.bases?.map((base: any) => ({
+      // Fetch bases from our gateway service
+      const bases = await airtableClient.listBases()
+      
+      // Transform the data to our expected format for compatibility
+      const transformedBases = bases.map((base) => ({
         id: base.id,
         name: base.name,
         permissionLevel: base.permissionLevel || 'read',
-        tableCount: base.tables?.length || 0,
+        tableCount: 0, // We'll need to fetch schema to get table count
         recordCount: null, // We'll need separate API calls to get record counts
         createdTime: new Date().toISOString(), // Airtable doesn't provide this in the bases endpoint
-        description: base.description || null
-      })) || []
+        description: null
+      }))
 
       // For demonstration purposes, let's add some mock data if no bases found
-      if (bases.length === 0) {
+      if (transformedBases.length === 0) {
         return NextResponse.json({
           bases: [
             {
@@ -81,10 +66,34 @@ export async function POST(request: NextRequest) {
         })
       }
 
-      return NextResponse.json({ bases })
+      return NextResponse.json({ bases: transformedBases })
 
-    } catch (fetchError) {
-      console.error('Airtable API bases error:', fetchError)
+    } catch (gatewayError) {
+      console.error('Airtable Gateway error:', gatewayError)
+      
+      // Handle specific error types from gateway
+      if (gatewayError instanceof Error) {
+        if (gatewayError.message.includes('Authentication failed')) {
+          return NextResponse.json(
+            { error: 'Invalid Personal Access Token' },
+            { status: 401 }
+          )
+        }
+        
+        if (gatewayError.message.includes('Access denied')) {
+          return NextResponse.json(
+            { error: 'Insufficient permissions to access bases' },
+            { status: 403 }
+          )
+        }
+
+        if (gatewayError.message.includes('timeout') || gatewayError.message.includes('Network error')) {
+          return NextResponse.json(
+            { error: 'Airtable service is temporarily unavailable. Please try again.' },
+            { status: 503 }
+          )
+        }
+      }
       
       return NextResponse.json(
         { error: 'Unable to fetch bases from Airtable. Please try again.' },

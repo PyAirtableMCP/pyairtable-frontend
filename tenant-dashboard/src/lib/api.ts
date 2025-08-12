@@ -36,16 +36,13 @@ class ApiClient {
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
     
-    // Get auth token from localStorage or auth context
-    const token = typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
-    
     const config: RequestInit = {
       ...options,
       headers: {
         ...this.defaultHeaders,
-        ...(token && { Authorization: `Bearer ${token}` }),
         ...options.headers,
       },
+      credentials: "include", // Include cookies in requests
     };
 
     try {
@@ -53,6 +50,15 @@ class ApiClient {
       
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
+        
+        // Handle authentication errors
+        if (response.status === 401) {
+          // Redirect to login on unauthorized
+          if (typeof window !== "undefined") {
+            window.location.href = "/auth/login";
+          }
+        }
+        
         throw new ApiErrorImpl(
           errorData.code || "API_ERROR",
           errorData.message || `HTTP ${response.status}: ${response.statusText}`,
@@ -155,15 +161,11 @@ class ApiClient {
         formData.append(key, String(value));
       });
     }
-
-    const token = typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
     
     const response = await fetch(`${this.baseURL}${endpoint}`, {
       method: "POST",
-      headers: {
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
       body: formData,
+      credentials: "include", // Include cookies for authentication
     });
 
     if (!response.ok) {
@@ -276,44 +278,22 @@ export const tenantApi = {
     apiClient.delete<any>(`/tenant/sessions/${sessionId}`),
 };
 
-// Authentication API functions
+// Authentication API functions - now handled by AuthContext
 export const authApi = {
-  // Login
-  login: async (email: string, password: string) => {
-    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+  // Get current user (now uses cookie-based auth)
+  getCurrentUser: () => 
+    fetch("/api/auth/profile", { credentials: "include" })
+      .then(res => res.ok ? res.json() : null),
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new ApiErrorImpl(
-        errorData.code || "LOGIN_ERROR",
-        errorData.message || "Login failed",
-        errorData.details,
-        new Date().toISOString(),
-        errorData.requestId || ""
-      );
-    }
+  // Check authentication status
+  checkAuth: () => 
+    fetch("/api/auth/check", { credentials: "include" })
+      .then(res => res.ok),
 
-    return response.json();
-  },
-
-  // Logout
-  logout: () => {
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("auth_token");
-    }
-  },
-
-  // Get current user
-  getCurrentUser: () => apiClient.get<any>("/auth/me"),
-
-  // Refresh token if needed
-  refreshToken: () => apiClient.post<any>("/auth/refresh"),
+  // Refresh token
+  refreshToken: () => 
+    fetch("/api/auth/refresh", { method: "POST", credentials: "include" })
+      .then(res => res.ok),
 };
 
 // Response interceptor for handling common errors
@@ -321,10 +301,9 @@ export const handleApiError = (error: any) => {
   if (error instanceof ApiErrorImpl) {
     switch (error.code) {
       case "UNAUTHORIZED":
-        // Redirect to login
+        // Auth context will handle logout and redirect
         if (typeof window !== "undefined") {
-          localStorage.removeItem("auth_token");
-          window.location.href = "/login";
+          window.location.href = "/auth/login";
         }
         break;
       case "FORBIDDEN":
