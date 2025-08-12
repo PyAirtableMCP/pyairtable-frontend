@@ -71,6 +71,11 @@ export default defineConfig({
       name: 'chromium-core',
       use: { ...devices['Desktop Chrome'] },
       testMatch: [
+        '**/auth-login-flow.spec.ts',
+        '**/auth-registration-flow.spec.ts', 
+        '**/auth-logout-flow.spec.ts',
+        '**/auth-token-refresh.spec.ts',
+        '**/auth-error-scenarios.spec.ts',
         '**/user-registration.spec.ts',
         '**/user-login-journey.spec.ts',
         '**/chat-interface-journey.spec.ts',

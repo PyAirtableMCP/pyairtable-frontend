@@ -7,7 +7,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { authApi, handleApiError } from "@/lib/api";
+import { useAuth } from "@/lib/auth/auth-context";
 
 // Login form validation schema
 const loginSchema = z.object({
@@ -23,8 +23,8 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ onSuccess, onError }: LoginFormProps) {
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { login, isLoading } = useAuth();
 
   const {
     register,
@@ -35,26 +35,18 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    setIsLoading(true);
     setError(null);
 
     try {
-      const result = await authApi.login(data.email, data.password);
+      await login(data.email, data.password);
       
-      // Store token in localStorage
-      if (result.token) {
-        localStorage.setItem("auth_token", result.token);
-      }
-
-      // Call success callback
+      // Login successful - auth context handles state management
       onSuccess?.();
     } catch (err) {
-      const errorMessage = handleApiError(err);
-      const message = errorMessage instanceof Error ? errorMessage.message : "Login failed";
+      const message = err instanceof Error ? err.message : "Login failed";
+      console.error("Login error:", err);
       setError(message);
       onError?.(message);
-    } finally {
-      setIsLoading(false);
     }
   };
 

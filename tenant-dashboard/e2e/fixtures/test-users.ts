@@ -7,10 +7,10 @@ export interface TestUser {
 }
 
 export const testUsers = {
-  // Standard test user for login tests
+  // Standard test user for login tests - using provided auth service credentials
   standard: {
-    email: 'testuser@example.com',
-    password: 'TestPassword123',
+    email: 'user@pyairtable.com',
+    password: 'test123456',
     name: 'Test User',
     role: 'user'
   } as TestUser,
