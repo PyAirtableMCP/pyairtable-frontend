@@ -333,7 +333,7 @@ export default function TableRecordsPage() {
         )}
 
         {/* Pagination Info */}
-        {!loading && !error && displayedRecords.length > 0 && totalRecords > 10 && (
+        {!loading && !error && filteredRecords.length > 0 && totalRecords > 10 && (
           <div className="mt-6 pt-4 border-t border-gray-200">
             <div className="flex items-center justify-between text-sm text-gray-600">
               <div>
