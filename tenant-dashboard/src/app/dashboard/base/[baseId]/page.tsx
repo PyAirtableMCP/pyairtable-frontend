@@ -151,7 +151,11 @@ export default function BaseDetailsPage() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {tables.map((table) => (
-                  <div key={table.id} className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow border border-gray-200">
+                  <div 
+                    key={table.id} 
+                    onClick={() => router.push(`/dashboard/base/${baseId}/table/${table.id}`)}
+                    className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow border border-gray-200 cursor-pointer"
+                  >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
@@ -180,10 +184,20 @@ export default function BaseDetailsPage() {
                         )}
                       </div>
                       <div className="flex space-x-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            router.push(`/dashboard/base/${baseId}/table/${table.id}`)
+                          }}
+                          className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                        >
+                          View Records
+                        </button>
                         <a
                           href={`https://airtable.com/${baseId}/${table.id}`}
                           target="_blank"
                           rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
                           className="text-gray-600 hover:text-gray-800 text-sm"
                         >
                           Open in Airtable
