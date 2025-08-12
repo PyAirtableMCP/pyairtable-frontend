@@ -75,12 +75,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, []);
 
-  // Refresh authentication
+  // Refresh authentication - stabilized with useRef to prevent excessive re-creation
   const refreshAuth = useCallback(async () => {
     try {
       const success = await CookieAuthClient.refreshToken();
       if (success) {
-        await checkAuth();
+        // Call checkAuth directly instead of depending on it in the callback
+        try {
+          const authenticated = await CookieAuthClient.isAuthenticated();
+          setIsAuthenticated(authenticated);
+
+          if (authenticated) {
+            const userData = await CookieAuthClient.getCurrentUser();
+            setUser(userData);
+          } else {
+            setUser(null);
+          }
+        } catch (checkError) {
+          console.error("Error checking auth:", checkError);
+          setIsAuthenticated(false);
+          setUser(null);
+        }
       } else {
         setUser(null);
         setIsAuthenticated(false);
@@ -90,7 +105,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setUser(null);
       setIsAuthenticated(false);
     }
-  }, [checkAuth]);
+  }, []); // Empty dependency array - no dependencies needed
 
   // Get access token securely from cookies
   const getAccessToken = useCallback(async (): Promise<string | null> => {
@@ -125,20 +140,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
       refreshAuth();
     }, 5 * 60 * 1000); // 5 minutes
 
-    return () => clearInterval(refreshInterval);
+    // Cleanup function with additional safety check
+    return () => {
+      if (refreshInterval) {
+        clearInterval(refreshInterval);
+      }
+    };
   }, [isAuthenticated, refreshAuth]);
 
   // Listen for focus events to refresh auth when user returns
   useEffect(() => {
     const handleFocus = () => {
-      if (isAuthenticated) {
+      // Check authentication status at focus time to avoid stale closure
+      if (document.hasFocus()) {
         refreshAuth();
       }
     };
 
     window.addEventListener("focus", handleFocus);
     return () => window.removeEventListener("focus", handleFocus);
-  }, [isAuthenticated, refreshAuth]);
+  }, [refreshAuth]); // Only depend on refreshAuth, which is now stable
 
   const value = {
     user,
