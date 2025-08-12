@@ -10,6 +10,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   refreshAuth: () => Promise<void>;
+  getAccessToken: () => Promise<string | null>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -91,6 +92,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, [checkAuth]);
 
+  // Get access token securely from cookies
+  const getAccessToken = useCallback(async (): Promise<string | null> => {
+    try {
+      const response = await fetch("/api/auth/token", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        return null;
+      }
+
+      const data = await response.json();
+      return data.access_token || null;
+    } catch (error) {
+      console.error("Error fetching access token:", error);
+      return null;
+    }
+  }, []);
+
   // Check auth on mount
   useEffect(() => {
     checkAuth();
@@ -126,6 +147,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     login,
     logout,
     refreshAuth,
+    getAccessToken,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
