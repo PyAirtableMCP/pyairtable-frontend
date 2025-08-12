@@ -4,7 +4,8 @@ import { auth } from '@/lib/auth'
 // This would typically connect to your database
 // For now, we'll simulate the database operations
 
-interface OnboardingData {
+// Comprehensive onboarding data structure
+interface ComprehensiveOnboardingData {
   airtableConfig: {
     personalAccessToken: string
     baseId?: string
@@ -33,6 +34,30 @@ interface OnboardingData {
   feedback?: any
 }
 
+// Basic onboarding data structure  
+interface BasicOnboardingData {
+  profile: {
+    name: string
+    company: string
+    role: string
+  }
+  airtable: {
+    apiKey: string
+    selectedBaseId: string
+    selectedBaseName: string
+  }
+  template: {
+    templateId: string
+    templateName: string
+  }
+}
+
+interface OnboardingRequest {
+  type: 'comprehensive' | 'basic'
+  data: ComprehensiveOnboardingData | BasicOnboardingData
+  completedAt: string
+}
+
 export async function POST(request: NextRequest) {
   try {
     const session = await auth()
@@ -44,64 +69,109 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const data: OnboardingData = await request.json()
+    const requestData: OnboardingRequest = await request.json()
+    const { type, data, completedAt } = requestData
 
-    // Validate required fields
-    if (!data.airtableConfig.personalAccessToken) {
+    // Handle basic onboarding flow
+    if (type === 'basic') {
+      const basicData = data as BasicOnboardingData
+      
+      // Validate required fields for basic onboarding
+      if (!basicData.profile.name || !basicData.profile.company || !basicData.profile.role) {
+        return NextResponse.json(
+          { error: 'Profile information is required' },
+          { status: 400 }
+        )
+      }
+
+      if (!basicData.airtable.apiKey || !basicData.airtable.selectedBaseId) {
+        return NextResponse.json(
+          { error: 'Airtable connection is required' },
+          { status: 400 }
+        )
+      }
+
+      if (!basicData.template.templateId) {
+        return NextResponse.json(
+          { error: 'Workspace template selection is required' },
+          { status: 400 }
+        )
+      }
+
+      // Simulate database save for basic onboarding
+      const savedData = {
+        userId: session.user.email,
+        onboardingType: 'basic',
+        onboardingCompleted: true,
+        completedAt,
+        profile: basicData.profile,
+        airtable: {
+          hasToken: !!basicData.airtable.apiKey,
+          tokenLength: basicData.airtable.apiKey.length,
+          selectedBaseId: basicData.airtable.selectedBaseId,
+          selectedBaseName: basicData.airtable.selectedBaseName
+        },
+        template: basicData.template
+      }
+
+      console.log('Basic onboarding completed for user:', session.user.email, {
+        template: basicData.template.templateName,
+        company: basicData.profile.company,
+        role: basicData.profile.role
+      })
+
+      return NextResponse.json({
+        success: true,
+        message: 'Basic onboarding completed successfully!',
+        data: savedData
+      })
+    }
+
+    // Handle comprehensive onboarding flow (existing logic)
+    const comprehensiveData = data as ComprehensiveOnboardingData
+
+    // Validate required fields for comprehensive onboarding
+    if (!comprehensiveData.airtableConfig.personalAccessToken) {
       return NextResponse.json(
         { error: 'Airtable Personal Access Token is required' },
         { status: 400 }
       )
     }
 
-    if (!data.organization.organizationName) {
+    if (!comprehensiveData.organization.organizationName) {
       return NextResponse.json(
         { error: 'Organization name is required' },
         { status: 400 }
       )
     }
 
-    // In a real implementation, you would:
-    // 1. Encrypt and store the Personal Access Token securely
-    // 2. Save user preferences to the database
-    // 3. Create workspace and base configurations
-    // 4. Set up any default automations or features
-    // 5. Send welcome emails or notifications
-    // 6. Track onboarding analytics
-
-    // Simulate database save
+    // Simulate database save for comprehensive onboarding
     const savedData = {
       userId: session.user.email,
+      onboardingType: 'comprehensive',
       onboardingCompleted: true,
-      completedAt: new Date().toISOString(),
-      ...data,
+      completedAt,
+      ...comprehensiveData,
       // Remove sensitive data from response
       airtableConfig: {
-        hasToken: !!data.airtableConfig.personalAccessToken,
-        tokenLength: data.airtableConfig.personalAccessToken.length,
-        baseId: data.airtableConfig.baseId
+        hasToken: !!comprehensiveData.airtableConfig.personalAccessToken,
+        tokenLength: comprehensiveData.airtableConfig.personalAccessToken.length,
+        baseId: comprehensiveData.airtableConfig.baseId
       }
     }
 
-    // Log successful onboarding completion
-    console.log('Onboarding completed for user:', session.user.email, {
-      completionScore: data.completionScore,
-      completionPercentage: data.completionPercentage,
-      milestonesCompleted: data.completedMilestones.length,
-      selectedFeatures: data.selectedFeatures.length,
-      userType: data.userType,
-      duration: data.onboardingDuration
+    console.log('Comprehensive onboarding completed for user:', session.user.email, {
+      completionScore: comprehensiveData.completionScore,
+      completionPercentage: comprehensiveData.completionPercentage,
+      milestonesCompleted: comprehensiveData.completedMilestones.length,
+      selectedFeatures: comprehensiveData.selectedFeatures.length,
+      userType: comprehensiveData.userType,
+      duration: comprehensiveData.onboardingDuration
     })
-
-    // In production, you might want to:
-    // - Send onboarding completion analytics to your tracking service
-    // - Trigger welcome automations
-    // - Set up initial workspace resources
-    // - Send confirmation emails
 
     return NextResponse.json({
       success: true,
-      message: 'Onboarding completed successfully!',
+      message: 'Comprehensive onboarding completed successfully!',
       data: savedData
     })
 

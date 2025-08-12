@@ -10,7 +10,7 @@ const loginSchema = z.object({
   password: z.string().min(8),
 })
 
-// Auth service base URL - using mock service to bypass UUID/int type mismatch
+// Auth service base URL - using mock auth service (TODO: implement auth in platform-services)
 const AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL || "http://localhost:8009"
 
 export const { handlers, auth, signIn, signOut } = NextAuth({

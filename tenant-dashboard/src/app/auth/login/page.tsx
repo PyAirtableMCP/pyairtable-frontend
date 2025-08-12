@@ -2,7 +2,6 @@
 
 import React, { useState } from "react"
 import Link from "next/link"
-import { signIn, getSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -11,13 +10,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Separator } from "@/components/ui/separator"
-import { Loader2, Mail, Lock, Github, Chrome } from "lucide-react"
-import toast from "react-hot-toast"
+import { Loader2, Mail, Lock } from "lucide-react"
+import { CookieAuthClient } from "@/lib/auth/cookie-auth"
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  password: z.string().min(1, "Password is required"),
 })
 
 type LoginForm = z.infer<typeof loginSchema>
@@ -42,49 +40,17 @@ export default function LoginPage() {
 
       console.log("🔐 Starting login with:", { email: data.email })
 
-      const result = await signIn("credentials", {
-        email: data.email,
-        password: data.password,
-        redirect: false,
-      })
+      const result = await CookieAuthClient.login(data.email, data.password)
 
-      console.log("🔐 SignIn result:", result)
-
-      if (result?.error) {
-        console.error("🔐 SignIn error:", result.error)
-        setError("Invalid email or password")
-        return
-      }
-
-      if (result?.ok) {
-        console.log("🔐 SignIn successful, redirecting to dashboard")
-        toast.success("Welcome back!")
-        
-        // Refresh session to get updated data
-        await getSession()
-        
-        // Use Next.js router for client-side navigation
-        router.push("/dashboard")
-      }
+      console.log("🔐 Login successful:", result)
+      
+      // Redirect to dashboard after successful login
+      router.push("/dashboard")
     } catch (error) {
       console.error("Login error:", error)
-      setError("An unexpected error occurred. Please try again.")
+      const message = error instanceof Error ? error.message : "Login failed"
+      setError(message)
     } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleOAuthSignIn = async (provider: "google" | "github") => {
-    try {
-      setIsLoading(true)
-      setError(null)
-
-      await signIn(provider, {
-        callbackUrl: "/",
-      })
-    } catch (error) {
-      console.error("OAuth error:", error)
-      setError("Failed to sign in. Please try again.")
       setIsLoading(false)
     }
   }
@@ -106,39 +72,6 @@ export default function LoginPage() {
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-
-          {/* Social Sign In */}
-          <div className="grid grid-cols-2 gap-3">
-            <Button
-              variant="outline"
-              onClick={() => handleOAuthSignIn("google")}
-              disabled={isLoading}
-              className="w-full"
-            >
-              <Chrome className="mr-2 h-4 w-4" />
-              Google
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => handleOAuthSignIn("github")}
-              disabled={isLoading}
-              className="w-full"
-            >
-              <Github className="mr-2 h-4 w-4" />
-              GitHub
-            </Button>
-          </div>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <Separator className="w-full" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
-                Or continue with email
-              </span>
-            </div>
-          </div>
 
           {/* Email/Password Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
@@ -184,25 +117,24 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          <div className="text-center text-sm">
-            <Link
-              href="/auth/forgot-password"
-              className="text-primary hover:underline"
-            >
-              Forgot your password?
-            </Link>
-          </div>
-
-          <Separator />
-
-          <div className="text-center text-sm">
-            Don&apos;t have an account?{" "}
-            <Link
-              href="/auth/register"
-              className="text-primary hover:underline font-medium"
-            >
-              Sign up
-            </Link>
+          <div className="text-center text-sm space-y-2">
+            <div>
+              <Link
+                href="/auth/forgot-password"
+                className="text-primary hover:underline"
+              >
+                Forgot your password?
+              </Link>
+            </div>
+            <div>
+              Don&apos;t have an account?{" "}
+              <Link
+                href="/auth/register"
+                className="text-primary hover:underline font-medium"
+              >
+                Sign up
+              </Link>
+            </div>
           </div>
         </CardContent>
       </Card>
