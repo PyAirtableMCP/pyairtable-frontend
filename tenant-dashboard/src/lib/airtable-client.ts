@@ -63,6 +63,17 @@ interface BaseSchemaResponse {
   total: number;
 }
 
+interface AirtableTableSummary {
+  id: string;
+  name: string;
+  recordCount?: number;
+}
+
+interface ListTablesResponse {
+  tables: AirtableTableSummary[];
+  total: number;
+}
+
 class AirtableGatewayClient {
   private config: AirtableConfig;
 
@@ -133,6 +144,14 @@ class AirtableGatewayClient {
    */
   async getBaseSchema(baseId: string): Promise<AirtableTable[]> {
     const response = await this.makeRequest<BaseSchemaResponse>(`/api/v1/airtable/bases/${baseId}/schema`);
+    return response.tables;
+  }
+
+  /**
+   * List tables for a specific base with record counts
+   */
+  async listTables(baseId: string, accessToken?: string): Promise<AirtableTableSummary[]> {
+    const response = await this.makeRequest<ListTablesResponse>(`/api/v1/airtable/bases/${baseId}/tables`, {}, accessToken);
     return response.tables;
   }
 
@@ -272,10 +291,12 @@ export type {
   AirtableConfig,
   AirtableBase,
   AirtableTable,
+  AirtableTableSummary,
   AirtableField,
   AirtableView,
   AirtableRecord,
   ListRecordsResponse,
   ListBasesResponse,
   BaseSchemaResponse,
+  ListTablesResponse,
 };

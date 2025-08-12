@@ -71,13 +71,7 @@ export class CookieAuthClient {
       user: user
     };
 
-    // Store JWT token in localStorage
-    if (typeof window !== "undefined" && data.access_token) {
-      localStorage.setItem("jwt_token", data.access_token);
-      localStorage.setItem("user_data", JSON.stringify(data.user));
-    }
-
-    // Also store tokens in httpOnly cookies via API route (for backward compatibility)
+    // Store tokens in httpOnly cookies only - more secure than localStorage
     try {
       await fetch("/api/auth/set-tokens", {
         method: "POST",
@@ -92,26 +86,15 @@ export class CookieAuthClient {
         credentials: "include",
       });
     } catch (error) {
-      console.warn("Failed to set cookies, continuing with localStorage only:", error);
+      console.error("Failed to set secure cookies:", error);
+      throw new Error("Authentication failed - unable to store secure session");
     }
 
     return data;
   }
 
-  // Get current user profile
+  // Get current user profile from secure API
   static async getCurrentUser(): Promise<User | null> {
-    // Check localStorage first
-    if (typeof window !== "undefined") {
-      const userData = localStorage.getItem("user_data");
-      if (userData) {
-        try {
-          return JSON.parse(userData);
-        } catch (error) {
-          console.error("Error parsing user data from localStorage:", error);
-        }
-      }
-    }
-
     try {
       const response = await fetch("/api/auth/profile", {
         method: "GET",
@@ -129,14 +112,8 @@ export class CookieAuthClient {
     }
   }
 
-  // Logout and clear cookies
+  // Logout and clear secure cookies
   static async logout(): Promise<void> {
-    // Clear localStorage
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("jwt_token");
-      localStorage.removeItem("user_data");
-    }
-
     try {
       await fetch("/api/auth/logout", {
         method: "POST",
@@ -162,16 +139,8 @@ export class CookieAuthClient {
     }
   }
 
-  // Check if user is authenticated
+  // Check if user is authenticated via secure API
   static async isAuthenticated(): Promise<boolean> {
-    // Check localStorage first
-    if (typeof window !== "undefined") {
-      const token = localStorage.getItem("jwt_token");
-      if (token) {
-        return true; // Basic check - could be enhanced with token validation
-      }
-    }
-
     try {
       const response = await fetch("/api/auth/check", {
         method: "GET",

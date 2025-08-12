@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/lib/auth/auth-context";
 import dynamic from "next/dynamic";
 import { useTenant } from "@/hooks/useTenant";
 import { Card, CardContent } from "@/components/ui/card";
@@ -82,7 +82,7 @@ function ErrorState({ error }: { error: Error }) {
 }
 
 export default function HomePage() {
-  const { status } = useSession();
+  const { isLoading: authLoading, isAuthenticated } = useAuth();
   const isDevelopment = process.env.NODE_ENV === "development";
   const { data: tenant, isLoading, error } = useTenant();
   const [mockTenant, setMockTenant] = React.useState<Tenant | null>(null);
@@ -112,8 +112,8 @@ export default function HomePage() {
   // Use appropriate tenant data based on environment
   const currentTenant = isDevelopment ? mockTenant : tenant;
   
-  // Show loading state while session or data is loading
-  if (status === "loading" || (!isDevelopment && isLoading) || (isDevelopment && !mockTenant)) {
+  // Show loading state while auth or data is loading
+  if (authLoading || (!isDevelopment && isLoading) || (isDevelopment && !mockTenant)) {
     return <LoadingState />;
   }
 
