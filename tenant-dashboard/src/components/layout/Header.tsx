@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -19,14 +20,13 @@ import {
   User,
   LogOut,
   HelpCircle,
-  Moon,
-  Sun,
   Menu,
   ChevronDown,
 } from "lucide-react";
 import { cn, getInitials } from "@/lib/utils";
 import { CommandPalette, useCommandPalette } from "@/components/design-system";
 import { useResponsive, responsive } from "@/hooks/useResponsive";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 interface HeaderProps {
   onMenuToggle?: () => void;
@@ -34,7 +34,6 @@ interface HeaderProps {
 }
 
 export function Header({ onMenuToggle, className }: HeaderProps) {
-  const [theme, setTheme] = React.useState<"light" | "dark">("light");
   const { open, setOpen, CommandPalette: CommandPaletteComponent } = useCommandPalette();
   const { isMobile, isTablet } = useResponsive();
   const [notifications] = React.useState([
@@ -77,11 +76,6 @@ export function Header({ onMenuToggle, className }: HeaderProps) {
     avatar: null,
   };
 
-  const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
-    // In real app, this would update the theme context
-    document.documentElement.classList.toggle("dark");
-  };
 
   return (
     <header className={cn(
@@ -167,19 +161,7 @@ export function Header({ onMenuToggle, className }: HeaderProps) {
           </Button>
 
           {/* Theme Toggle */}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleTheme}
-            className={cn("h-9 w-9", responsive.touchTarget)}
-            aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
-          >
-            {theme === "light" ? (
-              <Moon className="h-4 w-4" />
-            ) : (
-              <Sun className="h-4 w-4" />
-            )}
-          </Button>
+          <ThemeToggle />
 
           {/* Notifications */}
           <DropdownMenu>
@@ -302,13 +284,17 @@ export function Header({ onMenuToggle, className }: HeaderProps) {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className={cn("cursor-pointer", responsive.touchTarget)}>
-                <User className="mr-2 h-4 w-4" />
-                Profile Settings
+              <DropdownMenuItem asChild>
+                <Link href="/dashboard/profile" className={cn("cursor-pointer", responsive.touchTarget)}>
+                  <User className="mr-2 h-4 w-4" />
+                  Profile Settings
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem className={cn("cursor-pointer", responsive.touchTarget)}>
-                <Settings className="mr-2 h-4 w-4" />
-                Account Settings
+              <DropdownMenuItem asChild>
+                <Link href="/settings" className={cn("cursor-pointer", responsive.touchTarget)}>
+                  <Settings className="mr-2 h-4 w-4" />
+                  Settings
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className={cn("cursor-pointer text-destructive", responsive.touchTarget)}>

@@ -9,6 +9,7 @@ import { PerformanceProvider } from "@/components/performance/PerformanceProvide
 import { AuthProvider } from "@/lib/auth/auth-context";
 import { WebSocketProvider } from "@/lib/realtime/WebSocketProvider";
 import { QueryProvider } from "@/components/providers/query-provider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -24,12 +25,13 @@ export function Providers({ children }: ProvidersProps) {
         console.error("Root error boundary triggered:", error, errorInfo);
       }}
     >
-      <PerformanceProvider>
-        <AuthProvider>
-          <WebSocketProvider>
-          {/* Temporarily disabled: <PostHogProvider> */}
-            <QueryProvider>
-              {children}
+      <ThemeProvider>
+        <PerformanceProvider>
+          <AuthProvider>
+            <WebSocketProvider>
+            {/* Temporarily disabled: <PostHogProvider> */}
+              <QueryProvider>
+                {children}
               <Toaster
                 position="top-right"
                 toastOptions={{
@@ -54,14 +56,15 @@ export function Providers({ children }: ProvidersProps) {
                 }}
               />
             
-              {/* PWA Components */}
-              <ConnectionStatus />
-              <PWAPrompts showInstallBanner={true} autoShowInstallDialog={false} />
-            </QueryProvider>
-          {/* Temporarily disabled: </PostHogProvider> */}
-          </WebSocketProvider>
-        </AuthProvider>
-      </PerformanceProvider>
+                {/* PWA Components */}
+                <ConnectionStatus />
+                <PWAPrompts showInstallBanner={true} autoShowInstallDialog={false} />
+              </QueryProvider>
+            {/* Temporarily disabled: </PostHogProvider> */}
+            </WebSocketProvider>
+          </AuthProvider>
+        </PerformanceProvider>
+      </ThemeProvider>
     </ErrorBoundary>
   );
 }
