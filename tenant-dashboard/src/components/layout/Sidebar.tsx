@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { responsive } from "@/hooks/useResponsive";
 import {
   LayoutDashboard,
   Users,
@@ -261,9 +262,9 @@ export function Sidebar({ className }: SidebarProps) {
   }, [pathname]);
 
   return (
-    <div className={cn("pb-12 w-64 border-r bg-background", className)}>
-      <div className="space-y-4 py-4">
-        <div className="px-3 py-2">
+    <div className={cn("pb-12 w-64 border-r bg-background h-full", className)}>
+      <div className="space-y-4 py-4 h-full flex flex-col">
+        <div className="px-3 py-2 flex-1">
           <div className="flex items-center mb-6">
             <Building2 className="w-8 h-8 text-primary mr-3" />
             <div>
@@ -271,12 +272,17 @@ export function Sidebar({ className }: SidebarProps) {
               <p className="text-sm text-muted-foreground">Management Hub</p>
             </div>
           </div>
-          <div className="space-y-1">
+          <nav 
+            className="space-y-1"
+            role="navigation"
+            aria-label="Sidebar navigation"
+          >
             {navigationItems.map((item) => (
               <div key={item.id}>
                 <div
                   className={cn(
                     "flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent hover:text-accent-foreground cursor-pointer",
+                    responsive.touchTarget,
                     isActiveItem(item.href) || (item.children && hasActiveChild(item.children))
                       ? "bg-accent text-accent-foreground"
                       : "text-muted-foreground"
@@ -286,23 +292,35 @@ export function Sidebar({ className }: SidebarProps) {
                       toggleExpanded(item.id);
                     }
                   }}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      if (item.children) {
+                        toggleExpanded(item.id);
+                      }
+                    }
+                  }}
+                  aria-expanded={item.children ? expandedItems.includes(item.id) : undefined}
+                  aria-current={isActiveItem(item.href) ? "page" : undefined}
                 >
                   {item.children ? (
-                    <div className="flex items-center flex-1">
-                      <item.icon className="mr-2 h-4 w-4" />
-                      <span>{item.label}</span>
+                    <div className="flex items-center flex-1 min-w-0">
+                      <item.icon className="mr-2 h-4 w-4 flex-shrink-0" />
+                      <span className="truncate">{item.label}</span>
                       {item.badge && (
-                        <Badge variant="secondary" className="ml-auto">
+                        <Badge variant="secondary" className="ml-auto flex-shrink-0">
                           {item.badge}
                         </Badge>
                       )}
                     </div>
                   ) : (
-                    <Link href={item.href} className="flex items-center flex-1">
-                      <item.icon className="mr-2 h-4 w-4" />
-                      <span>{item.label}</span>
+                    <Link href={item.href} className="flex items-center flex-1 min-w-0">
+                      <item.icon className="mr-2 h-4 w-4 flex-shrink-0" />
+                      <span className="truncate">{item.label}</span>
                       {item.badge && (
-                        <Badge variant="secondary" className="ml-auto">
+                        <Badge variant="secondary" className="ml-auto flex-shrink-0">
                           {item.badge}
                         </Badge>
                       )}
@@ -311,12 +329,13 @@ export function Sidebar({ className }: SidebarProps) {
                   {item.children && (
                     <svg
                       className={cn(
-                        "h-4 w-4 transition-transform",
+                        "h-4 w-4 transition-transform flex-shrink-0",
                         expandedItems.includes(item.id) ? "rotate-90" : ""
                       )}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
+                      aria-hidden="true"
                     >
                       <path
                         strokeLinecap="round"
@@ -334,16 +353,18 @@ export function Sidebar({ className }: SidebarProps) {
                         key={child.id}
                         href={child.href}
                         className={cn(
-                          "flex items-center rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent hover:text-accent-foreground",
+                          "flex items-center rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent hover:text-accent-foreground min-w-0",
+                          responsive.touchTarget,
                           isActiveItem(child.href)
                             ? "bg-accent text-accent-foreground"
                             : "text-muted-foreground"
                         )}
+                        aria-current={isActiveItem(child.href) ? "page" : undefined}
                       >
-                        <child.icon className="mr-2 h-4 w-4" />
-                        <span>{child.label}</span>
+                        <child.icon className="mr-2 h-4 w-4 flex-shrink-0" />
+                        <span className="truncate flex-1">{child.label}</span>
                         {child.badge && (
-                          <Badge variant="secondary" className="ml-auto">
+                          <Badge variant="secondary" className="ml-2 flex-shrink-0">
                             {child.badge}
                           </Badge>
                         )}
@@ -353,7 +374,7 @@ export function Sidebar({ className }: SidebarProps) {
                 )}
               </div>
             ))}
-          </div>
+          </nav>
         </div>
       </div>
     </div>

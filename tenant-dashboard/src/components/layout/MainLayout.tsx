@@ -3,7 +3,9 @@
 import React from "react";
 import { Header } from "./Header";
 import { Sidebar } from "./Sidebar";
+import { MobileNav } from "./MobileNav";
 import { cn } from "@/lib/utils";
+import { useResponsive, responsive } from "@/hooks/useResponsive";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -12,22 +14,21 @@ interface MainLayoutProps {
 
 export function MainLayout({ children, className }: MainLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
+  const { isMobile, isDesktop } = useResponsive();
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Mobile sidebar overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/50 md:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
+      {/* Mobile Navigation */}
+      <MobileNav
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
-      {/* Sidebar */}
+      {/* Desktop Sidebar */}
       <div
         className={cn(
-          "fixed inset-y-0 left-0 z-50 w-64 transform bg-background transition-transform duration-200 ease-in-out md:translate-x-0 md:static md:inset-0",
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          "fixed inset-y-0 left-0 z-30 w-64 transform bg-background transition-transform duration-200 ease-in-out",
+          "hidden md:block md:translate-x-0"
         )}
       >
         <Sidebar />
@@ -36,7 +37,11 @@ export function MainLayout({ children, className }: MainLayoutProps) {
       {/* Main content */}
       <div className="md:pl-64">
         <Header onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
-        <main className={cn("p-6", className)}>
+        <main className={cn(
+          "transition-all duration-200",
+          isMobile ? responsive.paddingMobile : responsive.paddingDesktop,
+          className
+        )}>
           {children}
         </main>
       </div>
