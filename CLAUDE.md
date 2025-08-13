@@ -1,7 +1,18 @@
-# PyAirtable Frontend - Claude Context
+# PyAirtable Frontend - Claude Code Configuration
 
 ## 🎯 Service Purpose
 This is the **user interface** of the PyAirtable ecosystem - a modern Next.js 15 frontend application that provides an intuitive, responsive interface for AI-powered Airtable automation. It serves as the primary interaction point for users to engage with all PyAirtable services.
+
+## 🔪 Available Slash Commands
+- `/commit` - Create conventional commits with proper formatting
+- `/context-prime` - Load full project context at session start
+- `/todo` - Manage development tasks and track progress
+- `/create-pr` - Create GitHub pull request with template
+- `/fix-github-issue` - Fix specific GitHub issue systematically
+- `/clean` - Clean code issues, formatting, and linting
+- `/add-to-changelog` - Update CHANGELOG.md with new entries
+- `/release` - Manage version releases and tags
+- `/pr-review` - Review pull requests for issues
 
 ## 🏗️ Current State
 
@@ -250,3 +261,74 @@ interface AirtableStore {
 - **Icons**: Lucide React icons for consistency
 
 Remember: This frontend is the **user's window** into the PyAirtable AI ecosystem - every interaction should be intuitive, responsive, and delightful!
+## 🚀 Development Workflow
+
+### Quick Start Commands
+```bash
+# Initial setup
+npm install
+npm run dev          # Start development server on port 3000
+
+# Docker development
+docker-compose up    # Start all services
+make dev-start      # Alternative with Makefile
+
+# Testing
+npm test            # Run unit tests  
+npm run e2e         # Run E2E tests with Playwright
+./scripts/test-local.sh --all  # Complete test suite
+
+# Building
+npm run build       # Production build
+./scripts/build-local.sh --all --parallel  # Build all apps
+```
+
+### Git Workflow
+1. Create feature branch: `git checkout -b feat/feature-name`
+2. Make changes with TDD approach
+3. Commit with: `/commit` (uses conventional commits)
+4. Create PR with: `/create-pr`
+5. Address reviews and merge
+
+### Code Standards
+- **TypeScript**: Strict mode enabled, no any types
+- **Components**: Functional with hooks, max 200 lines
+- **Testing**: Minimum 80% coverage
+- **Performance**: Lazy load heavy components
+- **Security**: Input validation, XSS prevention
+
+### Common Tasks
+- Fix a bug: Use `/fix-github-issue [issue-number]`
+- Update docs: Make changes then `/add-to-changelog`
+- Clean code: Use `/clean` to fix formatting issues
+- Review PR: Use `/pr-review` for systematic review
+
+## 🛠️ Local Development Setup
+
+### Environment Variables
+Create `.env.local` with:
+```bash
+NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_AUTH_URL=http://localhost:8081
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/pyairtable
+REDIS_URL=redis://localhost:6379
+JWT_SECRET=your-secret-key-here
+```
+
+### Service Dependencies
+- API Gateway: Port 8000
+- Auth Service: Port 8081
+- PostgreSQL: Port 5432
+- Redis: Port 6379
+
+### Debugging Tips
+- Use React DevTools for component inspection
+- Check Network tab for API calls
+- Enable source maps in development
+- Use `console.time()` for performance debugging
+
+## 📝 Important Notes
+- This project uses LOCAL deployment (no cloud dependencies)
+- All secrets managed via GitHub repository secrets
+- Supports Docker, Minikube, Podman, and Colima
+- Follow conventional commits for Git history
