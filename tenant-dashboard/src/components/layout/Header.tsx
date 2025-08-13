@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { cn, getInitials } from "@/lib/utils";
 import { CommandPalette, useCommandPalette } from "@/components/design-system";
+import { useResponsive, responsive } from "@/hooks/useResponsive";
 
 interface HeaderProps {
   onMenuToggle?: () => void;
@@ -35,6 +36,7 @@ interface HeaderProps {
 export function Header({ onMenuToggle, className }: HeaderProps) {
   const [theme, setTheme] = React.useState<"light" | "dark">("light");
   const { open, setOpen, CommandPalette: CommandPaletteComponent } = useCommandPalette();
+  const { isMobile, isTablet } = useResponsive();
   const [notifications] = React.useState([
     {
       id: "1",
@@ -82,18 +84,38 @@ export function Header({ onMenuToggle, className }: HeaderProps) {
   };
 
   return (
-    <header className={cn("border-b bg-background px-6 py-4", className)}>
+    <header className={cn(
+      "border-b bg-background transition-all duration-200",
+      isMobile ? "px-4 py-3" : "px-6 py-4",
+      className
+    )}>
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2 md:space-x-4">
           <Button
             variant="ghost"
             size="icon"
             onClick={onMenuToggle}
-            className="md:hidden"
+            className={cn("md:hidden", responsive.touchTarget)}
+            aria-label="Toggle navigation menu"
           >
             <Menu className="h-5 w-5" />
           </Button>
           
+          {/* Mobile tenant info - condensed */}
+          <div className="flex md:hidden items-center space-x-2">
+            <div className="w-6 h-6 rounded-lg bg-primary text-primary-foreground flex items-center justify-center text-xs font-semibold">
+              {tenant.avatar ? (
+                <Image src={tenant.avatar} alt={tenant.name} width={24} height={24} className="w-full h-full rounded-lg" />
+              ) : (
+                getInitials(tenant.name)
+              )}
+            </div>
+            <div className="min-w-0 flex-1">
+              <h1 className="text-sm font-semibold truncate">{tenant.name}</h1>
+            </div>
+          </div>
+
+          {/* Desktop tenant info - full */}
           <div className="hidden md:flex items-center space-x-3">
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center font-semibold">
@@ -115,19 +137,33 @@ export function Header({ onMenuToggle, className }: HeaderProps) {
           </div>
         </div>
 
-        <div className="flex items-center space-x-4">
-          {/* Command Palette Trigger */}
+        <div className={cn(
+          "flex items-center",
+          isMobile ? "space-x-1" : "space-x-4"
+        )}>
+          {/* Command Palette Trigger - responsive sizing */}
           <Button
             variant="outline"
-            className="relative h-9 w-full justify-start text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64"
+            className={cn(
+              "relative justify-start text-sm text-muted-foreground transition-all",
+              isMobile 
+                ? "h-9 w-9 px-0" 
+                : "h-9 w-full sm:pr-12 md:w-40 lg:w-64",
+              responsive.touchTarget
+            )}
             onClick={() => setOpen(true)}
+            aria-label={isMobile ? "Search" : "Search commands"}
           >
-            <Search className="mr-2 h-4 w-4" />
-            <span className="hidden lg:inline-flex">Search commands...</span>
-            <span className="inline-flex lg:hidden">Search...</span>
-            <kbd className="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
-              <span className="text-xs">⌘</span>K
-            </kbd>
+            <Search className={cn("h-4 w-4", !isMobile && "mr-2")} />
+            {!isMobile && (
+              <>
+                <span className="hidden lg:inline-flex">Search commands...</span>
+                <span className="inline-flex lg:hidden">Search...</span>
+                <kbd className="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+                  <span className="text-xs">⌘</span>K
+                </kbd>
+              </>
+            )}
           </Button>
 
           {/* Theme Toggle */}
@@ -135,7 +171,8 @@ export function Header({ onMenuToggle, className }: HeaderProps) {
             variant="ghost"
             size="icon"
             onClick={toggleTheme}
-            className="h-9 w-9"
+            className={cn("h-9 w-9", responsive.touchTarget)}
+            aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
           >
             {theme === "light" ? (
               <Moon className="h-4 w-4" />
@@ -147,7 +184,12 @@ export function Header({ onMenuToggle, className }: HeaderProps) {
           {/* Notifications */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="relative h-9 w-9">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className={cn("relative h-9 w-9", responsive.touchTarget)}
+                aria-label="Notifications"
+              >
                 <Bell className="h-4 w-4" />
                 {unreadCount > 0 && (
                   <Badge
@@ -159,7 +201,13 @@ export function Header({ onMenuToggle, className }: HeaderProps) {
                 )}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-80">
+            <DropdownMenuContent 
+              align="end" 
+              className={cn(
+                "w-80",
+                isMobile && "max-w-[calc(100vw-2rem)] w-[calc(100vw-2rem)]"
+              )}
+            >
               <DropdownMenuLabel className="flex items-center justify-between">
                 Notifications
                 {unreadCount > 0 && (
@@ -171,19 +219,22 @@ export function Header({ onMenuToggle, className }: HeaderProps) {
                 {notifications.map((notification) => (
                   <DropdownMenuItem
                     key={notification.id}
-                    className="flex flex-col items-start p-4 space-y-1 cursor-pointer"
+                    className={cn(
+                      "flex flex-col items-start space-y-1 cursor-pointer",
+                      isMobile ? "p-3" : "p-4"
+                    )}
                   >
                     <div className="flex items-start justify-between w-full">
-                      <div className="flex-1">
+                      <div className="flex-1 min-w-0">
                         <div className="flex items-center space-x-2">
-                          <h4 className="text-sm font-medium">
+                          <h4 className="text-sm font-medium truncate">
                             {notification.title}
                           </h4>
                           {!notification.read && (
-                            <div className="w-2 h-2 bg-primary rounded-full" />
+                            <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
                           )}
                         </div>
-                        <p className="text-sm text-muted-foreground mt-1">
+                        <p className="text-sm text-muted-foreground mt-1 overflow-hidden text-ellipsis">
                           {notification.message}
                         </p>
                         <p className="text-xs text-muted-foreground mt-1">
@@ -201,8 +252,13 @@ export function Header({ onMenuToggle, className }: HeaderProps) {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Help */}
-          <Button variant="ghost" size="icon" className="h-9 w-9">
+          {/* Help - Hidden on mobile to save space */}
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className={cn("h-9 w-9 hidden sm:flex", responsive.touchTarget)}
+            aria-label="Help"
+          >
             <HelpCircle className="h-4 w-4" />
           </Button>
 
@@ -211,11 +267,16 @@ export function Header({ onMenuToggle, className }: HeaderProps) {
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className="flex items-center space-x-2 h-9 px-3"
+                className={cn(
+                  "flex items-center h-9",
+                  isMobile ? "space-x-0 px-2" : "space-x-2 px-3",
+                  responsive.touchTarget
+                )}
+                aria-label="User menu"
               >
                 <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-medium">
                   {user.avatar ? (
-                    <Image src={user.avatar} alt={user.name} width={32} height={32} className="w-full h-full rounded-full" />
+                    <Image src={user.avatar} alt={user.name} width={24} height={24} className="w-full h-full rounded-full" />
                   ) : (
                     getInitials(user.name)
                   )}
@@ -227,24 +288,30 @@ export function Header({ onMenuToggle, className }: HeaderProps) {
                 <ChevronDown className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuContent 
+              align="end" 
+              className={cn(
+                "w-56",
+                isMobile && "max-w-[calc(100vw-2rem)]"
+              )}
+            >
               <DropdownMenuLabel>
                 <div className="flex flex-col space-y-1">
                   <span className="text-sm font-medium">{user.name}</span>
-                  <span className="text-xs text-muted-foreground">{user.email}</span>
+                  <span className="text-xs text-muted-foreground truncate">{user.email}</span>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer">
+              <DropdownMenuItem className={cn("cursor-pointer", responsive.touchTarget)}>
                 <User className="mr-2 h-4 w-4" />
                 Profile Settings
               </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
+              <DropdownMenuItem className={cn("cursor-pointer", responsive.touchTarget)}>
                 <Settings className="mr-2 h-4 w-4" />
                 Account Settings
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer text-destructive">
+              <DropdownMenuItem className={cn("cursor-pointer text-destructive", responsive.touchTarget)}>
                 <LogOut className="mr-2 h-4 w-4" />
                 Sign Out
               </DropdownMenuItem>
