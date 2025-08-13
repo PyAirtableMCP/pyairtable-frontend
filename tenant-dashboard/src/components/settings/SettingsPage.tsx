@@ -12,6 +12,7 @@ import { useSettingsStore } from '@/stores/settingsStore';
 import { ProfileSettings } from './ProfileSettings';
 import { ApiKeyManager } from './ApiKeyManager';
 import { NotificationSettings } from './NotificationSettings';
+import { AppearanceSettings } from './AppearanceSettings';
 
 interface SettingsPageProps {}
 
@@ -63,7 +64,6 @@ export function SettingsPage({}: SettingsPageProps) {
       title: 'Appearance',
       description: 'Customize the look and feel',
       icon: Palette,
-      disabled: true, // Prepare for future dark mode
     },
   ];
 
@@ -76,14 +76,7 @@ export function SettingsPage({}: SettingsPageProps) {
       case 'notifications':
         return <NotificationSettings />;
       case 'appearance':
-        return (
-          <div className="flex items-center justify-center h-48 text-muted-foreground">
-            <div className="text-center">
-              <Palette className="h-12 w-12 mx-auto mb-4" />
-              <p>Theme customization coming soon</p>
-            </div>
-          </div>
-        );
+        return <AppearanceSettings />;
       default:
         return null;
     }

@@ -3,7 +3,7 @@
 import React from "react";
 import { Toaster } from "react-hot-toast";
 // Temporarily disabled: import { PostHogProvider } from "./posthog-provider";
-import { ErrorBoundary } from "@/components/error-boundary";
+import { ErrorBoundary } from "@/components/error/ErrorBoundary";
 import { PWAPrompts, ConnectionStatus } from "@/components/pwa/PWAPrompts";
 import { PerformanceProvider } from "@/components/performance/PerformanceProvider";
 import { AuthProvider } from "@/lib/auth/auth-context";
@@ -19,7 +19,6 @@ export function Providers({ children }: ProvidersProps) {
 
   return (
     <ErrorBoundary
-      showDetails={process.env.NODE_ENV === "development"}
       onError={(error, errorInfo) => {
         // Additional error handling if needed
         console.error("Root error boundary triggered:", error, errorInfo);
