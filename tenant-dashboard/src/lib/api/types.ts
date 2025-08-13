@@ -72,6 +72,9 @@ export const queryKeys = {
   analyticsUsage: (period?: string) => [...queryKeys.analytics, 'usage', period] as const,
   analyticsPerformance: (period?: string) => [...queryKeys.analytics, 'performance', period] as const,
   analyticsReports: (type: string, period?: string) => [...queryKeys.analytics, 'reports', type, period] as const,
+
+  // System metrics queries
+  systemMetrics: () => ['system', 'metrics'] as const,
 } as const;
 
 // Mutation keys for React Query
