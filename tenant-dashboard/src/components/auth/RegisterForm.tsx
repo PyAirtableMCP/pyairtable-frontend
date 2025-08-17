@@ -122,7 +122,7 @@ export function RegisterForm({ onSuccess, onError }: RegisterFormProps) {
         lastName: lastNameValidation.sanitizedValue
       });
 
-      const response = await fetch("http://localhost:8082/auth/register", {
+      const response = await fetch("http://localhost:8000/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -130,8 +130,7 @@ export function RegisterForm({ onSuccess, onError }: RegisterFormProps) {
         body: JSON.stringify({
           email: emailValidation.sanitizedValue,
           password: passwordValidation.sanitizedValue,
-          first_name: firstNameValidation.sanitizedValue,
-          last_name: lastNameValidation.sanitizedValue,
+          name: `${firstNameValidation.sanitizedValue} ${lastNameValidation.sanitizedValue}`,
         }),
         credentials: "include",
       });

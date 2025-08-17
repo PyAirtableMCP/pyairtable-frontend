@@ -1,9 +1,11 @@
 "use client";
 
-import React from "react";
-import { useAuth } from "@/lib/auth/auth-context";
+import React, { useState } from "react";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
+import toast from "react-hot-toast";
 
 interface LogoutButtonProps {
   children?: React.ReactNode;
@@ -20,14 +22,27 @@ export function LogoutButton({
   className,
   showIcon = true,
 }: LogoutButtonProps) {
-  const { logout, isLoading } = useAuth();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogout = async () => {
     try {
-      await logout();
-      // Redirect will be handled by the auth context or middleware
+      setIsLoading(true);
+      
+      // Use NextAuth signOut
+      await signOut({
+        redirect: false, // Handle redirect manually
+      });
+      
+      toast.success("Logged out successfully");
+      
+      // Redirect to login page
+      router.push("/auth/login");
     } catch (error) {
       console.error("Logout error:", error);
+      toast.error("Failed to log out. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 

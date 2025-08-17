@@ -1,13 +1,16 @@
 "use client";
 
 import React from "react";
-import { useAuth } from "@/lib/auth/auth-context";
+import { useSession } from "next-auth/react";
 import { LogoutButton } from "@/components/auth/LogoutButton";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 export default function AuthTestPage() {
-  const { user, isLoading, isAuthenticated, refreshAuth } = useAuth();
+  const { data: session, status } = useSession();
+  const user = session?.user;
+  const isLoading = status === 'loading';
+  const isAuthenticated = status === 'authenticated';
 
   if (isLoading) {
     return (

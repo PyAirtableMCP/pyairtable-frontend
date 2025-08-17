@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 
-// Auth service base URL - using mock auth service (TODO: implement in platform-services)
-const AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL || "http://localhost:8009"
+// API Gateway auth endpoint - NO MOCKING POLICY
+const AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
 
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -26,8 +26,8 @@ export async function POST(request: NextRequest) {
     const firstName = nameParts[0] || name
     const lastName = nameParts.slice(1).join(' ') || 'User'
 
-    // Call auth service to register user
-    const response = await fetch(`${AUTH_SERVICE_URL}/auth/register`, {
+    // Call API Gateway auth service to register user
+    const response = await fetch(`${AUTH_SERVICE_URL}/api/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -35,9 +35,7 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({
         email,
         password,
-        first_name: firstName,
-        last_name: lastName,
-        tenant_id: "550e8400-e29b-41d4-a716-446655440000", // Default tenant ID
+        name: `${firstName} ${lastName}`,
       }),
     })
 

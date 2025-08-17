@@ -1,27 +1,23 @@
-"use client"
+"use client";
 
-import React from "react"
-import Link from "next/link"
-import { SimpleLoginForm } from "@/components/auth/SimpleLoginForm"
+import React from "react";
+import Link from "next/link";
+import { ForgotPasswordForm } from "@/components/auth/ForgotPasswordForm";
 
-export default function LoginPage() {
+export default function ForgotPasswordPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="w-full max-w-md space-y-6">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">Welcome back</h1>
-          <p className="text-gray-600 mt-2">Sign in to your PyAirtable account</p>
-        </div>
-        
-        <SimpleLoginForm />
+        <ForgotPasswordForm />
         
         <div className="text-center text-sm space-y-2">
           <div>
+            Remember your password?{" "}
             <Link
-              href="/auth/forgot-password"
-              className="text-primary hover:underline"
+              href="/auth/login"
+              className="text-primary hover:underline font-medium"
             >
-              Forgot your password?
+              Sign in
             </Link>
           </div>
           <div>
@@ -36,5 +32,5 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
