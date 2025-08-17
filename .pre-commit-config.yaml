@@ -1,0 +1,74 @@
+repos:
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: |
+          (?x)^(
+            package-lock.json|
+            .*\.example$|
+            SECURITY.md
+          )$
+        
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: no-commit-to-branch
+        args: ['--branch', 'main', '--branch', 'production']
+      - id: check-json
+        exclude: package-lock.json
+      - id: check-toml
+      - id: check-xml
+      - id: debug-statements
+      - id: mixed-line-ending
+        
+  - repo: local
+    hooks:
+      - id: check-env-files
+        name: Prevent committing real .env files
+        entry: bash -c 'if find . -name ".env.local" -o -name ".env.production.local" -o -name ".env.development.local" -o -name ".jira-config" | grep -v node_modules | head -1; then echo "ERROR: Real credential files detected. These should be gitignored!"; exit 1; fi'
+        language: system
+        pass_filenames: false
+        
+      - id: check-credentials
+        name: Scan for hardcoded credentials
+        entry: bash -c 'if git diff --cached | grep -E "(pat[A-Za-z0-9]{40,}|ATATT[A-Za-z0-9]{40,}|sk-[A-Za-z0-9]{40,})" | grep -v "XXXXXXXX"; then echo "ERROR: Potential API tokens detected in commit!"; exit 1; fi'
+        language: system
+        pass_filenames: false
+        
+      - id: check-airtable-tokens
+        name: Check for Airtable personal access tokens
+        entry: bash -c 'if git diff --cached | grep -E "pat[A-Za-z0-9]{40,}" | grep -v "patXXXXXXXXXXXXXX"; then echo "ERROR: Airtable PAT detected! Use placeholder tokens in templates."; exit 1; fi'
+        language: system
+        pass_filenames: false
+        
+      - id: check-jira-tokens
+        name: Check for JIRA API tokens
+        entry: bash -c 'if git diff --cached | grep -E "ATATT[A-Za-z0-9]{40,}" | grep -v "ATATT3xFfGF0XXXXXXXXXX"; then echo "ERROR: JIRA API token detected! Use placeholder tokens in templates."; exit 1; fi'
+        language: system
+        pass_filenames: false
+        
+      - id: check-private-keys
+        name: Check for private keys
+        entry: bash -c 'if git diff --cached | grep -E "(BEGIN RSA PRIVATE KEY|BEGIN OPENSSH PRIVATE KEY|BEGIN PRIVATE KEY)"; then echo "ERROR: Private key detected!"; exit 1; fi'
+        language: system
+        pass_filenames: false
+        
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v8.44.0
+    hooks:
+      - id: eslint
+        files: \\.(js|jsx|ts|tsx)$
+        types: [file]
+        additional_dependencies:
+          - eslint@8.44.0
+          - '@typescript-eslint/eslint-plugin@5.60.1'
+          - '@typescript-eslint/parser@5.60.1'
