@@ -67,7 +67,11 @@ export async function middleware(req: NextRequest) {
   const isProtectedPath = protectedPaths.some(path => pathname.startsWith(path))
   
   if (isProtectedPath && !shouldSkipAuth) {
-    token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
+    token = await getToken({ 
+      req, 
+      secret: process.env.NEXTAUTH_SECRET,
+      cookieName: "next-auth.session-token"
+    })
   }
 
   // Check authentication for protected routes

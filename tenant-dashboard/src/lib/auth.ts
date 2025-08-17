@@ -113,7 +113,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
           // Handle different response formats from platform services
           let user
-          if (authResult.access_token) {
+          if (authResult.user && authResult.access_token) {
+            // Backend response format: { user: {...}, access_token: "...", refresh_token: "..." }
+            user = {
+              id: authResult.user.id,
+              email: authResult.user.email,
+              name: authResult.user.name || authResult.user.email.split('@')[0],
+              accessToken: authResult.access_token,
+              refreshToken: authResult.refresh_token,
+              role: authResult.user.role || "user",
+              tenantId: authResult.user.tenant_id,
+            }
+          } else if (authResult.access_token && !authResult.user) {
             // JWT format from platform services
             try {
               const jwtPayload = JSON.parse(Buffer.from(authResult.access_token.split('.')[1], 'base64').toString())
@@ -131,7 +142,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               return null
             }
           } else if (authResult.token && authResult.user) {
-            // Direct format from platform services
+            // Legacy format from platform services
             user = {
               id: authResult.user.id,
               email: authResult.user.email,
@@ -210,25 +221,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return false
     },
     async redirect({ url, baseUrl }) {
-      console.log("🔄 NextAuth redirect:", { url, baseUrl })
-      
       // Allows relative callback URLs
       if (url.startsWith("/")) {
-        const redirectUrl = `${baseUrl}${url}`
-        console.log("✅ Relative redirect:", redirectUrl)
-        return redirectUrl
+        return `${baseUrl}${url}`
       }
       
       // Allows callback URLs on the same origin
       if (url && new URL(url).origin === new URL(baseUrl).origin) {
-        console.log("✅ Same origin redirect:", url)
         return url
       }
       
       // Default redirect to dashboard after successful login
-      const defaultUrl = `${baseUrl}/dashboard`
-      console.log("🏠 Default redirect:", defaultUrl)
-      return defaultUrl
+      return `${baseUrl}/dashboard`
     },
   },
   events: {
