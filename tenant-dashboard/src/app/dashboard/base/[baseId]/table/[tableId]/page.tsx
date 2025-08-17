@@ -4,7 +4,7 @@ import { useRouter, useParams } from 'next/navigation'
 import { useEffect, useState, useMemo } from 'react'
 import dynamic from 'next/dynamic'
 import { airtableClient, AirtableRecord } from '@/lib/airtable-client'
-import { useAuth } from '@/lib/auth/auth-context'
+import { useSession } from 'next-auth/react'
 import { useInputValidation } from '@/lib/hooks/useInputValidation'
 import { CriticalPageErrorBoundary } from '@/lib/components/PageErrorBoundary'
 import { useRealtimeEvents } from '@/lib/hooks/useWebSocket'
@@ -34,7 +34,10 @@ function useDebounce<T>(value: T, delay: number): T {
 }
 
 function TableRecordsPageContent() {
-  const { user, isLoading: authLoading, isAuthenticated, getAccessToken } = useAuth()
+  const { data: session, status } = useSession()
+  const user = session?.user
+  const authLoading = status === 'loading'
+  const isAuthenticated = status === 'authenticated'
   const router = useRouter()
   const params = useParams()
   const baseId = params.baseId as string
@@ -158,7 +161,7 @@ function TableRecordsPageContent() {
     setError(null)
 
     try {
-      const accessToken = await getAccessToken()
+      const accessToken = session?.accessToken
       if (!accessToken) {
         throw new Error('No access token available')
       }
@@ -454,7 +457,7 @@ function TableRecordsPageContent() {
     
     setCrudLoading(true)
     try {
-      const accessToken = await getAccessToken()
+      const accessToken = session?.accessToken
       if (!accessToken) throw new Error('No access token available')
 
       // Create record with only non-empty fields
@@ -509,7 +512,7 @@ function TableRecordsPageContent() {
     ))
 
     try {
-      const accessToken = await getAccessToken()
+      const accessToken = session?.accessToken
       if (!accessToken) throw new Error('No access token available')
 
       await airtableClient.updateRecords(baseId, tableId, [
@@ -560,7 +563,7 @@ function TableRecordsPageContent() {
     setTotalRecords(prev => prev - 1)
 
     try {
-      const accessToken = await getAccessToken()
+      const accessToken = session?.accessToken
       if (!accessToken) throw new Error('No access token available')
 
       await airtableClient.deleteRecords(baseId, tableId, [recordId])

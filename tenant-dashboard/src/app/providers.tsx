@@ -2,11 +2,11 @@
 
 import React from "react";
 import { Toaster } from "react-hot-toast";
+import { SessionProvider } from "next-auth/react";
 // Temporarily disabled: import { PostHogProvider } from "./posthog-provider";
 import { ErrorBoundary } from "@/components/error/ErrorBoundary";
 import { PWAPrompts, ConnectionStatus } from "@/components/pwa/PWAPrompts";
 import { PerformanceProvider } from "@/components/performance/PerformanceProvider";
-import { AuthProvider } from "@/lib/auth/auth-context";
 import { WebSocketProvider } from "@/lib/realtime/WebSocketProvider";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
@@ -25,8 +25,8 @@ export function Providers({ children }: ProvidersProps) {
       }}
     >
       <ThemeProvider>
-        <PerformanceProvider>
-          <AuthProvider>
+        <SessionProvider>
+          <PerformanceProvider>
             <WebSocketProvider>
             {/* Temporarily disabled: <PostHogProvider> */}
               <QueryProvider>
@@ -61,8 +61,8 @@ export function Providers({ children }: ProvidersProps) {
               </QueryProvider>
             {/* Temporarily disabled: </PostHogProvider> */}
             </WebSocketProvider>
-          </AuthProvider>
-        </PerformanceProvider>
+          </PerformanceProvider>
+        </SessionProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );

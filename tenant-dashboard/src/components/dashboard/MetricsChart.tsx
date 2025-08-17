@@ -41,14 +41,14 @@ interface MetricsChartProps {
 }
 
 const defaultColors = [
-  '#3b82f6', // blue
-  '#10b981', // green
-  '#f59e0b', // yellow
-  '#ef4444', // red
-  '#8b5cf6', // purple
-  '#06b6d4', // cyan
-  '#f97316', // orange
-  '#84cc16', // lime
+  'hsl(var(--primary))', // primary theme color
+  'hsl(142 71% 45%)', // green
+  'hsl(48 96% 53%)', // yellow
+  'hsl(0 84% 60%)', // red
+  'hsl(262 83% 58%)', // purple
+  'hsl(189 94% 43%)', // cyan
+  'hsl(25 95% 53%)', // orange
+  'hsl(84 81% 44%)', // lime
 ];
 
 const formatBytes = (bytes: number) => {
@@ -86,12 +86,12 @@ const CustomTooltip = ({
   if (!active || !payload || !payload.length) return null;
 
   return (
-    <div className="bg-background border rounded-lg shadow-lg p-3">
-      <p className="text-sm font-medium text-foreground">
+    <div className="bg-popover border border-border rounded-lg shadow-lg p-3 backdrop-blur-sm">
+      <p className="text-sm font-medium text-popover-foreground">
         {formatXAxis ? formatXAxis(label) : label}
       </p>
       {payload.map((entry: any, index: number) => (
-        <p key={index} className="text-sm" style={{ color: entry.color }}>
+        <p key={index} className="text-sm text-popover-foreground" style={{ color: entry.color }}>
           {entry.name}: {formatValue ? formatValue(entry.value) : entry.value}
         </p>
       ))}
@@ -106,7 +106,7 @@ export function MetricsChart({
   type,
   dataKey,
   xAxisKey = 'timestamp',
-  color = '#3b82f6',
+  color = 'hsl(var(--primary))',
   colors = defaultColors,
   height = 300,
   showGrid = true,
@@ -148,7 +148,9 @@ export function MetricsChart({
 
     const axisProps = {
       dataKey: xAxisKey,
-      tick: { fontSize: 12 },
+      tick: { fontSize: 12, fill: 'hsl(var(--muted-foreground))' },
+      axisLine: { stroke: 'hsl(var(--border))' },
+      tickLine: { stroke: 'hsl(var(--border))' },
       tickFormatter: getFormattedXAxis,
     };
 
@@ -166,12 +168,13 @@ export function MetricsChart({
       case 'line':
         return (
           <LineChart {...commonProps}>
-            {showGrid && <CartesianGrid strokeDasharray="3 3" className="stroke-muted/30" />}
-            <XAxis {...axisProps} className="text-muted-foreground" />
+            {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />}
+            <XAxis {...axisProps} />
             <YAxis 
-              tick={{ fontSize: 12 }}
+              tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+              axisLine={{ stroke: 'hsl(var(--border))' }}
+              tickLine={{ stroke: 'hsl(var(--border))' }}
               tickFormatter={getFormattedValue}
-              className="text-muted-foreground"
             />
             {showTooltip && <Tooltip {...tooltipProps} />}
             <Line 
@@ -188,12 +191,13 @@ export function MetricsChart({
       case 'area':
         return (
           <AreaChart {...commonProps}>
-            {showGrid && <CartesianGrid strokeDasharray="3 3" className="stroke-muted/30" />}
-            <XAxis {...axisProps} className="text-muted-foreground" />
+            {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />}
+            <XAxis {...axisProps} />
             <YAxis 
-              tick={{ fontSize: 12 }}
+              tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+              axisLine={{ stroke: 'hsl(var(--border))' }}
+              tickLine={{ stroke: 'hsl(var(--border))' }}
               tickFormatter={getFormattedValue}
-              className="text-muted-foreground"
             />
             {showTooltip && <Tooltip {...tooltipProps} />}
             <Area 
@@ -209,12 +213,13 @@ export function MetricsChart({
       case 'bar':
         return (
           <BarChart {...commonProps}>
-            {showGrid && <CartesianGrid strokeDasharray="3 3" className="stroke-muted/30" />}
-            <XAxis {...axisProps} className="text-muted-foreground" />
+            {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />}
+            <XAxis {...axisProps} />
             <YAxis 
-              tick={{ fontSize: 12 }}
+              tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+              axisLine={{ stroke: 'hsl(var(--border))' }}
+              tickLine={{ stroke: 'hsl(var(--border))' }}
               tickFormatter={getFormattedValue}
-              className="text-muted-foreground"
             />
             {showTooltip && <Tooltip {...tooltipProps} />}
             <Bar dataKey={dataKey} fill={color} radius={[2, 2, 0, 0]} />

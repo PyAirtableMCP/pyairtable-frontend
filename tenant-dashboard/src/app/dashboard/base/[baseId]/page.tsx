@@ -3,10 +3,13 @@
 import { useRouter, useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { airtableClient, AirtableTableSummary } from '@/lib/airtable-client'
-import { useAuth } from '@/lib/auth/auth-context'
+import { useSession } from 'next-auth/react'
 
 export default function BaseDetailsPage() {
-  const { user, isLoading: authLoading, isAuthenticated, getAccessToken } = useAuth()
+  const { data: session, status } = useSession()
+  const user = session?.user
+  const authLoading = status === 'loading'
+  const isAuthenticated = status === 'authenticated'
   const router = useRouter()
   const params = useParams()
   const baseId = params.baseId as string
@@ -36,7 +39,7 @@ export default function BaseDetailsPage() {
     setError(null)
 
     try {
-      const accessToken = await getAccessToken()
+      const accessToken = session?.accessToken
       if (!accessToken) {
         throw new Error('No access token available')
       }

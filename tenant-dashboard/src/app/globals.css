@@ -29,9 +29,9 @@
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+    --card: 220 14% 10%;
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
+    --popover: 220 14% 10%;
     --popover-foreground: 210 40% 98%;
     --primary: 217.2 91.2% 59.8%;
     --primary-foreground: 222.2 84% 4.9%;
@@ -45,7 +45,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 94.1%;
+    --ring: 217.2 91.2% 59.8%;
   }
 }
 
@@ -271,6 +271,102 @@
   .mobile-stack {
     @apply flex-col space-y-2 space-x-0;
   }
+  
+  .mobile-padding {
+    @apply px-4 py-3;
+  }
+  
+  .mobile-text-lg {
+    @apply text-base;
+  }
+  
+  .mobile-grid-single {
+    @apply grid-cols-1;
+  }
+  
+  .mobile-touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+}
+
+/* Touch-friendly enhancements */
+@media (max-width: 768px) and (hover: none) {
+  /* Remove hover effects on touch devices */
+  .hover-lift {
+    @apply transform-none;
+  }
+  
+  /* Enhance focus states for touch devices */
+  .touch-focus {
+    @apply focus:ring-4 focus:ring-primary/20;
+  }
+  
+  /* Larger tap targets for touch devices */
+  .touch-friendly {
+    @apply min-h-[48px] px-6 py-3;
+  }
+}
+
+/* Responsive spacing utilities */
+.space-mobile {
+  @apply space-y-3 md:space-y-4 lg:space-y-6;
+}
+
+.gap-mobile {
+  @apply gap-3 md:gap-4 lg:gap-6;
+}
+
+.padding-mobile {
+  @apply p-4 md:p-6 lg:p-8;
+}
+
+.margin-mobile {
+  @apply m-3 md:m-4 lg:m-6;
+}
+
+/* Responsive text utilities */
+.text-responsive-sm {
+  @apply text-sm md:text-base lg:text-lg;
+}
+
+.text-responsive-base {
+  @apply text-base md:text-lg lg:text-xl;
+}
+
+.text-responsive-lg {
+  @apply text-lg md:text-xl lg:text-2xl;
+}
+
+.text-responsive-xl {
+  @apply text-xl md:text-2xl lg:text-3xl;
+}
+
+/* Safe area utilities for mobile devices */
+.safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-area-left {
+  padding-left: env(safe-area-inset-left);
+}
+
+.safe-area-right {
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Full height mobile utilities */
+.mobile-vh {
+  height: 100vh;
+  height: -webkit-fill-available;
+}
+
+.mobile-vh-screen {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
 }
 
 /* Print styles */

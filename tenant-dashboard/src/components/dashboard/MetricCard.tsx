@@ -18,7 +18,7 @@ interface MetricCardProps {
   size?: "sm" | "md" | "lg";
 }
 
-export function MetricCard({
+function MetricCard({
   title,
   value,
   change,
@@ -67,47 +67,48 @@ export function MetricCard({
   };
 
   const cardSizes = {
-    sm: "p-4",
-    md: "p-6",
-    lg: "p-8",
+    sm: "p-3 md:p-4",
+    md: "p-4 md:p-6",
+    lg: "p-6 md:p-8",
   };
 
   const titleSizes = {
-    sm: "text-sm",
-    md: "text-base",
-    lg: "text-lg",
+    sm: "text-xs md:text-sm",
+    md: "text-sm md:text-base",
+    lg: "text-base md:text-lg",
   };
 
   const valueSizes = {
-    sm: "text-xl",
-    md: "text-2xl",
-    lg: "text-3xl",
+    sm: "text-lg md:text-xl",
+    md: "text-xl md:text-2xl",
+    lg: "text-2xl md:text-3xl",
   };
 
   return (
-    <Card className={cn("relative overflow-hidden", className)}>
-      <CardHeader className={cn("flex flex-row items-center justify-between space-y-0", cardSizes[size])}>
-        <CardTitle className={cn("font-medium text-muted-foreground", titleSizes[size])}>
+    <Card className={cn("relative overflow-hidden touch-manipulation", className)}>
+      <CardHeader className={cn("flex flex-row items-center justify-between space-y-0 pb-2", cardSizes[size])}>
+        <CardTitle className={cn("font-medium text-muted-foreground truncate", titleSizes[size])}>
           {title}
         </CardTitle>
         {icon && (
-          <div className="text-muted-foreground">
+          <div className="text-muted-foreground flex-shrink-0 ml-2">
             {icon}
           </div>
         )}
       </CardHeader>
-      <CardContent className={cn("pb-2", cardSizes[size], "pt-0")}>
-        <div className="space-y-2">
-          <div className={cn("font-bold tracking-tight", valueSizes[size])}>
+      <CardContent className={cn("pb-3", cardSizes[size], "pt-0")}>
+        <div className="space-y-2 md:space-y-3">
+          <div data-testid="metric-value" className={cn("font-bold tracking-tight break-words", valueSizes[size])}>
             {formatValue(value)}
           </div>
           
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-2">
             {change !== undefined && (
               <Badge
+                data-testid="metric-trend"
                 variant="secondary"
                 className={cn(
-                  "flex items-center space-x-1 text-xs px-2 py-1",
+                  "flex items-center space-x-1 text-xs px-2 py-1 flex-shrink-0",
                   getChangeColor()
                 )}
               >
@@ -117,7 +118,7 @@ export function MetricCard({
             )}
             
             {description && (
-              <p className="text-xs text-muted-foreground">
+              <p data-testid="metric-status" className="text-xs text-muted-foreground text-right md:text-left flex-1 min-w-0 truncate">
                 {description}
               </p>
             )}
@@ -127,3 +128,7 @@ export function MetricCard({
     </Card>
   );
 }
+
+const MemoizedMetricCard = React.memo(MetricCard);
+MemoizedMetricCard.displayName = 'MetricCard';
+export default MemoizedMetricCard;
