@@ -1,5 +1,33 @@
 import { apiClient } from "./client";
 import { ApiResponse } from "@/types";
+import { z } from "zod";
+
+// Validation schemas
+const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+});
+
+const registerSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
+  acceptTerms: z.boolean().refine(val => val === true, "You must accept the terms"),
+});
+
+const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1),
+  newPassword: z.string().min(8),
+  confirmPassword: z.string().min(8),
+}).refine(data => data.newPassword === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
+// Backend service URLs - REAL SERVICES RUNNING AT CORRECT PORTS!
+const AUTH_SERVICE_URL = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || "http://localhost:8007";
+const API_GATEWAY_URL = process.env.NEXT_PUBLIC_API_GATEWAY_URL || "http://localhost:8000";
 
 // Auth-related types
 export interface LoginCredentials {
@@ -87,27 +115,28 @@ class TokenManager {
   static setTokens(tokens: AuthTokens): void {
     if (typeof window === 'undefined') return;
     
-    localStorage.setItem(this.ACCESS_TOKEN_KEY, tokens.accessToken);
-    localStorage.setItem(this.REFRESH_TOKEN_KEY, tokens.refreshToken);
+    // Use sessionStorage for better security and automatic cleanup
+    sessionStorage.setItem(this.ACCESS_TOKEN_KEY, tokens.accessToken);
+    sessionStorage.setItem(this.REFRESH_TOKEN_KEY, tokens.refreshToken);
     
     const expiryTime = Date.now() + tokens.expiresIn * 1000;
-    localStorage.setItem(this.TOKEN_EXPIRY_KEY, expiryTime.toString());
+    sessionStorage.setItem(this.TOKEN_EXPIRY_KEY, expiryTime.toString());
   }
 
   static getAccessToken(): string | null {
     if (typeof window === 'undefined') return null;
-    return localStorage.getItem(this.ACCESS_TOKEN_KEY);
+    return sessionStorage.getItem(this.ACCESS_TOKEN_KEY);
   }
 
   static getRefreshToken(): string | null {
     if (typeof window === 'undefined') return null;
-    return localStorage.getItem(this.REFRESH_TOKEN_KEY);
+    return sessionStorage.getItem(this.REFRESH_TOKEN_KEY);
   }
 
   static isTokenExpired(): boolean {
     if (typeof window === 'undefined') return true;
     
-    const expiryTime = localStorage.getItem(this.TOKEN_EXPIRY_KEY);
+    const expiryTime = sessionStorage.getItem(this.TOKEN_EXPIRY_KEY);
     if (!expiryTime) return true;
     
     return Date.now() > parseInt(expiryTime) - 60000; // 1 minute buffer
@@ -116,9 +145,9 @@ class TokenManager {
   static clearTokens(): void {
     if (typeof window === 'undefined') return;
     
-    localStorage.removeItem(this.ACCESS_TOKEN_KEY);
-    localStorage.removeItem(this.REFRESH_TOKEN_KEY);
-    localStorage.removeItem(this.TOKEN_EXPIRY_KEY);
+    sessionStorage.removeItem(this.ACCESS_TOKEN_KEY);
+    sessionStorage.removeItem(this.REFRESH_TOKEN_KEY);
+    sessionStorage.removeItem(this.TOKEN_EXPIRY_KEY);
   }
 
   static hasValidToken(): boolean {
@@ -136,7 +165,7 @@ export class AuthUtils {
       return JSON.parse(decoded);
     } catch (error) {
       console.error('Failed to decode JWT:', error);
-      return null;
+      throw new Error(`JWT decode failed: ${error instanceof Error ? error.message : 'Invalid token format'}`);
     }
   }
 
@@ -160,25 +189,34 @@ export class AuthUtils {
       const response = await fetch("/api/auth/check", { 
         credentials: "include" 
       });
-      return response.ok;
-    } catch {
-      return false;
+      if (!response.ok) {
+        throw new Error(`Auth check failed: HTTP ${response.status}`);
+      }
+      return true;
+    } catch (error) {
+      console.error('Auth status check failed:', error);
+      throw new Error(`Backend auth service unavailable. DevOps agent needed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
-  static async getCurrentUser(): Promise<AuthUser | null> {
+  static async getCurrentUser(): Promise<AuthUser> {
     try {
       const response = await fetch("/api/auth/profile", { 
         credentials: "include" 
       });
       
-      if (response.ok) {
-        const data = await response.json();
-        return data.user || data;
+      if (!response.ok) {
+        throw new Error(`Failed to get user profile: HTTP ${response.status}`);
       }
-      return null;
-    } catch {
-      return null;
+      
+      const data = await response.json();
+      if (!data.user && !data.id) {
+        throw new Error('Invalid user data received from auth service');
+      }
+      return data.user || data;
+    } catch (error) {
+      console.error('Get current user failed:', error);
+      throw new Error(`Backend auth service unavailable. DevOps agent needed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
@@ -255,26 +293,144 @@ export class AuthUtils {
   }
 }
 
+// Specialized Auth API Client for direct auth service communication
+class AuthApiClient {
+  private baseURL: string;
+
+  constructor() {
+    this.baseURL = AUTH_SERVICE_URL;
+  }
+
+  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+    const url = `${this.baseURL}${endpoint}`;
+    
+    const config: RequestInit = {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        ...options.headers,
+      },
+      credentials: 'include',
+    };
+
+    const response = await fetch(url, config);
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
+    }
+
+    return response.json();
+  }
+
+  async login(credentials: LoginCredentials): Promise<AuthResponse> {
+    const result = await this.request<any>('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify(credentials),
+    });
+    
+    // Store tokens after successful login
+    if (result.access_token) {
+      TokenManager.setTokens({
+        accessToken: result.access_token,
+        refreshToken: result.refresh_token,
+        expiresIn: result.expires_in || 3600,
+        tokenType: 'Bearer',
+      });
+    }
+    
+    return result;
+  }
+
+  async register(data: RegisterData): Promise<AuthResponse> {
+    return this.request<AuthResponse>('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async refreshToken(): Promise<TokenRefreshResponse> {
+    const refreshToken = TokenManager.getRefreshToken();
+    if (!refreshToken) {
+      throw new Error('No refresh token available');
+    }
+
+    const result = await this.request<any>('/auth/refresh', {
+      method: 'POST',
+      body: JSON.stringify({ refresh_token: refreshToken }),
+    });
+
+    if (result.access_token) {
+      TokenManager.setTokens({
+        accessToken: result.access_token,
+        refreshToken: result.refresh_token || refreshToken,
+        expiresIn: result.expires_in || 3600,
+        tokenType: 'Bearer',
+      });
+    }
+
+    return result;
+  }
+
+  async logout(): Promise<{ message: string }> {
+    try {
+      const result = await this.request<{ message: string }>('/auth/logout', {
+        method: 'POST',
+      });
+      return result;
+    } finally {
+      TokenManager.clearTokens();
+    }
+  }
+}
+
+const authApiClient = new AuthApiClient();
+
 // Auth API service
 export const authApi = {
-  // Authentication
-  login: (credentials: LoginCredentials): Promise<ApiResponse<AuthResponse>> =>
-    apiClient.post("/auth/login", credentials),
+  // Authentication - Use direct auth service
+  login: async (credentials: LoginCredentials): Promise<ApiResponse<AuthResponse>> => {
+    try {
+      const result = await authApiClient.login(credentials);
+      return { data: result, success: true };
+    } catch (error) {
+      throw error;
+    }
+  },
 
-  register: (data: RegisterData): Promise<ApiResponse<AuthResponse>> =>
-    apiClient.post("/auth/register", data),
+  register: async (data: RegisterData): Promise<ApiResponse<AuthResponse>> => {
+    try {
+      const result = await authApiClient.register(data);
+      return { data: result, success: true };
+    } catch (error) {
+      throw error;
+    }
+  },
 
-  logout: (): Promise<ApiResponse<{ message: string }>> =>
-    apiClient.post("/auth/logout"),
+  logout: async (): Promise<ApiResponse<{ message: string }>> => {
+    try {
+      const result = await authApiClient.logout();
+      return { data: result, success: true };
+    } catch (error) {
+      throw error;
+    }
+  },
 
-  // Token management
-  refreshToken: (): Promise<ApiResponse<TokenRefreshResponse>> =>
-    apiClient.post("/auth/refresh"),
+  // Token management - Use direct auth service
+  refreshToken: async (): Promise<ApiResponse<TokenRefreshResponse>> => {
+    try {
+      const result = await authApiClient.refreshToken();
+      return { data: result, success: true };
+    } catch (error) {
+      throw error;
+    }
+  },
 
   verifyToken: (token: string): Promise<ApiResponse<{ valid: boolean }>> =>
     apiClient.post("/auth/verify", { token }),
 
-  // Password management
+  // Password management - Use API Gateway
   requestPasswordReset: (data: PasswordResetRequest): Promise<ApiResponse<{ message: string }>> =>
     apiClient.post("/auth/password/reset", data),
 

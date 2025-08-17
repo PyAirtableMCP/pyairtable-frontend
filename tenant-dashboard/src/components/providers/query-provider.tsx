@@ -9,7 +9,8 @@ import {
   focusManager,
   onlineManager
 } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+// Temporarily disable ReactQueryDevtools to resolve initialization issues
+const ReactQueryDevtools = null;
 import { toast } from "react-hot-toast";
 
 import { handleAsyncError } from "@/components/error-boundary";
@@ -235,7 +236,7 @@ export function QueryProvider({ children }: QueryProviderProps) {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      {process.env.NODE_ENV === "development" && (
+      {ReactQueryDevtools && (
         <ReactQueryDevtools 
           initialIsOpen={false} 
           position="bottom-right"

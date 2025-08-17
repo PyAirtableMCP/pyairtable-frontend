@@ -1,4 +1,5 @@
 import { ApiResponse, PaginatedResponse, ApiError } from "@/types";
+import { ApiInterceptorManager, createDefaultInterceptorManager } from './interceptors';
 
 // Enhanced API Error with retry information
 export class ApiErrorImpl extends Error implements ApiError {
@@ -26,12 +27,16 @@ export class ApiClient {
   private baseURL: string;
   private defaultHeaders: Record<string, string>;
   private tokenRefreshPromise: Promise<boolean> | null = null;
+  private interceptorManager: ApiInterceptorManager;
 
-  constructor(baseURL?: string) {
-    this.baseURL = baseURL || `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/v1`;
+  constructor(baseURL?: string, interceptorManager?: ApiInterceptorManager) {
+    // Use API Gateway (8000) for main API calls - REAL SERVICE IS RUNNING!
+    this.baseURL = baseURL || `${process.env.NEXT_PUBLIC_API_GATEWAY_URL || "http://localhost:8000"}/api/v1`;
     this.defaultHeaders = {
       "Content-Type": "application/json",
+      "Accept": "application/json",
     };
+    this.interceptorManager = interceptorManager || createDefaultInterceptorManager();
   }
 
   private async refreshToken(): Promise<boolean> {
@@ -48,11 +53,44 @@ export class ApiClient {
 
   private async performTokenRefresh(): Promise<boolean> {
     try {
+      // Try refreshing via NextAuth
       const response = await fetch("/api/auth/refresh", {
         method: "POST",
         credentials: "include",
       });
-      return response.ok;
+      
+      if (response.ok) {
+        const { token } = await response.json();
+        if (token) {
+          sessionStorage.setItem('access_token', token);
+        }
+        return true;
+      }
+
+      // If NextAuth refresh fails, try direct auth service refresh
+      const refreshToken = sessionStorage.getItem('refresh_token');
+      if (refreshToken) {
+        const authResponse = await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || "http://localhost:8007"}/auth/refresh`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ refresh_token: refreshToken }),
+        });
+
+        if (authResponse.ok) {
+          const authData = await authResponse.json();
+          if (authData.access_token) {
+            sessionStorage.setItem('access_token', authData.access_token);
+            if (authData.refresh_token) {
+              sessionStorage.setItem('refresh_token', authData.refresh_token);
+            }
+            return true;
+          }
+        }
+      }
+      
+      return false;
     } catch (error) {
       console.error("Token refresh failed:", error);
       return false;
@@ -61,12 +99,31 @@ export class ApiClient {
 
   private async getAuthToken(): Promise<string | null> {
     try {
+      // First try to get token from session storage for SPA token management
+      const cachedToken = sessionStorage.getItem('access_token');
+      if (cachedToken) {
+        // Verify token is not expired (basic check)
+        try {
+          const payload = JSON.parse(atob(cachedToken.split('.')[1]));
+          if (payload.exp * 1000 > Date.now()) {
+            return cachedToken;
+          }
+        } catch {
+          // Invalid token format, remove it
+          sessionStorage.removeItem('access_token');
+        }
+      }
+
+      // Fall back to NextAuth session token
       const response = await fetch("/api/auth/token", {
         credentials: "include",
       });
       
       if (response.ok) {
         const { token } = await response.json();
+        if (token) {
+          sessionStorage.setItem('access_token', token);
+        }
         return token;
       }
     } catch (error) {
@@ -92,22 +149,38 @@ export class ApiClient {
 
     const url = endpoint.startsWith('http') ? endpoint : `${this.baseURL}${endpoint}`;
     
-    // Add auth token if available
-    const token = await this.getAuthToken();
-    const headers = {
-      ...this.defaultHeaders,
-      ...options.headers,
-      ...(token && { Authorization: `Bearer ${token}` }),
-    };
-
-    const requestConfig: RequestInit = {
+    // Prepare initial request config
+    let requestConfig: RequestInit & { url: string } = {
       ...options,
-      headers,
+      headers: {
+        ...this.defaultHeaders,
+        ...options.headers,
+      },
       credentials: "include",
+      url,
     };
 
     try {
-      const response = await fetch(url, requestConfig);
+      // Apply request interceptors
+      requestConfig = await this.interceptorManager.applyRequestInterceptors(requestConfig);
+      
+      // Extract URL from config as it might have been modified by interceptors
+      const finalUrl = requestConfig.url;
+      const { url: _, ...fetchConfig } = requestConfig;
+
+      let response = await fetch(finalUrl, fetchConfig);
+      
+      try {
+        // Apply response interceptors
+        response = await this.interceptorManager.applyResponseInterceptors(response);
+      } catch (interceptorError) {
+        // If interceptor wants to retry, handle it
+        if (interceptorError.shouldRetry && retryCount < maxRetries) {
+          await this.sleep(retryDelay * Math.pow(2, retryCount));
+          return this.request<T>(endpoint, { ...config, retryCount: retryCount + 1 });
+        }
+        throw interceptorError;
+      }
       
       // Handle 401 Unauthorized - attempt token refresh
       if (response.status === 401 && retryCount === 0) {
@@ -137,6 +210,16 @@ export class ApiClient {
           errorData.field,
           retryCount
         );
+
+        // Apply response error interceptors
+        try {
+          await this.interceptorManager.applyResponseErrorInterceptors(apiError);
+        } catch (interceptorError) {
+          if (interceptorError.shouldRetry && retryCount < maxRetries) {
+            await this.sleep(retryDelay * Math.pow(2, retryCount));
+            return this.request<T>(endpoint, { ...config, retryCount: retryCount + 1 });
+          }
+        }
 
         // Retry on 5xx errors or specific 4xx errors
         if (retryCount < maxRetries && this.shouldRetry(response.status)) {
