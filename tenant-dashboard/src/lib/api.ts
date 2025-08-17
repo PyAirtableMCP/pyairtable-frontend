@@ -23,8 +23,9 @@ class ApiClient {
   private baseURL: string;
   private defaultHeaders: Record<string, string>;
 
-  constructor() {
-    this.baseURL = `${API_BASE_URL}/api/${API_VERSION}`;
+  constructor(useLocalRoutes = false) {
+    // Use local Next.js API routes for tenant operations to avoid CORS issues
+    this.baseURL = useLocalRoutes ? "/api" : `${API_BASE_URL}/api/${API_VERSION}`;
     this.defaultHeaders = {
       "Content-Type": "application/json",
     };
@@ -185,11 +186,12 @@ class ApiClient {
 
 // Create a singleton instance
 export const apiClient = new ApiClient();
+export const localApiClient = new ApiClient(true); // For tenant operations
 
-// Tenant-specific API functions
+// Tenant-specific API functions using local Next.js routes to avoid CORS
 export const tenantApi = {
   // Get current tenant
-  getCurrent: () => apiClient.get<any>("/tenant/current"),
+  getCurrent: () => localApiClient.get<any>("/tenant/current"),
   
   // Update tenant
   update: (data: any) => apiClient.put<any>("/tenant", data),

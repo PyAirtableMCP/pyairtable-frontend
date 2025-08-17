@@ -6,9 +6,17 @@ test.describe('Authentication - Registration Flow', () => {
   test.beforeEach(async ({ page }) => {
     // Clear any existing auth state
     await page.context().clearCookies()
+    
+    // Navigate to registration page first to ensure DOM is loaded
+    await page.goto('/auth/register', { waitUntil: 'domcontentloaded' })
+    
     await page.evaluate(() => {
-      localStorage.clear()
-      sessionStorage.clear()
+      try {
+        localStorage.clear()
+        sessionStorage.clear()
+      } catch (error) {
+        console.warn('Storage clear failed:', error)
+      }
     })
   })
 

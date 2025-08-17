@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import { useAuth } from "@/lib/auth/auth-context";
+import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
-import { useTenant } from "@/hooks/useTenant";
+import { useTenant } from "@/lib/api/hooks";
 import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, Loader2 } from "lucide-react";
@@ -18,26 +18,7 @@ const DashboardOverview = dynamic(() => import("@/components/dashboard/Dashboard
   loading: () => <div className="p-8"><Loader2 className="h-6 w-6 animate-spin" /></div>
 });
 
-// Lazy load mock data to reduce initial bundle size (fallback only)
-const getMockData = async (): Promise<Tenant> => {
-  const { mockTenant } = await import("@/lib/mockData");
-  return mockTenant;
-};
-
-// Load real tenant data from API
-const getRealTenantData = async (): Promise<Tenant | null> => {
-  try {
-    // In a real implementation, this would fetch from your tenant management service
-    // For now, we'll use the mock data but this shows the structure for real API calls
-    const response = await fetch('/api/tenant/current');
-    if (response.ok) {
-      return await response.json();
-    }
-  } catch (error) {
-    console.warn('Failed to load real tenant data:', error);
-  }
-  return null;
-};
+// Note: Mock data removed - now using real API calls via React Query hooks
 
 function LoadingState() {
   return (
@@ -82,47 +63,29 @@ function ErrorState({ error }: { error: Error }) {
 }
 
 export default function HomePage() {
-  const { isLoading: authLoading, isAuthenticated } = useAuth();
-  const isDevelopment = process.env.NODE_ENV === "development";
-  const { data: tenant, isLoading, error } = useTenant();
-  const [mockTenant, setMockTenant] = React.useState<Tenant | null>(null);
+  const { status } = useSession();
+  const authLoading = status === 'loading';
+  const isAuthenticated = status === 'authenticated';
+  const { data: tenantResponse, isLoading, error } = useTenant();
+  
+  // Extract tenant data from API response
+  const tenant = tenantResponse?.data;
   
   // Feature flags for progressive disclosure
   const showAdvancedMetrics = false; // useFeatureFlag("advanced-metrics", false);
   const showBillingSection = false; // useFeatureFlag("billing-controls", false);
   
-  // Load tenant data (mock for dev, real for production)
-  React.useEffect(() => {
-    const loadTenantData = async () => {
-      if (isDevelopment) {
-        // Try to load real data first, fallback to mock
-        const realData = await getRealTenantData();
-        if (realData) {
-          setMockTenant(realData);
-        } else {
-          const mockData = await getMockData();
-          setMockTenant(mockData);
-        }
-      }
-    };
-    
-    loadTenantData();
-  }, [isDevelopment]);
-  
-  // Use appropriate tenant data based on environment
-  const currentTenant = isDevelopment ? mockTenant : tenant;
-  
   // Show loading state while auth or data is loading
-  if (authLoading || (!isDevelopment && isLoading) || (isDevelopment && !mockTenant)) {
+  if (authLoading || isLoading) {
     return <LoadingState />;
   }
 
   // Handle errors
-  if (!isDevelopment && error) {
+  if (error) {
     return <ErrorState error={error as Error} />;
   }
 
-  if (!currentTenant) {
+  if (!tenant) {
     return <ErrorState error={new Error("No tenant data available")} />;
   }
 
@@ -135,7 +98,7 @@ export default function HomePage() {
   return (
     <MainLayout>
       <DashboardOverview 
-        tenant={currentTenant} 
+        tenant={tenant} 
         showAdvancedMetrics={showAdvancedMetrics}
         showBillingSection={showBillingSection}
       />

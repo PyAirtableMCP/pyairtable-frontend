@@ -2,6 +2,7 @@
 
 import React from "react";
 import { initPerformanceMonitoring } from "@/lib/performance";
+import { WebVitalsProvider } from "./WebVitalsProvider";
 
 interface PerformanceProviderProps {
   children: React.ReactNode;
@@ -47,5 +48,9 @@ export function PerformanceProvider({ children }: PerformanceProviderProps) {
     }
   }, []);
 
-  return <>{children}</>;
+  return (
+    <WebVitalsProvider>
+      {children}
+    </WebVitalsProvider>
+  );
 }

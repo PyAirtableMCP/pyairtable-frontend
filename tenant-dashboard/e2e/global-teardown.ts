@@ -6,7 +6,7 @@ async function globalTeardown(config: FullConfig) {
   console.log('🧼 Starting global teardown for E2E tests...')
 
   // Set database URL for tests
-  const testDbUrl = 'postgresql://postgres:lIDvbpxaArutRwGz@localhost:5432/pyairtable'
+  const testDbUrl = 'postgresql://postgres:content_engine_secure_2024!@localhost:5432/tenant_dashboard_test'
   process.env.DATABASE_URL = testDbUrl
 
   const prisma = new PrismaClient({

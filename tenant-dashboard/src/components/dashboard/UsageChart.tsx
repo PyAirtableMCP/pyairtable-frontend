@@ -47,7 +47,7 @@ export function UsageChart({
   type = "line",
   height = 300,
   dataKey = "value",
-  color = "#8884d8",
+  color = "hsl(var(--primary))",
   className,
   showLegend = false,
   showGrid = true,
@@ -69,10 +69,10 @@ export function UsageChart({
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-background border border-border rounded-lg p-3 shadow-lg">
-          <p className="text-sm font-medium">{label}</p>
+        <div className="bg-popover border border-border rounded-lg p-3 shadow-lg backdrop-blur-sm">
+          <p className="text-sm font-medium text-popover-foreground">{label}</p>
           {payload.map((entry: any, index: number) => (
-            <p key={index} className="text-sm" style={{ color: entry.color }}>
+            <p key={index} className="text-sm text-popover-foreground" style={{ color: entry.color }}>
               {`${entry.name}: ${formatValue(entry.value)}`}
             </p>
           ))}
@@ -93,15 +93,17 @@ export function UsageChart({
       case "bar":
         return (
           <BarChart {...commonProps}>
-            {showGrid && <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />}
+            {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />}
             <XAxis 
               dataKey="date" 
-              tick={{ fontSize: 12 }}
-              className="text-muted-foreground"
+              tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+              axisLine={{ stroke: 'hsl(var(--border))' }}
+              tickLine={{ stroke: 'hsl(var(--border))' }}
             />
             <YAxis 
-              tick={{ fontSize: 12 }}
-              className="text-muted-foreground"
+              tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+              axisLine={{ stroke: 'hsl(var(--border))' }}
+              tickLine={{ stroke: 'hsl(var(--border))' }}
               tickFormatter={formatValue}
             />
             <Tooltip content={<CustomTooltip />} />
@@ -113,15 +115,17 @@ export function UsageChart({
       case "area":
         return (
           <AreaChart {...commonProps}>
-            {showGrid && <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />}
+            {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />}
             <XAxis 
               dataKey="date" 
-              tick={{ fontSize: 12 }}
-              className="text-muted-foreground"
+              tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+              axisLine={{ stroke: 'hsl(var(--border))' }}
+              tickLine={{ stroke: 'hsl(var(--border))' }}
             />
             <YAxis 
-              tick={{ fontSize: 12 }}
-              className="text-muted-foreground"
+              tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+              axisLine={{ stroke: 'hsl(var(--border))' }}
+              tickLine={{ stroke: 'hsl(var(--border))' }}
               tickFormatter={formatValue}
             />
             <Tooltip content={<CustomTooltip />} />
@@ -140,15 +144,17 @@ export function UsageChart({
       default:
         return (
           <LineChart {...commonProps}>
-            {showGrid && <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />}
+            {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />}
             <XAxis 
               dataKey="date" 
-              tick={{ fontSize: 12 }}
-              className="text-muted-foreground"
+              tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+              axisLine={{ stroke: 'hsl(var(--border))' }}
+              tickLine={{ stroke: 'hsl(var(--border))' }}
             />
             <YAxis 
-              tick={{ fontSize: 12 }}
-              className="text-muted-foreground"
+              tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+              axisLine={{ stroke: 'hsl(var(--border))' }}
+              tickLine={{ stroke: 'hsl(var(--border))' }}
               tickFormatter={formatValue}
             />
             <Tooltip content={<CustomTooltip />} />

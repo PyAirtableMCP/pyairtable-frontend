@@ -8,9 +8,17 @@ test.describe('Authentication - Logout and Token Clearing', () => {
   test.beforeEach(async ({ page }) => {
     // Start each test with authenticated user
     await page.context().clearCookies()
+    
+    // Navigate to login page first to ensure DOM is loaded
+    await page.goto('/auth/login', { waitUntil: 'domcontentloaded' })
+    
     await page.evaluate(() => {
-      localStorage.clear()
-      sessionStorage.clear()
+      try {
+        localStorage.clear()
+        sessionStorage.clear()
+      } catch (error) {
+        console.warn('Storage clear failed:', error)
+      }
     })
     
     // Login user

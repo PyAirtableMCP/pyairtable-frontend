@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
-import { useAuth } from '../auth/auth-context';
+import { useSession } from 'next-auth/react';
 
 export interface WebSocketEvent {
   type: string;
@@ -56,7 +56,8 @@ export const useWebSocket = (options: UseWebSocketOptions = {}): UseWebSocketRet
     debug = false
   } = options;
 
-  const { user } = useAuth();
+  const { data: session } = useSession();
+  const user = session?.user;
   const socketRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout>();
   const reconnectAttemptsRef = useRef(0);

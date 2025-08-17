@@ -47,93 +47,17 @@ export interface Alert {
   source: string;
 }
 
-// Mock API functions (in real app, these would call actual endpoints)
-const mockMetricsApi = {
+// REAL API implementation - NO MOCKING!
+import { apiClient } from '@/lib/api/client';
+
+const metricsApi = {
   getSystemMetrics: async (): Promise<{ data: MetricsData }> => {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    const now = new Date().toISOString();
-    
-    return {
-      data: {
-        system: {
-          status: 'healthy',
-          uptime: 99.9,
-          lastCheck: now,
-        },
-        services: [
-          {
-            id: 'api',
-            name: 'API Gateway',
-            status: 'online',
-            responseTime: 45,
-            uptime: 99.95,
-            errorRate: 0.001,
-            lastCheck: now,
-          },
-          {
-            id: 'database',
-            name: 'Database',
-            status: 'online',
-            responseTime: 12,
-            uptime: 99.99,
-            errorRate: 0,
-            lastCheck: now,
-          },
-          {
-            id: 'cache',
-            name: 'Redis Cache',
-            status: 'degraded',
-            responseTime: 120,
-            uptime: 98.5,
-            errorRate: 0.05,
-            lastCheck: now,
-          },
-          {
-            id: 'auth',
-            name: 'Auth Service',
-            status: 'online',
-            responseTime: 32,
-            uptime: 99.8,
-            errorRate: 0.002,
-            lastCheck: now,
-          },
-        ],
-        performance: Array.from({ length: 24 }, (_, i) => ({
-          cpu: 20 + Math.random() * 60,
-          memory: 30 + Math.random() * 50,
-          disk: 15 + Math.random() * 25,
-          network: {
-            in: Math.random() * 100,
-            out: Math.random() * 80,
-          },
-          timestamp: new Date(Date.now() - (23 - i) * 60 * 60 * 1000).toISOString(),
-        })),
-        alerts: [
-          {
-            id: '1',
-            type: 'warning',
-            title: 'High Memory Usage',
-            message: 'Memory usage is approaching 85% threshold on server-01',
-            severity: 'medium',
-            timestamp: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
-            acknowledged: false,
-            source: 'monitoring',
-          },
-          {
-            id: '2',
-            type: 'info',
-            title: 'Scheduled Maintenance',
-            message: 'Database maintenance scheduled for 2:00 AM UTC tomorrow',
-            severity: 'low',
-            timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
-            acknowledged: true,
-            source: 'system',
-          },
-        ],
-      },
-    };
+    // REAL API CALL - connects to http://localhost:8000/api/v1/metrics/system
+    const response = await apiClient.get<MetricsData>('/metrics/system');
+    if (!response.data) {
+      throw new Error('Backend service unavailable at http://localhost:8000. DevOps agent needed.');
+    }
+    return response;
   },
 };
 
@@ -141,7 +65,7 @@ const mockMetricsApi = {
 export function useMetrics(refreshInterval = 30000) {
   return useApiQuery(
     queryKeys.systemMetrics(),
-    mockMetricsApi.getSystemMetrics,
+    metricsApi.getSystemMetrics,
     {
       staleTime: 5000, // Data considered stale after 5 seconds
       refetchInterval: refreshInterval, // Auto-refresh every 30 seconds

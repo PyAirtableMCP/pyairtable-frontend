@@ -1,0 +1,36 @@
+# JIRA Configuration Template
+# Copy this file to .jira-config and replace placeholder values with real credentials
+# IMPORTANT: Never commit .jira-config - it contains sensitive API tokens
+
+# Your JIRA instance URL
+# Replace with your actual JIRA Cloud or Server URL
+JIRA_URL=https://your-organization.atlassian.net
+
+# Your email address associated with JIRA account
+# This should be the email you use to log into JIRA
+JIRA_EMAIL=your-email@your-domain.com
+
+# Your JIRA API token
+# Create one at: https://id.atlassian.com/manage-profile/security/api-tokens
+# SECURITY: This token provides access to your JIRA instance - never commit it
+JIRA_API_TOKEN=ATATT3xFfGF0XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+# Project key for your JIRA project
+# This is typically a 3-10 character abbreviation (e.g., PROJ, DEV, etc.)
+JIRA_PROJECT_KEY=YOUR_PROJECT_KEY
+
+# Project name (optional, for display purposes)
+JIRA_PROJECT_NAME=Your Project Name
+
+# Additional JIRA Configuration (optional)
+# Default assignee for new issues
+JIRA_DEFAULT_ASSIGNEE=your-email@your-domain.com
+
+# Default issue type for created issues
+JIRA_DEFAULT_ISSUE_TYPE=Task
+
+# Board ID for sprint management (if using Scrum)
+JIRA_BOARD_ID=123
+
+# Webhook URL for JIRA notifications (if needed)
+JIRA_WEBHOOK_URL=https://your-app.com/webhooks/jira

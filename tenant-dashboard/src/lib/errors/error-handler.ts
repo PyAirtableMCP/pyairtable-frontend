@@ -18,6 +18,18 @@ import {
   isAppError 
 } from './error-types';
 
+// Re-export the types for other modules to use
+export {
+  AppError,
+  ValidationError, 
+  NetworkError,
+  PermissionError,
+  ErrorCode,
+  ErrorSeverity,
+  ERROR_MESSAGES,
+  isAppError
+} from './error-types';
+
 // Error handler configuration
 interface ErrorHandlerConfig {
   enableConsoleLogging?: boolean;

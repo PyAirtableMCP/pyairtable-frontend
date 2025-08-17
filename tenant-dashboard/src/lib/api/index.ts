@@ -1,18 +1,22 @@
-// Re-export the enhanced API client
+// Core API infrastructure
 export { apiClient, ApiErrorImpl } from './client';
-
-// Re-export auth utilities
 export { authApi, AuthUtils, TokenManager } from './auth';
-
-// Re-export types
 export * from './types';
+export * from './interceptors';
 
-// Re-export existing API functions from the main api.ts file
+// API endpoints and hooks
+export * from './endpoints';
+export * from './hooks';
+
+// Legacy API functions for backward compatibility
 export { 
   tenantApi, 
   workspaceApi, 
   handleApiError 
 } from '../api';
 
-// Additional utility exports for convenience
+// Utility exports
 export { isApiError, isPaginatedResponse, isValidationError } from './types';
+
+// Main API instance as default export
+export { api as default } from './endpoints';

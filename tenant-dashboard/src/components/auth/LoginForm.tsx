@@ -4,13 +4,16 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { signIn, getSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { useAuth } from "@/lib/auth/auth-context";
 import { useInputValidation } from "@/lib/hooks/useInputValidation";
 import { ErrorMessage, FieldError, useErrorState } from "@/components/ui/ErrorMessage";
 import { useErrorHandler, ValidationError } from "@/lib/errors/error-handler";
+import { AuthErrorDisplay, useAuthError } from "@/components/auth/AuthErrorDisplay";
+import toast from "react-hot-toast";
 
 // Login form validation schema
 const loginSchema = z.object({
@@ -26,9 +29,11 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ onSuccess, onError }: LoginFormProps) {
-  const { error, setError, clearError } = useErrorState();
+  const router = useRouter();
+  const { error: generalError, setError, clearError } = useErrorState();
+  const { error: authError, handleError: handleAuthError, clearError: clearAuthError } = useAuthError();
   const [validationErrors, setValidationErrors] = useState<{ email?: string; password?: string }>({});
-  const { login, isLoading } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
   const { validateEmail, validatePassword } = useInputValidation();
   const errorHandler = useErrorHandler();
 
@@ -73,7 +78,9 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
 
   const onSubmit = async (data: LoginFormData) => {
     clearError();
+    clearAuthError();
     setValidationErrors({});
+    setIsLoading(true);
 
     // Final validation before submission
     const emailValidation = validateEmail(data.email);
@@ -84,26 +91,60 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
         email: emailValidation.isValid ? undefined : emailValidation.errors[0],
         password: passwordValidation.isValid ? undefined : passwordValidation.errors[0]
       });
+      setIsLoading(false);
       return;
     }
 
     try {
-      // Use sanitized values for login
-      await login(emailValidation.sanitizedValue, passwordValidation.sanitizedValue);
-      
-      // Login successful - auth context handles state management
-      onSuccess?.();
+      // Use NextAuth signIn with credentials
+      const result = await signIn("credentials", {
+        email: emailValidation.sanitizedValue,
+        password: passwordValidation.sanitizedValue,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        // Handle authentication errors with enhanced error handling
+        const errorMessage = result.error === "CredentialsSignin" 
+          ? "Invalid email or password. Please try again."
+          : result.error === "AccessDenied"
+          ? "Access denied. Please contact your administrator."
+          : result.error === "Configuration"
+          ? "Authentication service is temporarily unavailable. Please try again later."
+          : "Authentication failed. Please try again.";
+        
+        handleAuthError(errorMessage);
+        onError?.(errorMessage);
+        toast.error(errorMessage);
+      } else if (result?.ok) {
+        // Login successful
+        toast.success("Login successful! Redirecting...");
+        
+        // Wait for session to be established
+        await getSession();
+        
+        if (onSuccess) {
+          onSuccess();
+        } else {
+          // Default redirect to dashboard
+          router.push("/dashboard");
+        }
+      }
     } catch (err) {
-      // Use centralized error handling
-      const handledError = errorHandler.handle(err, 'login-form');
-      setError(handledError);
-      onError?.(errorHandler.getUserMessage(handledError));
+      // Use centralized error handling for unexpected errors
+      console.error("Unexpected login error:", err);
+      const errorMessage = "An unexpected error occurred. Please try again.";
+      handleAuthError(errorMessage);
+      onError?.(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto p-6">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <Card className="w-full max-w-md mx-auto p-4 md:p-6 min-h-0">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:space-y-6">
         <div className="space-y-2">
           <h1 className="text-2xl font-semibold text-center">Sign In</h1>
           <p className="text-sm text-muted-foreground text-center">
@@ -111,7 +152,16 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
           </p>
         </div>
 
-        <ErrorMessage error={error} onDismiss={clearError} />
+        <AuthErrorDisplay 
+          error={authError} 
+          onDismiss={clearAuthError}
+          onRetry={() => {
+            clearAuthError();
+            // Allow user to retry
+          }}
+          className="mb-4"
+        />
+        <ErrorMessage error={generalError} onDismiss={clearError} />
 
         <div className="space-y-4">
           <div className="space-y-2">
@@ -122,6 +172,7 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
               id="email"
               type="email"
               placeholder="Enter your email"
+              mobileOptimized={true}
               {...register("email")}
               onChange={handleEmailChange}
               disabled={isLoading}
@@ -141,6 +192,7 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
               id="password"
               type="password"
               placeholder="Enter your password"
+              mobileOptimized={true}
               {...register("password")}
               onChange={handlePasswordChange}
               disabled={isLoading}

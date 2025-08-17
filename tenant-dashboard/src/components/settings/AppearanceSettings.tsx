@@ -3,6 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { ThemeToggleInline } from '@/components/ui/ThemeToggle';
+import { ThemeValidator } from '@/components/ui/ThemeValidator';
 import { Palette, Monitor } from 'lucide-react';
 
 export function AppearanceSettings() {
@@ -73,6 +74,9 @@ export function AppearanceSettings() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Theme Implementation Validator */}
+      <ThemeValidator />
     </div>
   );
 }

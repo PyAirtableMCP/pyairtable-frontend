@@ -106,17 +106,9 @@ export class CommonHelpers {
   }
 
   /**
-   * Mock API responses
+   * REMOVED: API response mocking violates NO MOCKING POLICY
+   * Tests should connect to real backend services at ports 8000-8008
    */
-  static async mockAPIResponse(page: Page, urlPattern: string, responseData: any, status: number = 200) {
-    await page.route(`**/*${urlPattern}*`, async route => {
-      await route.fulfill({
-        status,
-        contentType: 'application/json',
-        body: JSON.stringify(responseData)
-      })
-    })
-  }
 
   /**
    * Verify error message display

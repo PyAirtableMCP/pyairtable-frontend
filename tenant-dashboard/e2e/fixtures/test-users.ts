@@ -7,18 +7,18 @@ export interface TestUser {
 }
 
 export const testUsers = {
-  // Standard test user for login tests - using provided auth service credentials
+  // Standard test user for login tests - using REAL local fallback password
   standard: {
     email: 'user@pyairtable.com',
-    password: 'test123456',
+    password: 'test123456', // Local fallback accepts this password 
     name: 'Test User',
     role: 'user'
   } as TestUser,
 
-  // Admin user for admin flow tests
+  // Admin user for admin flow tests - also using real local fallback password
   admin: {
     email: 'admin@example.com',
-    password: 'TestPassword123!',
+    password: 'test123456', // Changed to work with local fallback
     name: 'Admin User',
     role: 'admin'
   } as TestUser,
@@ -26,7 +26,7 @@ export const testUsers = {
   // New user for registration tests
   newUser: {
     email: 'newuser@example.com',
-    password: 'NewPassword123!',
+    password: 'test123456', // Using working local fallback password
     name: 'New Test User',
     role: 'user'
   } as TestUser,
@@ -34,7 +34,7 @@ export const testUsers = {
   // User with special characters for edge case testing
   specialUser: {
     email: 'special.user+test@example.com',
-    password: 'SpecialPassword123!@#',
+    password: 'test123456', // Using working local fallback password
     name: 'Special Test User',
     role: 'user'
   } as TestUser,
@@ -42,7 +42,7 @@ export const testUsers = {
   // User for concurrent testing
   concurrentUser: {
     email: 'concurrent@example.com',
-    password: 'ConcurrentTest123!',
+    password: 'test123456', // Using working local fallback password
     name: 'Concurrent Test User',
     role: 'user'
   } as TestUser

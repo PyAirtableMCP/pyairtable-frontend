@@ -1,13 +1,43 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { airtableClient, AirtableBase } from '@/lib/airtable-client'
-import { useAuth } from '@/lib/auth/auth-context'
+import { useSession } from 'next-auth/react'
+import { Loader2 } from 'lucide-react'
+
+// Lazy load heavy dashboard components
+const LazyMetricsChart = dynamic(
+  () => import('@/components/dashboard/MetricsChart').then(mod => ({ default: mod.MetricsChart })),
+  {
+    loading: () => (
+      <div className="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
+        <Loader2 className="h-6 w-6 animate-spin text-primary" />
+      </div>
+    ),
+    ssr: false
+  }
+)
+
+const LazyUsageChart = dynamic(
+  () => import('@/components/dashboard/UsageChart').then(mod => ({ default: mod.UsageChart })),
+  {
+    loading: () => (
+      <div className="h-48 bg-gray-50 rounded-lg flex items-center justify-center">
+        <Loader2 className="h-6 w-6 animate-spin text-primary" />
+      </div>
+    ),
+    ssr: false
+  }
+)
 
 export default function DashboardPage() {
-  const { user, isLoading: authLoading, isAuthenticated, getAccessToken } = useAuth()
+  const { data: session, status } = useSession()
+  const user = session?.user
+  const authLoading = status === 'loading'
+  const isAuthenticated = status === 'authenticated'
   const router = useRouter()
   const [bases, setBases] = useState<AirtableBase[]>([])
   const [loading, setLoading] = useState(false)
@@ -31,7 +61,7 @@ export default function DashboardPage() {
     setError(null)
 
     try {
-      const accessToken = await getAccessToken()
+      const accessToken = session?.accessToken
       if (!accessToken) {
         throw new Error('No access token available')
       }
@@ -215,16 +245,28 @@ export default function DashboardPage() {
           )}
         </div>
 
-        {/* Other dashboard sections */}
+        {/* Dashboard Analytics - Lazy Loaded */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold mb-4">Overview</h2>
-            <p className="text-gray-600">Dashboard overview content</p>
+            <h2 className="text-xl font-semibold mb-4">Performance Metrics</h2>
+            <Suspense fallback={
+              <div className="h-32 bg-gray-50 rounded flex items-center justify-center">
+                <Loader2 className="h-4 w-4 animate-spin" />
+              </div>
+            }>
+              <LazyMetricsChart />
+            </Suspense>
           </div>
 
           <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold mb-4">Analytics</h2>
-            <p className="text-gray-600">Analytics content</p>
+            <h2 className="text-xl font-semibold mb-4">Usage Analytics</h2>
+            <Suspense fallback={
+              <div className="h-32 bg-gray-50 rounded flex items-center justify-center">
+                <Loader2 className="h-4 w-4 animate-spin" />
+              </div>
+            }>
+              <LazyUsageChart />
+            </Suspense>
           </div>
 
           <div className="bg-white rounded-lg shadow p-6">

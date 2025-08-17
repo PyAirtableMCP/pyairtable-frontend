@@ -1,28 +1,53 @@
-import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { NextRequest, NextResponse } from 'next/server'
+import { getToken } from 'next-auth/jwt'
 
-export async function GET(request: NextRequest) {
+export async function GET(req: NextRequest) {
   try {
-    const cookieStore = cookies();
-    const accessToken = cookieStore.get("access_token")?.value;
-    const expiresAt = cookieStore.get("token_expires_at")?.value;
+    // Get the user's session token
+    const token = await getToken({ 
+      req, 
+      secret: process.env.NEXTAUTH_SECRET 
+    })
 
-    if (!accessToken) {
-      return NextResponse.json({ authenticated: false }, { status: 401 });
+    if (!token) {
+      return NextResponse.json(
+        { 
+          authenticated: false,
+          error: 'No valid session found' 
+        }, 
+        { status: 401 }
+      )
     }
 
-    // Check if token is expired
-    if (expiresAt && new Date(expiresAt) <= new Date()) {
-      const response = NextResponse.json({ authenticated: false }, { status: 401 });
-      response.cookies.delete("access_token");
-      response.cookies.delete("token_type");
-      response.cookies.delete("token_expires_at");
-      return response;
-    }
-
-    return NextResponse.json({ authenticated: true });
+    // Return minimal user info for fast auth checks
+    return NextResponse.json(
+      { 
+        authenticated: true,
+        user: {
+          id: token.id,
+          email: token.email,
+          name: token.name,
+          role: token.role || 'user',
+          tenantId: token.tenantId
+        },
+        expiresAt: token.exp ? new Date(token.exp * 1000).toISOString() : null
+      },
+      { 
+        status: 200,
+        headers: {
+          'Cache-Control': 'private, max-age=60' // Cache for 1 minute
+        }
+      }
+    )
   } catch (error) {
-    console.error("Error checking auth status:", error);
-    return NextResponse.json({ authenticated: false }, { status: 401 });
+    console.error('Error checking auth status:', error)
+    return NextResponse.json(
+      { 
+        authenticated: false,
+        error: 'Auth check failed',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      }, 
+      { status: 500 }
+    )
   }
 }
