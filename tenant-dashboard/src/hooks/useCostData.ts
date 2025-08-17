@@ -64,162 +64,44 @@ export interface CostHistory {
   breakdown: CostBreakdown[];
 }
 
-// API functions (these would be implemented in your API client)
+// REAL API implementation - NO MOCKING!
+import { apiClient } from "@/lib/api/client";
+
 const costApi = {
   getCostData: async (period?: string): Promise<{ data: CostData }> => {
-    // Mock implementation - replace with actual API call
-    const now = new Date();
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    
-    return {
-      data: {
-        period: {
-          start: startOfMonth.toISOString(),
-          end: now.toISOString(),
-        },
-        totalCost: 156.78,
-        currency: 'USD',
-        breakdown: [
-          {
-            category: 'API Usage',
-            service: 'Airtable API',
-            cost: 89.50,
-            usage: 45000,
-            unit: 'requests',
-            percentage: 57.1,
-          },
-          {
-            category: 'Compute',
-            service: 'AI Processing',
-            cost: 43.20,
-            usage: 120.5,
-            unit: 'hours',
-            percentage: 27.6,
-          },
-          {
-            category: 'Storage',
-            service: 'Data Storage',
-            cost: 24.08,
-            usage: 2.1,
-            unit: 'GB',
-            percentage: 15.3,
-          },
-        ],
-        usage: {
-          apiCalls: 45000,
-          computeHours: 120.5,
-          storage: 2200000000, // 2.1 GB in bytes
-          dataTransfer: 890000000, // 890 MB in bytes
-          timestamp: now.toISOString(),
-        },
-        projectedCost: 187.34,
-      },
-    };
+    // REAL API CALL - connects to http://localhost:8000/api/v1/costs
+    const response = await apiClient.get<CostData>('/costs', period ? { period } : undefined);
+    if (!response.data) {
+      throw new Error('Backend service unavailable at http://localhost:8000. DevOps agent needed.');
+    }
+    return response;
   },
 
   getCostHistory: async (days: number = 30): Promise<{ data: CostHistory[] }> => {
-    // Mock implementation
-    const history: CostHistory[] = [];
-    const now = new Date();
-    
-    for (let i = days; i >= 0; i--) {
-      const date = new Date(now);
-      date.setDate(date.getDate() - i);
-      
-      const baseCost = 4.5 + Math.random() * 2;
-      history.push({
-        date: date.toISOString(),
-        cost: baseCost,
-        usage: Math.floor(1200 + Math.random() * 800),
-        breakdown: [
-          {
-            category: 'API',
-            service: 'Airtable API',
-            cost: baseCost * 0.6,
-            usage: Math.floor(1000 + Math.random() * 500),
-            unit: 'requests',
-            percentage: 60,
-          },
-          {
-            category: 'Compute',
-            service: 'AI Processing',
-            cost: baseCost * 0.4,
-            usage: Math.floor(3 + Math.random() * 2),
-            unit: 'hours',
-            percentage: 40,
-          },
-        ],
-      });
+    // REAL API CALL - connects to http://localhost:8000/api/v1/costs/history
+    const response = await apiClient.get<CostHistory[]>('/costs/history', { days });
+    if (!response.data) {
+      throw new Error('Backend service unavailable at http://localhost:8000. DevOps agent needed.');
     }
-    
-    return { data: history };
+    return response;
   },
 
   getBudgetAlerts: async (): Promise<{ data: BudgetAlert[] }> => {
-    return {
-      data: [
-        {
-          id: '1',
-          name: 'Monthly Budget Alert',
-          threshold: 200,
-          type: 'fixed',
-          period: 'monthly',
-          isActive: true,
-          currentSpend: 156.78,
-          notifications: ['email', 'dashboard'],
-        },
-        {
-          id: '2',
-          name: 'API Usage Warning',
-          threshold: 80,
-          type: 'percentage',
-          period: 'monthly',
-          isActive: true,
-          currentSpend: 89.50,
-          notifications: ['email'],
-        },
-      ],
-    };
+    // REAL API CALL - connects to http://localhost:8000/api/v1/costs/budget-alerts
+    const response = await apiClient.get<BudgetAlert[]>('/costs/budget-alerts');
+    if (!response.data) {
+      throw new Error('Backend service unavailable at http://localhost:8000. DevOps agent needed.');
+    }
+    return response;
   },
 
   getModelCosts: async (): Promise<{ data: ModelCost[] }> => {
-    return {
-      data: [
-        {
-          modelId: 'gpt-4',
-          modelName: 'GPT-4',
-          provider: 'OpenAI',
-          inputCost: 0.03,
-          outputCost: 0.06,
-          totalCalls: 1250,
-          totalCost: 34.20,
-          avgResponseTime: 2.3,
-          successRate: 98.4,
-        },
-        {
-          modelId: 'claude-3',
-          modelName: 'Claude 3 Sonnet',
-          provider: 'Anthropic',
-          inputCost: 0.003,
-          outputCost: 0.015,
-          totalCalls: 890,
-          totalCost: 15.60,
-          avgResponseTime: 1.8,
-          successRate: 99.1,
-        },
-        {
-          modelId: 'gemini-pro',
-          modelName: 'Gemini Pro',
-          provider: 'Google',
-          inputCost: 0.0005,
-          outputCost: 0.0015,
-          totalCalls: 2100,
-          totalCost: 8.40,
-          avgResponseTime: 1.5,
-          successRate: 97.2,
-        },
-      ],
-    };
+    // REAL API CALL - connects to http://localhost:8000/api/v1/costs/models
+    const response = await apiClient.get<ModelCost[]>('/costs/models');
+    if (!response.data) {
+      throw new Error('Backend service unavailable at http://localhost:8000. DevOps agent needed.');
+    }
+    return response;
   },
 };
 
