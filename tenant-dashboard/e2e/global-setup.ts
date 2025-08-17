@@ -6,7 +6,7 @@ async function globalSetup(config: FullConfig) {
   console.log('🚀 Starting global setup for E2E tests...')
 
   // Set database URL for tests
-  const testDbUrl = 'postgresql://postgres:lIDvbpxaArutRwGz@localhost:5432/pyairtable'
+  const testDbUrl = 'postgresql://postgres:content_engine_secure_2024!@localhost:5432/tenant_dashboard_test'
   process.env.DATABASE_URL = testDbUrl
 
   // Initialize database connection with explicit URL
@@ -37,7 +37,7 @@ async function globalSetup(config: FullConfig) {
     const page = await browser.newPage()
     
     try {
-      await page.goto(process.env.BASE_URL || 'http://localhost:3000', {
+      await page.goto(process.env.BASE_URL || 'http://localhost:5173', {
         waitUntil: 'networkidle',
         timeout: 30000
       })

@@ -1,13 +1,13 @@
 import { defineConfig, devices } from '@playwright/test'
 
 /**
- * Simplified Playwright configuration for testing without database dependency
+ * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
   testDir: './e2e',
   
   /* Output directory for test results */
-  outputDir: 'test-results-simple',
+  outputDir: 'test-results/artifacts',
   
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -25,25 +25,31 @@ export default defineConfig({
   maxFailures: process.env.CI ? 10 : undefined,
   
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [
+  reporter: process.env.CI ? [
+    ['github'],
+    ['junit', { outputFile: 'test-results/junit.xml' }],
+    ['json', { outputFile: 'test-results/results.json' }],
+    ['html', { open: 'never', outputFolder: 'test-results/html-report' }],
+    ['blob', { outputDir: 'test-results/blob' }]
+  ] : [
     ['list'],
-    ['html', { open: 'on-failure', outputFolder: 'test-results-simple-html' }],
-    ['json', { outputFile: 'test-results-simple/results.json' }]
+    ['html', { open: 'on-failure', outputFolder: 'test-results/html-report' }],
+    ['json', { outputFile: 'test-results/results.json' }]
   ],
   
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: process.env.BASE_URL || 'http://localhost:5173',
+    baseURL: process.env.BASE_URL || 'http://localhost:3000',
     
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: process.env.CI ? 'retain-on-failure' : 'on-first-retry',
     
     /* Take screenshot on failure */
     screenshot: 'only-on-failure',
     
     /* Record video on failure */
-    video: 'retain-on-failure',
+    video: process.env.CI ? 'retain-on-failure' : 'on-first-retry',
     
     /* Global timeout for actions */
     actionTimeout: 15000,
@@ -66,10 +72,18 @@ export default defineConfig({
       name: 'chromium-core',
       use: { ...devices['Desktop Chrome'] },
       testMatch: [
+        '**/auth-login-flow.spec.ts',
+        '**/auth-registration-flow.spec.ts', 
+        '**/auth-logout-flow.spec.ts',
+        '**/auth-token-refresh.spec.ts',
+        '**/auth-error-scenarios.spec.ts',
         '**/user-registration.spec.ts',
         '**/user-login-journey.spec.ts',
         '**/chat-interface-journey.spec.ts',
-        '**/complete-user-journey.spec.ts'
+        '**/complete-user-journey.spec.ts',
+        '**/dashboard-navigation.spec.ts',
+        '**/workspace-management.spec.ts',
+        '**/settings-updates.spec.ts'
       ]
     },
 
@@ -90,6 +104,12 @@ export default defineConfig({
       testMatch: '**/complete-user-journey.spec.ts'
     },
 
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+      testMatch: '**/complete-user-journey.spec.ts'
+    },
+
     // Mobile testing - core user flows
     {
       name: 'mobile-chrome',
@@ -107,18 +127,30 @@ export default defineConfig({
         '**/user-login-journey.spec.ts',
         '**/chat-interface-journey.spec.ts'
       ]
+    },
+
+    // Visual regression tests
+    {
+      name: 'chromium-visual',
+      use: { ...devices['Desktop Chrome'] },
+      testMatch: '**/visual-regression.spec.ts'
+    },
+
+    {
+      name: 'mobile-visual',
+      use: { ...devices['Pixel 5'] },
+      testMatch: '**/visual-regression.spec.ts'
     }
   ],
 
   /* Run your local dev server before starting the tests */
   webServer: process.env.CI ? undefined : {
     command: 'npm run start',
-    port: 5173,
+    port: 3000,
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
     env: {
-      NODE_ENV: 'production',
-      DATABASE_URL: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/pyairtable'
+      NODE_ENV: 'test'
     },
   },
 

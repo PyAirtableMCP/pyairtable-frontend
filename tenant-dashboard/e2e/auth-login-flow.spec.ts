@@ -7,9 +7,18 @@ test.describe('Authentication - Complete Login Flow', () => {
   test.beforeEach(async ({ page }) => {
     // Clear any existing auth state
     await page.context().clearCookies()
+    
+    // Navigate to login page first to ensure DOM is loaded
+    await page.goto('/auth/login', { waitUntil: 'domcontentloaded' })
+    
+    // Now safely clear storage
     await page.evaluate(() => {
-      localStorage.clear()
-      sessionStorage.clear()
+      try {
+        localStorage.clear()
+        sessionStorage.clear()
+      } catch (error) {
+        console.warn('Storage clear failed:', error)
+      }
     })
   })
 

@@ -1,0 +1,316 @@
+version: '3.8'
+
+# E2E Testing Docker Compose Configuration
+# This orchestrates all backend services and infrastructure for comprehensive testing
+
+services:
+  # Infrastructure Services
+  postgres:
+    image: postgres:15
+    container_name: e2e-postgres
+    environment:
+      POSTGRES_DB: pyairtable_test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_MULTIPLE_DATABASES: pyairtable_test,analytics_test
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+      - ./init-scripts/:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d pyairtable_test"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - e2e-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: e2e-redis
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_test_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - e2e-network
+
+  # Backend Services
+  api-gateway:
+    build:
+      context: ../../../backend/api-gateway
+      dockerfile: Dockerfile.test
+    container_name: e2e-api-gateway
+    environment:
+      - NODE_ENV=test
+      - PORT=8000
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/pyairtable_test
+      - REDIS_URL=redis://redis:6379/0
+      - JWT_SECRET=test-jwt-secret-key-for-e2e-tests
+      - CORS_ORIGIN=http://localhost:3000
+      - LOG_LEVEL=debug
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    volumes:
+      - ../../../backend/api-gateway/src:/app/src:ro
+      - ../../../backend/api-gateway/logs:/app/logs
+    networks:
+      - e2e-network
+
+  ai-processor:
+    build:
+      context: ../../../backend/ai-processor
+      dockerfile: Dockerfile.test
+    container_name: e2e-ai-processor
+    environment:
+      - NODE_ENV=test
+      - PORT=8001
+      - API_GATEWAY_URL=http://api-gateway:8000
+      - GEMINI_API_KEY=${GEMINI_TEST_API_KEY:-test-gemini-key}
+      - GEMINI_PROJECT_ID=${GEMINI_TEST_PROJECT_ID:-test-project}
+      - OPENAI_API_KEY=${OPENAI_TEST_API_KEY:-test-openai-key}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_TEST_API_KEY:-test-anthropic-key}
+      - REDIS_URL=redis://redis:6379/1
+      - TEST_MODE=true
+      - MOCK_AI_RESPONSES=${MOCK_AI_RESPONSES:-false}
+      - AI_BUDGET_LIMIT_TOKENS=10000
+      - LOG_LEVEL=debug
+    ports:
+      - "8001:8001"
+    depends_on:
+      api-gateway:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 45s
+    volumes:
+      - ../../../backend/ai-processor/src:/app/src:ro
+      - ../../../backend/ai-processor/logs:/app/logs
+      - ai_processor_temp:/tmp/ai-processing
+    networks:
+      - e2e-network
+
+  airtable-gateway:
+    build:
+      context: ../../../backend/airtable-gateway
+      dockerfile: Dockerfile.test
+    container_name: e2e-airtable-gateway
+    environment:
+      - NODE_ENV=test
+      - PORT=8002
+      - API_GATEWAY_URL=http://api-gateway:8000
+      - AIRTABLE_API_KEY=${AIRTABLE_TEST_API_KEY:-test-airtable-key}
+      - AIRTABLE_TEST_BASE_ID=${AIRTABLE_TEST_BASE_ID:-test-base}
+      - REDIS_URL=redis://redis:6379/2
+      - RATE_LIMIT_REQUESTS_PER_SECOND=10
+      - CACHE_TTL_SECONDS=300
+      - LOG_LEVEL=debug
+    ports:
+      - "8002:8002"
+    depends_on:
+      api-gateway:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    volumes:
+      - ../../../backend/airtable-gateway/src:/app/src:ro
+      - ../../../backend/airtable-gateway/logs:/app/logs
+    networks:
+      - e2e-network
+
+  platform-services:
+    build:
+      context: ../../../backend/platform-services
+      dockerfile: Dockerfile.test
+    container_name: e2e-platform-services
+    environment:
+      - NODE_ENV=test
+      - PORT=8007
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/analytics_test
+      - REDIS_URL=redis://redis:6379/3
+      - API_GATEWAY_URL=http://api-gateway:8000
+      - ANALYTICS_RETENTION_DAYS=30
+      - METRICS_COLLECTION_INTERVAL=60
+      - LOG_LEVEL=debug
+    ports:
+      - "8007:8007"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8007/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    volumes:
+      - ../../../backend/platform-services/src:/app/src:ro
+      - ../../../backend/platform-services/logs:/app/logs
+    networks:
+      - e2e-network
+
+  # Test Support Services
+  test-data-seeder:
+    build:
+      context: ./test-support
+      dockerfile: Dockerfile.seeder
+    container_name: e2e-test-seeder
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/pyairtable_test
+      - REDIS_URL=redis://redis:6379/4
+      - AIRTABLE_TEST_BASE_ID=${AIRTABLE_TEST_BASE_ID:-test-base}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: ["node", "seed-test-data.js"]
+    volumes:
+      - ./test-support/seed-data:/app/seed-data:ro
+    networks:
+      - e2e-network
+    restart: "no"
+
+  # Monitoring and Observability
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: e2e-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_test_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=1h'
+      - '--web.enable-lifecycle'
+    networks:
+      - e2e-network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: e2e-grafana
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_test_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    networks:
+      - e2e-network
+
+  # Log Aggregation
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: e2e-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_test_data:/usr/share/elasticsearch/data
+    networks:
+      - e2e-network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.0
+    container_name: e2e-kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    networks:
+      - e2e-network
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.11.0
+    container_name: e2e-logstash
+    volumes:
+      - ./monitoring/logstash/pipeline:/usr/share/logstash/pipeline:ro
+      - ./monitoring/logstash/config:/usr/share/logstash/config:ro
+    ports:
+      - "5044:5044"
+      - "9600:9600"
+    depends_on:
+      - elasticsearch
+    networks:
+      - e2e-network
+
+  # Health Check Dashboard
+  health-dashboard:
+    build:
+      context: ./monitoring/health-dashboard
+      dockerfile: Dockerfile
+    container_name: e2e-health-dashboard
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVICES_CONFIG_PATH=/app/config/services.json
+    volumes:
+      - ./monitoring/health-dashboard/config:/app/config:ro
+    depends_on:
+      - api-gateway
+      - ai-processor
+      - airtable-gateway
+      - platform-services
+    networks:
+      - e2e-network
+
+volumes:
+  postgres_test_data:
+    name: e2e-postgres-data
+  redis_test_data:
+    name: e2e-redis-data
+  ai_processor_temp:
+    name: e2e-ai-temp
+  prometheus_test_data:
+    name: e2e-prometheus-data
+  grafana_test_data:
+    name: e2e-grafana-data
+  elasticsearch_test_data:
+    name: e2e-elasticsearch-data
+
+networks:
+  e2e-network:
+    name: e2e-test-network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
